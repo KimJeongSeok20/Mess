@@ -15,20 +15,6 @@ Unity 6 · URP · PurrNet 멀티플레이 · 1인 개발
 
 ---
 
-## 5분 코드 투어
-
-시간이 없다면 이 다섯 파일만 보셔도 됩니다.
-
-| 보고 싶은 것 | 파일 | 한 줄 요약 |
-|---|---|---|
-| 서버 권한 인벤토리 | [`ServerInventoryLedger.cs`](src/Assets/Scripts/Inventory/ServerInventoryLedger.cs) · [`NetworkPlayerInventory.cs`](src/Assets/Scripts/Network_Integration/NetworkPlayerInventory.cs) | 서버가 아이템 토큰 장부를 갖고, 클라이언트는 요청만 보냄 |
-| 할당량·계약 해지 규칙 | [`TaxSchedule.cs`](src/Assets/Scripts/Tax/TaxSchedule.cs) · [`TaxScheduleTests.cs`](src/Assets/Scripts/Tax/Editor/TaxScheduleTests.cs) | 순수 함수로 분리해 경계 조건을 테스트 |
-| 하루 사이클 동기화 | [`TimeManager.cs`](src/Assets/Scripts/TimeSync/TimeManager.cs) | SyncVar 시계 + 침대 착석 투표 + 던전 시드 확정 |
-| 절차 던전의 베이크 조명 | [`DungeonTileLightmapSwitcher.cs`](src/Assets/Scripts/Dungeon%201/Lighting/DungeonTileLightmapSwitcher.cs) · [`NetworkDungeonController.cs`](src/Assets/Scripts/Dungeon%201/NetworkDungeonController.cs) | 타일별 P0/P100 라이트맵 세트를 런타임에 교체 |
-| 몬스터 AI | [`ClownBehaviorGraphBuilder.cs`](src/Assets/Monster/Clown/Scripts/Editor/ClownBehaviorGraphBuilder.cs) · [`DoorAutoOpener.cs`](src/Assets/Scripts/monster/DoorAutoOpener.cs) | 코드로 조립한 Behavior Graph, 경로가 문을 지날 때만 여는 문 통과 |
-
----
-
 ## 게임 소개
 
 Lethal Company 계열의 협동 루팅 게임입니다. 하루는 게임 내 9:00~24:00, 실시간 10분입니다.
