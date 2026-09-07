@@ -9,7 +9,7 @@ Unity 6 · URP · PurrNet 멀티플레이 · 1인 개발
 |---|---|
 | **플레이 빌드** | [Releases](https://github.com/KimJeongSeok20/Mess/releases/latest) |
 | **플레이 영상** | <!-- YouTube 링크 --> |
-| **개발 기간** | <!-- 예: 2026.03 ~ 진행 중 --> |
+| **개발 기간** | 2025.08 ~ 진행 중 |
 | **역할** | 기획 · 프로그래밍 · 툴링 전담 (1인) |
 
 ---
