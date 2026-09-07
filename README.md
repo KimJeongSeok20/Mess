@@ -1,4 +1,4 @@
-# Mess
+# MessUp
 
 **팀으로 절차 생성 던전을 털어 3일마다 회사 할당량을 채우고, 못 채우면 계약이 끊기는 협동 공포 게임.**
 Unity 6 · URP · PurrNet 멀티플레이 · 1인 개발
@@ -7,7 +7,7 @@ Unity 6 · URP · PurrNet 멀티플레이 · 1인 개발
 
 | | |
 |---|---|
-| **플레이 빌드** | [Releases](https://github.com/KimJeongSeok20/Mess/releases/latest) |
+| **플레이 빌드** | [Releases](https://github.com/KimJeongSeok20/MessUp/releases/latest) |
 | **플레이 영상** | <!-- YouTube 링크 --> |
 | **개발 기간** | 2025.08 ~ 진행 중 |
 | **역할** | 기획 · 프로그래밍 · 툴링 전담 (1인) |
@@ -76,4 +76,4 @@ src/Assets/
 
 **클론해도 빌드되지 않습니다.** 에셋스토어에서 구매한 모델·사운드·에디터 확장(DunGen, PurrNet, Kinemation 등)이 프로젝트의 큰 부분을 차지하는데 라이선스상 재배포할 수 없어 제외했습니다. 씬·프리팹·머티리얼도 함께 빠졌습니다. 직접 작성한 C# 스크립트 473개만 들어 있습니다.
 
-플레이는 [Releases](https://github.com/KimJeongSeok20/Mess/releases/latest)의 빌드로 해주세요.
+플레이는 [Releases](https://github.com/KimJeongSeok20/MessUp/releases/latest)의 빌드로 해주세요.
