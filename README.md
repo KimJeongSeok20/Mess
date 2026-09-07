@@ -66,58 +66,6 @@ Lethal Company 계열의 협동 루팅 게임입니다. 하루는 게임 내 9:0
 | 테스트 | Unity Test Framework (NUnit) | Edit Mode 회귀 테스트 21개 파일, 스탠드얼론 검증 빌드, CLI 원격 조작 |
 | 도구 | Git, ParrelSync, Unity CLI · MCP, Claude Code | 2인 동시 접속 재현, 에디터 스크립트 원격 실행, AI 에이전트로 회귀 테스트·감사 문서 작성 후 직접 검증 |
 
-## 주요 구현
-
-### 1. 클라이언트 신뢰 구조를 서버 권한으로 옮김
-
-**문제.** 초기에는 인벤토리·거래·부활을 클라이언트가 결정하고 서버에 통보했습니다. 아이템 복제와 무료 부활이 그냥 가능했습니다.
-
-**접근.**
-- 서버가 플레이어별 [`ServerInventoryLedger`](src/Assets/Scripts/Inventory/ServerInventoryLedger.cs)를 들고, 모든 아이템은 서버가 발급한 토큰으로만 식별됩니다.
-- 거래·드롭·강화·재장전·유료 부활은 전부 `[ServerRpc(requireOwnership: false)]`로 들어와서 토큰 소유권을 확인한 뒤에만 상태를 바꿉니다.
-- 클라이언트는 결과를 `TargetRpc`/`ObserversRpc`로 돌려받아 연출만 합니다.
-
-**검증.** [`ServerInventoryTransactionTests.cs`](src/Assets/Editor/ServerInventoryTransactionTests.cs), [`DeathLifecycleRegressionTests.cs`](src/Assets/Editor/DeathLifecycleRegressionTests.cs)로 위조 토큰·중복 소비·잘못된 부활 요청이 거부되는지 확인합니다.
-
-### 2. 절차 생성 던전에 베이크 조명 쓰기
-
-**문제.** 던전이 런타임에 조립되므로 라이트맵을 미리 구울 수 없고, 전부 실시간 조명으로 돌리면 프레임이 나오지 않습니다. 방마다 전원(P0/P100)도 바뀌어야 합니다.
-
-**접근.**
-- 방 프리팹을 회전 4종 × 전원 2종으로 미리 굽고([`DungeonTileBakeData`](src/Assets/Scripts/Dungeon%201/Lighting/DungeonTileBakeData.cs), [`DungeonTilePowerBakeSet`](src/Assets/Scripts/Dungeon%201/Lighting/DungeonTilePowerBakeSet.cs)), 생성 후 타일마다 라이트맵 슬롯을 다시 붙입니다.
-- 문 양쪽의 조명 차이는 [`DungeonDoorDualSideProbeReceiver`](src/Assets/Scripts/Dungeon%201/Lighting/DungeonDoorDualSideProbeReceiver.cs)가 프로브를 나눠 받아 처리합니다.
-- 인접 방 사이 빛 전달은 방 쌍마다 굽지 않고, 방별 "나가는 빛"만 캡처해 런타임에 합성하는 방식([`Experiments/DungeonRoomLocalLightShare`](src/Assets/Experiments/DungeonRoomLocalLightShare))을 택했습니다. 그 전에 시도한 인접 라이팅·포털 트랜스포트·베이크 기저 PoC 세 갈래도 [`Experiments/`](src/Assets/Experiments)에 그대로 남겨 두었습니다.
-
-**결과.** 라이트 셰어 카탈로그에 방 8개가 빠져 생성 중 한 프레임이 4.6초 걸리던 문제를 찾아 고친 뒤, 던전 생성 8.4초 → 2.4초, 40ms 초과 프레임 96 → 15개(에디터 호스트 기준).
-
-<!-- 어떤 PoC가 왜 실패했는지 2~3줄 더 쓰면 좋습니다. 면접에서 가장 많이 물어볼 지점입니다. -->
-
-### 3. 로딩 시간
-
-**문제.** 메인 메뉴 → 게임 씬 로딩이 HDD 빌드에서 81.5초. 씬이 던전 타일 프리팹 전체를 참조해 텍스처 5.25GB가 한 번에 올라왔습니다.
-
-**접근.** 로그 기반 타이밍 계측을 붙여 구간을 나눈 뒤, 밉맵 스트리밍을 전역으로 켜고 몬스터·소품 4K 텍스처를 2K로 캡했습니다. 라이트맵은 스트리밍하면 낮은 밉을 샘플링해 바닥에 이음새가 생겨서 제외했습니다.
-
-**결과.** 81.5초 → 58.5초, 빌드 6.47GB → 5.97GB. 다음 단계는 타일 프리팹의 Addressables 분리입니다.
-
-### 4. 몬스터 AI
-
-| 몬스터 | 방식 | 특징 |
-|---|---|---|
-| Clown | Unity Behavior Graph | 타깃 획득 → 접근 → 달리며 선물 투척. 그래프를 [에디터 스크립트](src/Assets/Monster/Clown/Scripts/Editor/ClownBehaviorGraphBuilder.cs)로 조립해 재현 가능하게 유지 |
-| smily | 커스텀 상태 머신 ([`SmilyBrain`](src/Assets/Scripts/monster/SmilyBrain.cs)) | 시야·거리 감지, 점프 포인트 이동, 벽 간격 보정 |
-| Octopus | 스웜 컨트롤러 ([`OctopusSwarmController`](src/Assets/Scripts/monster/Octopus/OctopusSwarmController.cs)) | 컨트롤러 하나가 멤버 여러 마리를 구동 |
-
-공통으로 [`DoorAutoOpener`](src/Assets/Scripts/monster/DoorAutoOpener.cs)가 NavMesh 경로가 실제로 문을 통과할 때만 문을 열고, [`CorpseProcessor`](src/Assets/Scripts/Currency/CorpseProcessor.cs)가 사망 시 시체와 드롭을 처리합니다.
-
-### 5. 에디터 자동화와 회귀 테스트
-
-- [`Editor/`](src/Assets/Editor) 79개 중 19개가 테스트입니다. 전투·사망·인벤토리·할당량·스킬·Steam 방 계약이 깨지면 바로 잡힙니다.
-- 라이트맵 회전 베이크, 방 프리팹 정규화, 문 개구부 검증, NavMesh 영역 저작을 `Tools > Dungeon V2 > Control Center` 하나로 모았습니다.
-- [`DebugRemoteControl`](src/Assets/Scripts/Debug/DebugRemoteControl.cs)로 Play Mode의 플레이어 이동·던전 생성·날씨를 CLI에서 조작해 재현 테스트를 돌립니다.
-
----
-
 ## 코드 구조
 
 ```
