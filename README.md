@@ -94,8 +94,3 @@ src/Assets/
 **클론해도 빌드되지 않습니다.** 에셋스토어에서 구매한 모델·사운드·에디터 확장(DunGen, PurrNet, Kinemation 등)이 프로젝트의 큰 부분을 차지하는데 라이선스상 재배포할 수 없어 제외했습니다. 씬·프리팹·머티리얼도 함께 빠졌습니다. 직접 작성한 C# 스크립트 473개만 들어 있습니다.
 
 플레이는 [Releases](https://github.com/KimJeongSeok20/Mess/releases/latest)의 빌드로 해주세요.
-
-## 크레딧
-
-- smily 몬스터 모델 — CC 저작자 표시 (`smily-horror-monster`)
-<!-- 빌드에 포함된 다른 서드파티 에셋의 저작자 표기가 필요하면 여기에 추가하세요. -->
