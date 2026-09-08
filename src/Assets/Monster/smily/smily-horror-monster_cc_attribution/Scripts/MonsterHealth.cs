@@ -295,9 +295,9 @@ public class MonsterHealth : NetworkBehaviour
         _netHealth.value = newHp;
 
         if (isSpawned)
-            HitObserversRpc(hitPoint, request.HitDirection);
+            HitObserversRpc(hitPoint, request.HitDirection, ResolveSourceRenderingLayerMask());
         else
-            PlayHitLocal(hitPoint, request.HitDirection);
+            PlayHitLocal(hitPoint, request.HitDirection, ResolveSourceRenderingLayerMask());
 
         if (newHp <= 0)
         {
@@ -384,15 +384,13 @@ public class MonsterHealth : NetworkBehaviour
     }
 
     [ObserversRpc]
-    private void HitObserversRpc(Vector3 hitPoint, Vector3 hitDirection)
+    private void HitObserversRpc(Vector3 hitPoint, Vector3 hitDirection, uint renderingLayerMask)
     {
-        PlayHitLocal(hitPoint, hitDirection);
+        PlayHitLocal(hitPoint, hitDirection, renderingLayerMask);
     }
 
-    private void PlayHitLocal(Vector3 hitPoint, Vector3 hitDirection)
+    private void PlayHitLocal(Vector3 hitPoint, Vector3 hitDirection, uint renderingLayerMask)
     {
-        if (_netDead.value) return;
-
         if (hitVfxPrefab != null)
         {
             Vector3 bodyCenter = rb != null ? rb.worldCenterOfMass : transform.position + deathVfxOffset;
@@ -404,8 +402,12 @@ public class MonsterHealth : NetworkBehaviour
 
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, direction.normalized)
                 * hitVfxPrefab.transform.rotation;
-            BloodVfxVisual.Spawn(hitVfxPrefab, hitPoint, rotation, hitVfxScale, hitVfxLifetime);
+            BloodVfxVisual.Spawn(hitVfxPrefab, hitPoint, rotation, hitVfxScale, hitVfxLifetime, renderingLayerMask);
         }
+
+        // An accepted hit can arrive after death state replication. Keep its blood,
+        // but do not restart flinch animation or apply force to the corpse.
+        if (_netDead.value) return;
 
         // 1. Animation Trigger (if available)
         if (config != null && animator != null && !string.IsNullOrEmpty(config.hitTrigger))
@@ -828,7 +830,8 @@ public class MonsterHealth : NetworkBehaviour
             position,
             deathVfxPrefab.transform.rotation,
             deathVfxScale * Mathf.Max(0.1f, scaleMultiplier),
-            deathVfxLifetime);
+            deathVfxLifetime,
+            ResolveSourceRenderingLayerMask());
     }
 
     private void SpawnDeathDecal(Vector3 hitPoint)

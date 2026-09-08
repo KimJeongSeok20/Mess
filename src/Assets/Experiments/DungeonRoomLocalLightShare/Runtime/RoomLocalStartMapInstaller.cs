@@ -32,7 +32,11 @@ namespace DungeonRoomLocalLightShare
         private readonly HashSet<Doorway> seenDoorways = new HashSet<Doorway>();
         private readonly Dictionary<string, OutgoingPortalMap> liveOutgoing =
             new Dictionary<string, OutgoingPortalMap>();
+        private readonly Dictionary<Transform, ClosedDoorPose> closedDoorPoses =
+            new Dictionary<Transform, ClosedDoorPose>();
+        private readonly List<Transform> expiredDoorPoses = new List<Transform>();
         private bool postProcessRegistered;
+        private NetworkDungeonController mapController;
         private int lastDungeonConnectionCount;
         private int lastWiredCount;
         private int lastSkippedMissingOutgoing;
@@ -63,6 +67,7 @@ namespace DungeonRoomLocalLightShare
                 if (connections[i].Connection != null)
                     connections[i].Connection.SetConnectionEnabled(enabled);
             }
+            DungeonTileProbeRegistry.Active?.ForceRefreshReceivers();
         }
 
         private void Awake()
@@ -70,6 +75,7 @@ namespace DungeonRoomLocalLightShare
             SuppressGrokDoorwayHook();
             if (runtimeDungeon == null)
                 runtimeDungeon = FindFirstObjectByType<RuntimeDungeon>();
+            mapController = runtimeDungeon != null ? runtimeDungeon.GetComponent<NetworkDungeonController>() : null;
             TryRegisterPostProcess();
         }
 
@@ -99,7 +105,6 @@ namespace DungeonRoomLocalLightShare
             if (Time.unscaledTime < nextDoorSearchTime)
                 return;
 
-            bool missingLeaf = false;
             for (int i = connections.Count - 1; i >= 0; i--)
             {
                 LiveConnection live = connections[i];
@@ -108,6 +113,8 @@ namespace DungeonRoomLocalLightShare
                 // Unity objects. Drop the connection instead of touching them every frame.
                 if (live == null || (live.DoorwayA == null && live.DoorwayB == null))
                 {
+                    UnregisterProbeVisibility(live);
+                    RestoreProductionReceiver(live);
                     if (live != null && live.Host != null)
                         Destroy(live.Host);
                     connections.RemoveAt(i);
@@ -115,13 +122,14 @@ namespace DungeonRoomLocalLightShare
                 }
 
                 if (live.Leaf != null)
+                {
+                    RegisterProbeVisibility(live);
                     continue;
-                missingLeaf = true;
+                }
                 TryBindDoor(live);
             }
 
-            if (missingLeaf)
-                nextDoorSearchTime = Time.unscaledTime + 0.25f;
+            nextDoorSearchTime = Time.unscaledTime + 0.25f;
         }
 
         private void TryRegisterPostProcess()
@@ -133,6 +141,7 @@ namespace DungeonRoomLocalLightShare
                 OnDungeonPostProcess,
                 postProcessPriority,
                 DunGen.PostProcessPhase.AfterBuiltIn);
+            runtimeDungeon.Generator.Cleared += OnDungeonCleared;
             postProcessRegistered = true;
         }
 
@@ -142,7 +151,16 @@ namespace DungeonRoomLocalLightShare
                 return;
 
             runtimeDungeon.Generator.UnregisterPostProcessStep(OnDungeonPostProcess);
+            runtimeDungeon.Generator.Cleared -= OnDungeonCleared;
             postProcessRegistered = false;
+        }
+
+        private void OnDungeonCleared()
+        {
+            Teardown();
+            lastDungeon = null;
+            cookieEnvironmentRetryFrames = 0;
+            closedDoorPoses.Clear();
         }
 
         private void OnDungeonPostProcess(DunGen.DungeonGenerator generator)
@@ -384,7 +402,7 @@ namespace DungeonRoomLocalLightShare
 
         private void TryBindDoor(LiveConnection live)
         {
-            if (live == null || live.Host == null)
+            if (live == null || live.Host == null || live.Connection == null)
                 return;
             if (live.Leaf != null)
                 return;
@@ -393,18 +411,28 @@ namespace DungeonRoomLocalLightShare
 
             Transform leaf = FindDoorLeaf(live.DoorwayA, live.DoorwayB);
             if (leaf == null)
+            {
+                live.Connection.SetOpenPassage(IsExplicitOpenPassage(live.DoorwayA, live.DoorwayB));
+                RegisterProbeVisibility(live);
                 return;
+            }
 
             live.Leaf = leaf;
-            live.Angle.Configure(leaf, leaf.localRotation, Vector3.up, 90f);
+            live.Connection.SetOpenPassage(false);
+            ClosedDoorPose pose = ResolveClosedDoorPose(leaf);
+            live.Angle.Configure(leaf, pose.Rotation, pose.Axis, pose.OpenAngle);
             lastDoorLeafCount++;
+            RegisterProbeVisibility(live);
 
             if (!enableDoorProbe || live.Probe != null)
                 return;
 
             var productionReceiver = leaf.GetComponent<DungeonDoorDualSideProbeReceiver>();
-            if (productionReceiver != null)
+            if (productionReceiver != null && productionReceiver.enabled)
+            {
+                live.DisabledProductionReceiver = productionReceiver;
                 productionReceiver.enabled = false;
+            }
 
             live.Probe = live.Host.AddComponent<RoomLocalDoorProbeDriver>();
             live.Probe.Configure(
@@ -421,6 +449,76 @@ namespace DungeonRoomLocalLightShare
             lastProbeCount++;
         }
 
+        private ClosedDoorPose ResolveClosedDoorPose(Transform leaf)
+        {
+            global::Door door = leaf.GetComponent<global::Door>();
+            if (door != null)
+            {
+                // Door captures this before motion. Its current pose and IsOpen target are
+                // not reliable closed references during a rebuild or a late network bind.
+                Quaternion closed = door.ClosedLocalRotation;
+                Vector3 openEuler = closed.eulerAngles;
+                switch (door.rotationOrientation)
+                {
+                    case global::Door.rotOrient.Y_Axis_Up:
+                        openEuler.y += door.doorOpenAngle;
+                        break;
+                    case global::Door.rotOrient.Z_Axis_Up:
+                        openEuler.z += door.doorOpenAngle;
+                        break;
+                    default:
+                        if (!door.applyRotationFix)
+                            openEuler.x += door.doorOpenAngle;
+                        else
+                            openEuler = door.rotationAxisFix == global::Door.rotFixAxis.Y
+                                ? new Vector3(openEuler.x + 90f, 90f, 270f)
+                                : new Vector3(openEuler.x + 90f, 270f, 90f);
+                        break;
+                }
+                Quaternion delta = Quaternion.Inverse(closed) * Quaternion.Euler(openEuler);
+                delta.ToAngleAxis(out float angle, out Vector3 axis);
+                if (angle > 180f) { angle = 360f - angle; axis = -axis; }
+                if (float.IsNaN(axis.x) || axis.sqrMagnitude < 0.000001f)
+                    axis = Vector3.up;
+                var pose = new ClosedDoorPose { Rotation = closed, Axis = axis.normalized, OpenAngle = angle };
+                closedDoorPoses[leaf] = pose;
+                return pose;
+            }
+            if (closedDoorPoses.TryGetValue(leaf, out ClosedDoorPose cached))
+                return cached;
+            // Non-gameplay preview leaves have no Door metadata. Capture once, then preserve
+            // that reference across Teardown/Rebuild instead of recapturing an opened pose.
+            var initial = new ClosedDoorPose { Rotation = leaf.localRotation, Axis = Vector3.up, OpenAngle = 90f };
+            closedDoorPoses.Add(leaf, initial);
+            return initial;
+        }
+
+        private static void RegisterProbeVisibility(LiveConnection live)
+        {
+            if (live.Connection == null)
+            {
+                UnregisterProbeVisibility(live);
+                return;
+            }
+            DungeonTileProbeRegistry registry = DungeonTileProbeRegistry.Active;
+            if (live.VisibilityRegistry != registry)
+            {
+                UnregisterProbeVisibility(live);
+                live.VisibilityRegistry = registry;
+            }
+            if (registry != null && live.Angle != null)
+                registry.RegisterDoorwayVisibility(live.DoorwayA, live.DoorwayB, live.Angle, live.Connection);
+        }
+
+        private static void UnregisterProbeVisibility(LiveConnection live)
+        {
+            if (live == null)
+                return;
+            if (live.VisibilityRegistry != null)
+                live.VisibilityRegistry.UnregisterDoorwayVisibility(live.Angle, live.Connection);
+            live.VisibilityRegistry = null;
+        }
+
         private bool TryResolveOutgoing(
             Doorway doorway,
             out RoomLocalMatrixCatalog.DoorwayEntry entry)
@@ -432,7 +530,10 @@ namespace DungeonRoomLocalLightShare
             string roomId = ResolveRoomId(doorway.Tile);
             if (!TryRelativePath(doorway.Tile.transform, doorway.transform, out string path))
                 return false;
-            if (catalog != null &&
+            // A new map may reuse room names. Never apply the previous map's captured portal lighting to it.
+            bool matchesMap = mapController == null || (mapController.MapList != null &&
+                catalog != null && catalog.SourceFlowPath == mapController.MapList.GetFlowAssetPath(mapController.CurrentFlowIndex));
+            if (catalog != null && matchesMap &&
                 catalog.TryFindDoorway(roomId, path, out _, out entry) &&
                 entry != null &&
                 entry.Outgoing != null)
@@ -520,6 +621,8 @@ namespace DungeonRoomLocalLightShare
 
         private static Transform FindDoorLeaf(Doorway first, Doorway second)
         {
+            if (first == null || second == null)
+                return null;
             Transform leaf = FindLeafOnDoorway(first);
             if (leaf != null)
                 return leaf;
@@ -527,27 +630,44 @@ namespace DungeonRoomLocalLightShare
             if (leaf != null)
                 return leaf;
 
-            Vector3 anchor = first != null ? first.transform.position : second.transform.position;
             DunGen.Door[] doors = FindObjectsByType<DunGen.Door>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            DunGen.Door best = null;
-            float bestDistance = 4f * 4f;
             for (int i = 0; i < doors.Length; i++)
             {
                 DunGen.Door candidate = doors[i];
                 if (candidate == null)
                     continue;
-                if ((first != null && (candidate.DoorwayA == first || candidate.DoorwayB == first)) ||
-                    (second != null && (candidate.DoorwayA == second || candidate.DoorwayB == second)))
-                    return FindNamedLeaf(candidate.transform);
-
-                float distance = (candidate.transform.position - anchor).sqrMagnitude;
-                if (distance >= bestDistance)
-                    continue;
-                best = candidate;
-                bestDistance = distance;
+                if ((candidate.DoorwayA == first && candidate.DoorwayB == second) ||
+                    (candidate.DoorwayA == second && candidate.DoorwayB == first))
+                {
+                    Transform named = FindNamedLeaf(candidate.transform);
+                    if (named != null)
+                        return named;
+                }
             }
 
-            return best != null ? FindNamedLeaf(best.transform) : null;
+            return null;
+        }
+
+        private static bool IsExplicitOpenPassage(Doorway first, Doorway second)
+        {
+            if (first == null || second == null || first.ConnectedDoorway != second ||
+                second.ConnectedDoorway != first || first.IsLocked || second.IsLocked)
+                return false;
+            return HasNoAuthoredConnector(first) && HasNoAuthoredConnector(second);
+        }
+
+        private static bool HasNoAuthoredConnector(Doorway doorway)
+        {
+            if (doorway.UsedDoorPrefabInstance != null || doorway.DoorComponent != null ||
+                doorway.ConnectorPrefabWeights.HasAnyViableEntries())
+                return false;
+            // DunGen skips SpawnDoorPrefab only when neither endpoint has viable connectors.
+            // A missing network-spawned leaf is unresolved while its authoring still expects one.
+            if (doorway.ConnectorSceneObjects != null)
+                for (int i = 0; i < doorway.ConnectorSceneObjects.Count; i++)
+                    if (doorway.ConnectorSceneObjects[i] != null)
+                        return false;
+            return true;
         }
 
         private static Transform FindLeafOnDoorway(Doorway doorway)
@@ -640,6 +760,13 @@ namespace DungeonRoomLocalLightShare
             for (int i = 0; i < connections.Count; i++)
             {
                 LiveConnection live = connections[i];
+                if (live.Leaf != null && live.Angle != null && live.Angle.IsConfigured)
+                    closedDoorPoses[live.Leaf] = new ClosedDoorPose {
+                        Rotation = live.Angle.ClosedLocalRotation,
+                        Axis = live.Angle.LocalHingeAxis,
+                        OpenAngle = live.Angle.OpenAngleDegrees };
+                UnregisterProbeVisibility(live);
+                RestoreProductionReceiver(live);
                 if (live.Host == null)
                     continue;
                 if (Application.isPlaying)
@@ -665,6 +792,32 @@ namespace DungeonRoomLocalLightShare
             }
 
             liveOutgoing.Clear();
+            expiredDoorPoses.Clear();
+            foreach (var pair in closedDoorPoses)
+                if (pair.Key == null)
+                    expiredDoorPoses.Add(pair.Key);
+            for (int i = 0; i < expiredDoorPoses.Count; i++)
+                closedDoorPoses.Remove(expiredDoorPoses[i]);
+        }
+
+        private static void RestoreProductionReceiver(LiveConnection live)
+        {
+            if (live == null)
+                return;
+            // Stop the temporary driver and restore its captured renderer state first.
+            if (live.Host != null)
+                live.Host.SetActive(false);
+            DungeonDoorDualSideProbeReceiver receiver = live.DisabledProductionReceiver;
+            live.DisabledProductionReceiver = null;
+            if (receiver != null)
+                receiver.enabled = true;
+        }
+
+        private struct ClosedDoorPose
+        {
+            public Quaternion Rotation;
+            public Vector3 Axis;
+            public float OpenAngle;
         }
 
         private sealed class LiveConnection
@@ -680,6 +833,8 @@ namespace DungeonRoomLocalLightShare
             public RoomLocalDoorAngleSource Angle;
             public RoomLocalDoorProbeDriver Probe;
             public Transform Leaf;
+            public DungeonTileProbeRegistry VisibilityRegistry;
+            public DungeonDoorDualSideProbeReceiver DisabledProductionReceiver;
         }
     }
 }

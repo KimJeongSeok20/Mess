@@ -105,15 +105,6 @@ public class DungeonStartPoint : MonoBehaviour
             counter.transform.InverseTransformPoint(waitingWorld),
             counter.transform.InverseTransformPoint(reviveWorld));
 
-        var glow = new GameObject("Glow");
-        glow.transform.SetParent(counter.transform, false);
-        glow.transform.position = bounds.center + wallNormal * 0.6f;
-        var light = glow.AddComponent<Light>();
-        light.type = LightType.Point;
-        light.color = stationColor;
-        light.intensity = 1.8f;
-        light.range = 4f;
-
         Debug.Log($"[DungeonStartPoint] Revive counter attached to '{wall.name}'. waiting={waitingWorld} revive={reviveWorld}", this);
         return true;
     }

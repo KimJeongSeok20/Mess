@@ -9,12 +9,16 @@ Unity 6 · URP · PurrNet 온라인 멀티플레이 · 1인 개발
 
 | | |
 |---|---|
-| **플레이 빌드** | [Releases](https://github.com/KimJeongSeok20/MessUp/releases/latest) |
+| **플레이 빌드** | [Alpha 0.21](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.21) |
 | **플레이 영상** | <!-- YouTube 링크 --> |
 | **개발 기간** | 2025.08 ~ 진행 중 |
 | **역할** | 기획 · 프로그래밍 · 툴링 전담 (1인) |
 
 ---
+
+## Alpha 0.21
+
+Steam 없이 실행하는 로컬 플레이와 저장 이어하기를 추가하고, 캠프 진입과 던전 맵 로딩을 분리했습니다. 여러 던전 맵을 등록해도 선택한 맵만 읽도록 구성했습니다. [변경 내용과 확인 범위](docs/releases/alpha-0.21.md)를 참고해 주세요.
 
 ## 게임 소개
 
@@ -55,27 +59,28 @@ Lethal Company 계열의 협동 루팅 게임입니다. 하루는 게임 내 9:0
 
 ```
 src/Assets/
-├── Scripts/            게임 로직 (193)
-│   ├── Dungeon 1/        던전 생성·조명·전원·NavMesh   37
-│   ├── Inventory/        인벤토리·아이템·무기          33
-│   ├── monster/          몬스터 공통·smily·Octopus     31
-│   ├── Player/           체력·사망·부활·퍽             12
-│   ├── Menu/             메인 메뉴·세이브·Steam 방      9
-│   ├── Tax/              할당량·계약·계약 해지          8
-│   ├── Currency/         공유 자금·판매·시체            8
-│   ├── Interaction/      문·리셉션·스킬 터미널          6
-│   ├── TimeSync/         하루 사이클                     4
+├── Scripts/            게임 로직 (198)
+│   ├── Dungeon 1/        던전 생성·조명·전원·NavMesh
+│   ├── Inventory/        인벤토리·아이템·무기
+│   ├── monster/          몬스터 공통·smily·Octopus
+│   ├── Player/           체력·사망·부활·퍽
+│   ├── Menu/             메인 메뉴·세이브·Steam 방
+│   ├── Tax/              할당량·계약·계약 해지
+│   ├── Currency/         공유 자금·판매·시체
+│   ├── Interaction/      문·리셉션·스킬 터미널
+│   ├── TimeSync/         하루 사이클
 │   └── ...               Shop, Upgrade, Combat, Audio, UI, Debug
-├── Experiments/        던전 조명 PoC (164)
-├── Editor/             에디터 툴·회귀 테스트 (79)
+├── Experiments/        던전 조명 PoC (171)
+├── Editor/             에디터 툴·회귀 테스트 (86)
 ├── Monster/            Clown Behavior Graph · smily 액션 (33)
-└── Tests/              전투·카메라 스모크 (2)
+├── Tests/              전투·카메라 스모크 (2)
+└── Clown/Editor/       Clown 에디터 도구 (2)
 ```
 
 ---
 
 ## 이 저장소에 대하여
 
-**클론해도 빌드되지 않습니다.** 에셋스토어에서 구매한 모델·사운드·에디터 확장(DunGen, PurrNet, Kinemation 등)이 프로젝트의 큰 부분을 차지하는데 라이선스상 재배포할 수 없어 제외했습니다. 씬·프리팹·머티리얼도 함께 빠졌습니다. 직접 작성한 C# 스크립트 473개만 들어 있습니다.
+**클론해도 빌드되지 않습니다.** 에셋스토어에서 구매한 모델·사운드·에디터 확장(DunGen, PurrNet, Kinemation 등)이 프로젝트의 큰 부분을 차지하는데 라이선스상 재배포할 수 없어 제외했습니다. 씬·프리팹·머티리얼도 함께 빠졌습니다. 직접 작성한 C# 스크립트 492개만 들어 있습니다.
 
-플레이는 [Releases](https://github.com/KimJeongSeok20/MessUp/releases/latest)의 빌드로 해주세요.
+플레이는 [Alpha 0.21](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.21)의 빌드로 해주세요.

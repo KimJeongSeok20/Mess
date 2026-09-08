@@ -14,7 +14,6 @@ using UnityEngine.Rendering;
 /// </summary>
 public sealed class DungeonLightmapShaderVariantCollector : IPreprocessBuildWithReport
 {
-    private const string TileFolder = "Assets/Prefabs/map_piece/NewPrison/Tiles_Rotated";
     private const string CollectionPath = "Assets/Settings/DungeonRuntimeLightmapVariants.shadervariants";
     private static readonly HashSet<string> ReportedVariantFailures = new(StringComparer.Ordinal);
 
@@ -36,29 +35,23 @@ public sealed class DungeonLightmapShaderVariantCollector : IPreprocessBuildWith
         int attemptedVariants = 0;
         int addedVariants = 0;
 
-        foreach (string guid in AssetDatabase.FindAssets("t:Prefab", new[] { TileFolder }))
+        var materialPaths = new HashSet<string>(StringComparer.Ordinal);
+        foreach (string guid in AssetDatabase.FindAssets("t:DungeonMapList"))
         {
-            string prefabPath = AssetDatabase.GUIDToAssetPath(guid);
-            if (prefabPath.IndexOf("/BakedData/", StringComparison.OrdinalIgnoreCase) >= 0)
-                continue;
-
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-            if (prefab == null)
-                continue;
-
-            foreach (var renderer in prefab.GetComponentsInChildren<Renderer>(true))
+            var catalog = AssetDatabase.LoadAssetAtPath<DungeonMapList>(AssetDatabase.GUIDToAssetPath(guid));
+            if (catalog == null || catalog.UsesDeferredLoading) continue;
+            foreach (var entry in catalog.Entries)
             {
-                if (renderer == null)
-                    continue;
-
-                foreach (var material in renderer.sharedMaterials)
-                {
-                    if (material == null || material.shader == null || !seenMaterials.Add(material))
-                        continue;
-
-                    AddLightmapVariants(collection, material, ref attemptedVariants, ref addedVariants);
-                }
+                if (entry?.flow == null) continue;
+                foreach (string dependency in AssetDatabase.GetDependencies(AssetDatabase.GetAssetPath(entry.flow), true))
+                    if (dependency.EndsWith(".mat", StringComparison.OrdinalIgnoreCase)) materialPaths.Add(dependency);
             }
+        }
+        foreach (string path in materialPaths)
+        {
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material == null || material.shader == null || !seenMaterials.Add(material)) continue;
+            AddLightmapVariants(collection, material, ref attemptedVariants, ref addedVariants);
         }
 
         EnsurePreloaded(collection);

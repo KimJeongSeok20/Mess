@@ -59,8 +59,9 @@ public class InventoryBagItem : ShopPurchaseItemBase
 
         if (!PurchaseCurrencyManager.CanAfford(Price))
         {
-            ShowInsufficientFunds(Price, PurchaseCurrencyManager.SharedCurrency, playAudio: false);
-            _inventoryExpansionShop?.TryRequestPurchaseFeedback(this, success: false);
+            bool feedbackRequested = _inventoryExpansionShop != null &&
+                _inventoryExpansionShop.TryRequestPurchaseFeedback(this, success: false);
+            ShowInsufficientFunds(Price, PurchaseCurrencyManager.SharedCurrency, playAudio: !feedbackRequested);
             CancelPendingPurchaseRequest();
             return;
         }
@@ -68,7 +69,9 @@ public class InventoryBagItem : ShopPurchaseItemBase
         if (InventoryManagerExtensions.Instance != null &&
             !InventoryManagerExtensions.Instance.CanExpandInventory(slotExpansion))
         {
-            _inventoryExpansionShop?.TryRequestPurchaseFeedback(this, success: false);
+            if (_inventoryExpansionShop == null ||
+                !_inventoryExpansionShop.TryRequestPurchaseFeedback(this, success: false))
+                PlayFailureAudio();
             ShowMaxSlotsReached();
             CancelPendingPurchaseRequest();
             return;
@@ -107,14 +110,14 @@ public class InventoryBagItem : ShopPurchaseItemBase
         return true;
     }
 
-    public void ResolvePurchaseLocally(string purchaseToken, bool success, int currentCurrency)
+    public void ResolvePurchaseLocally(string purchaseToken, bool success, int currentCurrency, bool feedbackWasBroadcast)
     {
         if (!TryResolvePurchaseToken(purchaseToken))
             return;
 
         if (!success)
         {
-            ShowInsufficientFunds(Price, currentCurrency, playAudio: false);
+            ShowInsufficientFunds(Price, currentCurrency, playAudio: !feedbackWasBroadcast);
             return;
         }
 

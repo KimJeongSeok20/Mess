@@ -54,6 +54,16 @@ namespace DungeonRoomLocalLightShare
             bool connectionEnabled,
             out string failure)
         {
+            float beamWeight = connectionEnabled
+                ? RoomLocalLightShareMath.ComposeTransferWeight(sourcePower01, aperture01)
+                : 0f;
+            if (beamWeight <= 0.00001f)
+            {
+                DisableAll();
+                failure = null;
+                return true;
+            }
+
             if (!built)
                 Rebuild();
             if (beam == null)
@@ -79,9 +89,6 @@ namespace DungeonRoomLocalLightShare
                 return false;
             }
 
-            float beamWeight = connectionEnabled
-                ? RoomLocalLightShareMath.ComposeTransferWeight(sourcePower01, aperture01)
-                : 0f;
             Texture spotCookie = EnsureSquareCookie(cookie);
             // The cookie already contains normalized linear RGB. Tinting the Light with the
             // average chromaticity multiplies the color a second time. White light times the
@@ -96,7 +103,10 @@ namespace DungeonRoomLocalLightShare
             intensityScale = Mathf.Max(0.05f, scale);
             directRange = Mathf.Max(0.5f, range);
             if (beam != null)
+            {
                 beam.range = directRange;
+                UpdateShadowNearPlane();
+            }
         }
 
         public void SetShadowRenderingLayers(int shadowRenderingLayerMask)
@@ -106,6 +116,53 @@ namespace DungeonRoomLocalLightShare
             UniversalAdditionalLightData data = beam.GetUniversalAdditionalLightData();
             data.customShadowLayers = true;
             data.shadowRenderingLayers = (uint)shadowRenderingLayerMask;
+        }
+
+        public bool TrySampleRadiance(Vector3 worldPosition, float sourcePower01, float aperture01,
+            out Color radiance, out Vector3 portalEntry, out Vector3 directionToLight)
+        {
+            radiance = Color.black;
+            portalEntry = directionToLight = Vector3.zero;
+            if (!TryApply(sourcePower01, aperture01, true, out _) || beam == null || !beam.enabled ||
+                !(squareCookie is Texture2D cookie))
+                return false;
+
+            Vector3 local = beam.transform.InverseTransformPoint(worldPosition);
+            // A spot's virtual source is behind the doorway. It must never contribute SH
+            // to that source room, even though the Unity spot cone extends into it.
+            if (local.z <= sourceStandOff || float.IsNaN(local.z) || float.IsInfinity(local.z))
+                return false;
+            Vector3 fromLight = worldPosition - beam.transform.position;
+            float distanceSqr = fromLight.sqrMagnitude;
+            float rangeSqr = directRange * directRange;
+            if (distanceSqr >= rangeSqr || distanceSqr <= 0.00001f)
+                return false;
+            portalEntry = beam.transform.position + fromLight * (sourceStandOff / local.z);
+            Vector2 socket = RoomLocalDoorwayFrame.OverlappingSocketSize(
+                ResolveSocketSize(receiverDoorway), ResolveSocketSize(sourceDoorway));
+            Vector3 atDoor = receiverDoorway.InverseTransformPoint(portalEntry);
+            if (Mathf.Abs(atDoor.x) > socket.x * 0.5f || atDoor.y < 0f || atDoor.y > socket.y)
+                return false;
+
+            float halfCone = Mathf.Tan(beam.spotAngle * 0.5f * Mathf.Deg2Rad) * local.z;
+            float u = 0.5f + local.x / (2f * halfCone);
+            float v = 0.5f + local.y / (2f * halfCone);
+            if (u < 0f || u > 1f || v < 0f || v > 1f)
+                return false;
+
+            float distance = Mathf.Sqrt(distanceSqr);
+            float cosine = local.z / distance;
+            float outer = Mathf.Cos(beam.spotAngle * 0.5f * Mathf.Deg2Rad);
+            float inner = Mathf.Cos(beam.innerSpotAngle * 0.5f * Mathf.Deg2Rad);
+            float angular = Mathf.Clamp01((cosine - outer) / Mathf.Max(0.001f, inner - outer));
+            float distanceFactor = distanceSqr / rangeSqr;
+            float smoothRange = Mathf.Clamp01(1f - distanceFactor * distanceFactor);
+            // Same distance and cone attenuation as URP's RealtimeLights.hlsl. Reuse the
+            // existing readable cookie, including its RGB normalization and edge feather.
+            radiance = cookie.GetPixelBilinear(u, v) *
+                (beam.intensity * angular * angular * smoothRange * smoothRange / distanceSqr);
+            directionToLight = -fromLight / distance;
+            return RoomLocalLightShareMath.Luminance(radiance) > 0.000001f;
         }
 
         public void DisableAll()
@@ -147,7 +204,7 @@ namespace DungeonRoomLocalLightShare
             }
 
             RoomLocalDoorwayFrame.Frame frame = RoomLocalDoorwayFrame.FromDoorway(receiverDoorway, socket);
-            float spotAngle = RoomLocalDoorwayFrame.FittedSpotAngle(frame);
+            float spotAngle = RoomLocalDoorwayFrame.FittedSpotAngle(frame, sourceStandOff);
             Vector3 position = RoomLocalDoorwayFrame.SpotPosition(frame, sourceStandOff);
             Quaternion rotation = RoomLocalDoorwayFrame.SpotRotation(frame);
 
@@ -158,8 +215,19 @@ namespace DungeonRoomLocalLightShare
                 spotAngle,
                 directRange,
                 LightShadows.Soft,
-                RoomLocalLightShareContract.DungeonRenderingLayerMask);
+                RoomLocalLightShareContract.DoorwayShadowRenderingLayerMask);
+            UpdateShadowNearPlane();
             built = true;
+        }
+
+        private void UpdateShadowNearPlane()
+        {
+            if (beam == null)
+                return;
+            // The virtual source sits behind the portal. Ignore occluders in that source
+            // region, while keeping the doorway and every leaf in the receiving room.
+            beam.shadowNearPlane = Mathf.Clamp(sourceStandOff - 0.05f,
+                0.01f, Mathf.Max(0.01f, directRange - 0.01f));
         }
 
         private static Vector2 ResolveSocketSize(Transform doorwayTransform)
@@ -195,7 +263,7 @@ namespace DungeonRoomLocalLightShare
             light.innerSpotAngle = Mathf.Max(1f, spotAngle * 0.65f);
             light.range = range;
             light.shadows = shadows;
-            light.shadowStrength = 0.9f;
+            light.shadowStrength = 1f;
             light.shadowBias = 0.05f;
             light.shadowNormalBias = 0.25f;
             light.cullingMask = RoomLocalLightShareContract.DungeonCullingMask;

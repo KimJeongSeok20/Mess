@@ -214,7 +214,7 @@ public sealed class SteamRoomService : MonoBehaviour
     {
         AsyncOperation loading = null;
         string error = null;
-        try { loading = SceneManager.LoadSceneAsync(GameplayScene); }
+        try { loading = GameSceneLoading.Begin(GameplayScene); }
         catch (Exception exception) { error = exception.Message; }
         if (loading == null) { _loadingScene = false; Fail("Unable to load gameplay. " + error); yield break; }
         while (!loading.isDone) yield return null;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Rendering;
@@ -15,19 +16,30 @@ using UnityEngine.Rendering;
 /// </summary>
 public sealed class VfxShaderVariantStripper : IPreprocessShaders
 {
-    // IDA_Skin is the character skin graph: it exceeds the 16-sampler limit of ps_4_0 only in its
-    // lightmap variants, and characters are never lightmapped, so those variants are dropped too.
-    private static readonly string[] ShaderNameMarkers = { "Vefects", "IDA_Skin" };
+    // IDA_Skin is the character skin graph: it exceeds the 16-sampler limit of ps_4_0 in its
+    // lightmap/probe variants and in the light-cookie variants, and characters are never
+    // lightmapped, so those axes are dropped for it. _LIGHT_LAYERS must stay: the URP asset
+    // enables light layers, which makes it a global keyword at runtime, and without a matching
+    // variant the built skin (fingers between the gloves) did not render at all.
+    private const string VfxMarker = "Vefects";
+    private const string SkinMarker = "IDA_Skin";
 
-    private static readonly string[] StrippedKeywords =
+    private static readonly string[] LightmapAndProbeKeywords =
     {
         "LIGHTMAP_ON", "DIRLIGHTMAP_COMBINED", "DYNAMICLIGHTMAP_ON", "LIGHTMAP_SHADOW_MIXING",
         "SHADOWS_SHADOWMASK", "USE_LEGACY_LIGHTMAPS",
         "PROBE_VOLUMES_L1", "PROBE_VOLUMES_L2", "EVALUATE_SH_MIXED", "EVALUATE_SH_VERTEX",
         "DOTS_INSTANCING_ON", "LOD_FADE_CROSSFADE", "DEBUG_DISPLAY",
+    };
+
+    private static readonly string[] VfxStrippedKeywords = LightmapAndProbeKeywords.Concat(new[]
+    {
         "_LIGHT_LAYERS", "_LIGHT_COOKIES", "_WRITE_RENDERING_LAYERS",
         "_DBUFFER_MRT1", "_DBUFFER_MRT2", "_DBUFFER_MRT3",
-    };
+    }).ToArray();
+
+    private static readonly string[] SkinStrippedKeywords =
+        LightmapAndProbeKeywords.Concat(new[] { "_LIGHT_COOKIES" }).ToArray();
 
     private static int s_totalStripped;
     private static int s_totalKept;
@@ -36,13 +48,17 @@ public sealed class VfxShaderVariantStripper : IPreprocessShaders
 
     public void OnProcessShader(Shader shader, ShaderSnippetData snippet, IList<ShaderCompilerData> data)
     {
-        if (shader == null || !IsVfxShader(shader.name))
+        if (shader == null)
+            return;
+
+        string[] strippedKeywords = StrippedKeywordsFor(shader.name);
+        if (strippedKeywords == null)
             return;
 
         int before = data.Count;
         for (int i = data.Count - 1; i >= 0; i--)
         {
-            if (HasStrippedKeyword(shader, data[i].shaderKeywordSet))
+            if (HasStrippedKeyword(shader, data[i].shaderKeywordSet, strippedKeywords))
                 data.RemoveAt(i);
         }
 
@@ -54,22 +70,20 @@ public sealed class VfxShaderVariantStripper : IPreprocessShaders
             Debug.Log($"[VfxShaderVariantStripper] {shader.name} {snippet.passName}: kept {data.Count}, stripped {stripped} (running total stripped={s_totalStripped}, kept={s_totalKept})");
     }
 
-    private static bool IsVfxShader(string shaderName)
+    private static string[] StrippedKeywordsFor(string shaderName)
     {
-        for (int i = 0; i < ShaderNameMarkers.Length; i++)
-        {
-            if (shaderName.IndexOf(ShaderNameMarkers[i], System.StringComparison.OrdinalIgnoreCase) >= 0)
-                return true;
-        }
-
-        return false;
+        if (shaderName.IndexOf(VfxMarker, System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return VfxStrippedKeywords;
+        if (shaderName.IndexOf(SkinMarker, System.StringComparison.OrdinalIgnoreCase) >= 0)
+            return SkinStrippedKeywords;
+        return null;
     }
 
-    private static bool HasStrippedKeyword(Shader shader, ShaderKeywordSet keywordSet)
+    private static bool HasStrippedKeyword(Shader shader, ShaderKeywordSet keywordSet, string[] strippedKeywords)
     {
-        for (int i = 0; i < StrippedKeywords.Length; i++)
+        for (int i = 0; i < strippedKeywords.Length; i++)
         {
-            var keyword = new ShaderKeyword(shader, StrippedKeywords[i]);
+            var keyword = new ShaderKeyword(shader, strippedKeywords[i]);
             if (keyword.IsValid() && keywordSet.IsEnabled(keyword))
                 return true;
         }

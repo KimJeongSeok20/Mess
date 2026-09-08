@@ -11,6 +11,10 @@ public sealed class PlayerSoundProfile : ScriptableObject
     [Header("Footsteps")]
     [SerializeField] private List<AudioClip> walkSounds = new();
     [SerializeField] private List<AudioClip> sprintSounds = new();
+    [Range(0f, 1f)]
+    [SerializeField] private float walkVolume = 0.4f;
+    [Range(0f, 1f)]
+    [SerializeField] private float sprintVolume = 0.35f;
     [SerializeField] private float walkDelay = 0.45f;
     [SerializeField] private float sprintDelay = 0.30f;
     [Range(0f, 1f)]
@@ -19,6 +23,10 @@ public sealed class PlayerSoundProfile : ScriptableObject
     [Header("Jumping")]
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private AudioClip landSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float jumpVolume = 0.4f;
+    [Range(0f, 1f)]
+    [SerializeField] private float landVolume = 0.25f;
 
     [Header("Aiming")]
     [SerializeField] private AudioClip aimInSound;
@@ -32,11 +40,15 @@ public sealed class PlayerSoundProfile : ScriptableObject
     public AudioClip UnEquipSound => unEquipSound;
     public IReadOnlyList<AudioClip> WalkSounds => walkSounds;
     public IReadOnlyList<AudioClip> SprintSounds => sprintSounds;
+    public float WalkVolume => walkVolume;
+    public float SprintVolume => sprintVolume;
     public float WalkDelay => walkDelay;
     public float SprintDelay => sprintDelay;
     public float SprintClipThreshold => sprintClipThreshold;
     public AudioClip JumpSound => jumpSound;
     public AudioClip LandSound => landSound;
+    public float JumpVolume => jumpVolume;
+    public float LandVolume => landVolume;
     public AudioClip AimInSound => aimInSound;
     public AudioClip AimOutSound => aimOutSound;
     public float OneShotVolume => oneShotVolume;

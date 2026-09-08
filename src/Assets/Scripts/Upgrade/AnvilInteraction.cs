@@ -34,14 +34,16 @@ public class AnvilInteraction : AInteractable
     [Header("Audio")]
     [SerializeField] private AudioClip upgradeSound;
     [SerializeField] [Range(0f, 1f)] private float upgradeSoundVolume = 1f;
+    [SerializeField] private AudioClip upgradeFailureSound;
+    [SerializeField, Range(0f, 1f)] private float upgradeFailureSoundVolume = 0.35f;
     [SerializeField] private AudioMixerGroup upgradeMixerGroup;
+    [SerializeField] private AudioSource _audioSource;
 
     // 캐시
     private PromptPresenter _prompt;
     private InventoryManager _inventoryManager;
     private CurrencyManager _currencyManager;
     private AnvilUI _anvilUI;
-    private AudioSource _audioSource;
 
     public IReadOnlyList<ItemUpgradeRecipe> Recipes => recipes;
 
@@ -397,7 +399,7 @@ public class AnvilInteraction : AInteractable
             ConfirmUpgradeRollTargetRpc(info.sender, baseName, currentTier, (int)RollOutcome.Rejected, 0, chance, false, mainToken, materialToken, default);
             return;
         }
-        if (outcome == RollOutcome.Success) BroadcastUpgradeSound();
+        PlayUpgradeSoundObserversRpc(outcome == RollOutcome.Success);
         ConfirmUpgradeRollTargetRpc(info.sender, baseName, currentTier, (int)outcome, cost, chance, useMaterial, mainToken, materialToken, replacement);
     }
 
@@ -440,7 +442,8 @@ public class AnvilInteraction : AInteractable
             outcome = recipe.DowngradesOnFail(resultTier) && currentTier > 0 ? RollOutcome.Downgrade : RollOutcome.Fail;
         }
 
-        ApplyRollOutcomeLocally(recipe, currentTier, outcome, useMaterial);
+        if (ApplyRollOutcomeLocally(recipe, currentTier, outcome, useMaterial))
+            PlayUpgradeSoundLocal(outcome == RollOutcome.Success);
         AnnounceOutcome(recipe, currentTier, outcome, chance, recipe.GetUpgradeCost(resultTier));
         OnRollResolved?.Invoke(recipe, resultTier, outcome, chance);
         RefreshOpenUi();
@@ -496,9 +499,6 @@ public class AnvilInteraction : AInteractable
         int toTier = outcome == RollOutcome.Success ? currentTier + 1 : Mathf.Max(0, currentTier - 1);
         if (!ReplaceWeaponTier(recipe, currentTier, toTier))
             return false;
-
-        if (outcome == RollOutcome.Success)
-            BroadcastUpgradeSound();
 
         Debug.Log($"[AnvilInteraction] {baseName} +{currentTier} → +{toTier} ({outcome})");
         return true;
@@ -601,13 +601,14 @@ public class AnvilInteraction : AInteractable
     }
 
 
-    private void PlayUpgradeSoundLocal()
+    private void PlayUpgradeSoundLocal(bool succeeded)
     {
-        if (upgradeSound == null) return;
+        AudioClip clip = succeeded ? upgradeSound : upgradeFailureSound;
+        if (clip == null) return;
         EnsureAudioSource();
-        _lastUpgradeAudioDebug = $"{name}|pos={transform.position}";
+        _lastUpgradeAudioDebug = $"{name}|success={succeeded}|pos={transform.position}";
         Debug.Log($"[AnvilUpgradeAudio] {_lastUpgradeAudioDebug}");
-        _audioSource.PlayOneShot(upgradeSound, upgradeSoundVolume);
+        _audioSource.PlayOneShot(clip, succeeded ? upgradeSoundVolume : upgradeFailureSoundVolume);
     }
 
     public static string GetLastUpgradeAudioDebug()
@@ -615,36 +616,10 @@ public class AnvilInteraction : AInteractable
         return _lastUpgradeAudioDebug;
     }
 
-    private void BroadcastUpgradeSound()
-    {
-        if (upgradeSound == null)
-            return;
-
-        if (NetworkManager.main == null)
-        {
-            PlayUpgradeSoundLocal();
-            return;
-        }
-
-        if (isServer)
-        {
-            PlayUpgradeSoundObserversRpc();
-            return;
-        }
-
-        RequestPlayUpgradeSoundServerRpc();
-    }
-
-    [ServerRpc(requireOwnership: false)]
-    private void RequestPlayUpgradeSoundServerRpc()
-    {
-        PlayUpgradeSoundObserversRpc();
-    }
-
     [ObserversRpc]
-    private void PlayUpgradeSoundObserversRpc()
+    private void PlayUpgradeSoundObserversRpc(bool succeeded)
     {
-        PlayUpgradeSoundLocal();
+        PlayUpgradeSoundLocal(succeeded);
     }
 
     private void DropResultItemNearPlayer(GameObject itemObj, int upgradeTier)

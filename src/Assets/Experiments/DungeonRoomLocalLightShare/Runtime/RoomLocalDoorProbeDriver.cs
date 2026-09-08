@@ -13,9 +13,8 @@ namespace DungeonRoomLocalLightShare
     }
 
     /// <summary>
-    /// Supplies the isolated preview door with the room-local baked SH data that is normally
-    /// provided by DungeonTileProbeRegistry in a generated dungeon. The preview scene has no
-    /// generator and therefore no global probe registry or Unity LightProbes collection.
+    /// Samples room SH through DungeonTileProbeRegistry in generated dungeons, preserving
+    /// its visibility filtering. Isolated previews without a registry use the baked entries.
     /// PositiveZ/NegativeZ keep the closed-pose room only while the sample sits near the
     /// doorway. Once a face has swung clearly into a room, that location wins. Edge pieces
     /// always follow the current normal's location.
@@ -69,6 +68,8 @@ namespace DungeonRoomLocalLightShare
         private MaterialPropertyBlock workingBlock;
         private Material runtimeOpaqueMaterial;
         private RoomLocalConnection connection;
+        private DunGen.Tile startTile;
+        private DunGen.Tile administrativeTile;
         private Renderer shadowCasterRenderer;
         private bool shadowCasterStateCaptured;
         private bool originalShadowCasterEnabled;
@@ -77,6 +78,7 @@ namespace DungeonRoomLocalLightShare
         private uint originalShadowCasterRenderingLayerMask;
         private bool initialized;
         private bool applied;
+        private bool restorationPending;
         private bool faultLatched;
         private string faultReason = string.Empty;
         private float lastStartFacingLuminance;
@@ -119,6 +121,7 @@ namespace DungeonRoomLocalLightShare
             startOutgoing = startMap;
             administrativeOutgoing = administrativeMap;
             connection = GetComponent<RoomLocalConnection>();
+            CacheRoomTiles();
             initialized = false;
             faultLatched = false;
             faultReason = string.Empty;
@@ -230,7 +233,8 @@ namespace DungeonRoomLocalLightShare
 
             DungeonTileBakeData startBake = CurrentBake(startLighting);
             DungeonTileBakeData administrativeBake = CurrentBake(administrativeLighting);
-            if (!HasProbeData(startBake) || !HasProbeData(administrativeBake))
+            if (DungeonTileProbeRegistry.Active == null &&
+                (!HasProbeData(startBake) || !HasProbeData(administrativeBake)))
             {
                 failure = "Door probe driver requires P0/P100 baked probe entries for both rooms.";
                 return false;
@@ -343,6 +347,7 @@ namespace DungeonRoomLocalLightShare
                 return false;
             }
 
+            CacheRoomTiles();
             bindings.Clear();
             var uniqueRenderers = new HashSet<Renderer>();
             DungeonDoorProbeRendererGroup[] groups =
@@ -389,6 +394,7 @@ namespace DungeonRoomLocalLightShare
             workingBlock = new MaterialPropertyBlock();
             for (int i = 0; i < bindings.Count; i++)
                 bindings[i].CaptureOriginalState();
+            restorationPending = true;
 
             if (!ApplyVisibleSurfacePolicy(out failure))
                 return false;
@@ -502,6 +508,16 @@ namespace DungeonRoomLocalLightShare
                                         DungeonTileLightmapSwitcher.PowerLevel.P100
                 ? 1f
                 : 0f;
+            float aperture = 1f;
+            if (connection != null)
+            {
+                RoomLocalTransferState state = connection.EvaluateTransferState();
+                if (!state.Enabled)
+                    return Color.black;
+                startPower = state.StartPower01;
+                administrativePower = state.AdministrativePower01;
+                aperture = state.ApertureFraction;
+            }
             Vector3 directionToStart = -startDoorway.forward;
             Vector3 directionToAdministrative = -administrativeDoorway.forward;
             float startFacing = RoomLocalLightShareMath.ComputeLambertFaceResponse(
@@ -516,7 +532,7 @@ namespace DungeonRoomLocalLightShare
                 PoweredDirectColor(startOutgoing, startPower) * startFacing +
                 PoweredDirectColor(administrativeOutgoing, administrativePower) *
                 administrativeFacing;
-            response *= perFaceDirectScale * tuning;
+            response *= perFaceDirectScale * tuning * aperture;
             response.a = 1f;
             return response;
         }
@@ -580,6 +596,11 @@ namespace DungeonRoomLocalLightShare
 
         private void RestoreOriginalState()
         {
+            // OnDisable restores before the installer hands SH back to its prior receiver.
+            // A later OnDestroy must not overwrite that receiver's newly applied block.
+            if (!restorationPending)
+                return;
+            restorationPending = false;
             for (int i = 0; i < bindings.Count; i++)
                 bindings[i].RestoreOriginalState();
             if (runtimeOpaqueMaterial != null)
@@ -623,6 +644,14 @@ namespace DungeonRoomLocalLightShare
                 TryApplyNow(out _);
         }
 
+        private void CacheRoomTiles()
+        {
+            startTile = startRoot != null ? startRoot.GetComponentInParent<DunGen.Tile>(true) : null;
+            administrativeTile = administrativeRoot != null
+                ? administrativeRoot.GetComponentInParent<DunGen.Tile>(true)
+                : null;
+        }
+
         private bool TrySample(
             Transform roomRoot,
             DungeonTileBakeData bake,
@@ -634,6 +663,26 @@ namespace DungeonRoomLocalLightShare
             probe = default;
             occlusion = Vector4.one;
             nearestDistance = float.PositiveInfinity;
+            DungeonTileProbeRegistry activeRegistry = DungeonTileProbeRegistry.Active;
+            if (activeRegistry != null)
+            {
+                DunGen.Tile tile = roomRoot == startRoot ? startTile :
+                    roomRoot == administrativeRoot ? administrativeTile : null;
+                if (tile == null)
+                    return false;
+                if (activeRegistry.TrySampleForTile(tile, worldPosition, out probe, out occlusion,
+                        out DungeonTileProbeRegistry.SampleInfo info, doorLeaf))
+                    return true;
+
+                // Visibility failure is a valid dark result, never a request to revive the
+                // old distance-only sample. Missing registered data remains a query failure.
+                probe = default;
+                occlusion = Vector4.one;
+                return info.hasTileData && info.noVisibleProbes;
+            }
+
+            if (roomRoot == null || !HasProbeData(bake))
+                return false;
             DungeonTileBakeData.LightProbeBakeEntry[] entries = bake.lightProbeEntries;
             ResetNearestBuffers();
             for (int i = 0; i < entries.Length; i++)

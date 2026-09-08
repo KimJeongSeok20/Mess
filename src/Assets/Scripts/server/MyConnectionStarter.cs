@@ -12,6 +12,7 @@ namespace PurrLobby
     {
         private SteamTransport _steamtransport;
         private UDPTransport _udpTransport;
+        [SerializeField] private LocalTransport localTransport;
         private NetworkManager _networkManager;
         private LobbyDataHolder _lobbyDataHolder;
 
@@ -51,7 +52,8 @@ namespace PurrLobby
 
             if (_networkManager != null)
             {
-                _networkManager.transport = _isFromLobby ? _steamtransport : _udpTransport;
+                _networkManager.transport = _soloStartRequested ? localTransport
+                    : _isFromLobby ? _steamtransport : _udpTransport;
                 Debug.Log($"[MyConnectionStarter] Awake transport bind: {(_networkManager.transport != null ? _networkManager.transport.GetType().Name : "null")}");
             }
         }
@@ -83,15 +85,21 @@ namespace PurrLobby
         }
         private void StartNormal()
         {
-            _networkManager.transport = _udpTransport;
-
             // A title-menu solo request takes precedence over a stale lobby or client test flag.
             if (_soloStartRequested)
             {
+                if (localTransport == null)
+                {
+                    PurrLogger.LogError("Local play transport is missing on NetworkManager.", this);
+                    return;
+                }
+                Debug.Log("[MyConnectionStarter] Local solo session (no network socket).");
                 _networkManager.StartServer();
-                StartCoroutine(StartClientAfterDelay(HostClientStartDelay));
+                _networkManager.StartClient();
                 return;
             }
+
+            _networkManager.transport = _udpTransport;
 
             bool isClone = false;
             #if UNITY_EDITOR

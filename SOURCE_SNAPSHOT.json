@@ -1,0 +1,1976 @@
+{
+  "release": "alpha-0.21",
+  "scope": "Existing public C# roots only; not a complete Unity project",
+  "hashFormat": "SHA-256 of exported file bytes with LF line endings",
+  "fileCount": 492,
+  "files": [
+    {
+      "path": "Assets/Clown/Editor/ClownSkin2CombinedPrefabSetup.cs",
+      "sha256": "bebbe266b0f812c360940c38631466a9c40868c9e3bd8cd43c87a4288765c1a2"
+    },
+    {
+      "path": "Assets/Clown/Editor/ClownSkin2CombinedSetup.cs",
+      "sha256": "3b0505b5c88a8bed5c91bc1c9628321df500416c3a909a2597038981556353f2"
+    },
+    {
+      "path": "Assets/Editor/Audio/AudioBalanceMixer.cs",
+      "sha256": "027761b09fe05e3642515235fa82cd2172707e0cb0d017a57dec50285d83d4dd"
+    },
+    {
+      "path": "Assets/Editor/Audio/AudioBalanceWindow.cs",
+      "sha256": "a14eae91bb32b279586e049f94e6a4023f87dfacfb3b4ad1802f297c6c5cd170"
+    },
+    {
+      "path": "Assets/Editor/Audio/ClipBalanceCatalog.cs",
+      "sha256": "9a258583775aa8de893b2688ba175b874dfa3ff7ed5c87e5e73dd22a0b834a48"
+    },
+    {
+      "path": "Assets/Editor/Audio/ClipBalanceProcessor.cs",
+      "sha256": "fe7bea882cd1de22c7a3e475a222f9fcc36d1d70a0d1ff6450f8476f1d7f6056"
+    },
+    {
+      "path": "Assets/Editor/BAKEROTATETOOLV2.cs",
+      "sha256": "dc13721cc50d4a57b5279050b3686a91943460427b1fcfc07c65f1c88d3c97e0"
+    },
+    {
+      "path": "Assets/Editor/BakeCurrentPose.cs",
+      "sha256": "b545a645e1b6f48bcf5ab565d4d442caf87a4e2ac430b723087d55e1bb1f8219"
+    },
+    {
+      "path": "Assets/Editor/BreakerControlRoomAuthoring.cs",
+      "sha256": "e077c2b27e09e8cc35a078e250c8799cb13fcf11b53e893b12d6f740e863c14a"
+    },
+    {
+      "path": "Assets/Editor/ClownGiftCollisionTests.cs",
+      "sha256": "b59527d3dc67465dedbf19bef038c57795a181bc73b1a4378512697323b226e5"
+    },
+    {
+      "path": "Assets/Editor/CodexDungeonLightingBuild.cs",
+      "sha256": "956f86285f4d66342dda770ff388a84025c972d8e5ca76c510860c7a2452e643"
+    },
+    {
+      "path": "Assets/Editor/DeathLifecycleRegressionTests.cs",
+      "sha256": "83976a9c016cc0ff72733741d742c4c9a579490ee7abb4cb973ecfae35d8c603"
+    },
+    {
+      "path": "Assets/Editor/DungeonDoorProbeMeshSplitTool.cs",
+      "sha256": "ffd33e98f4ddb07b910f1d5893b361ac2ea50c77d47a30891dbc836cf8ae7b00"
+    },
+    {
+      "path": "Assets/Editor/DungeonDoorwayBoundaryValidator.cs",
+      "sha256": "fd82030cc4038ea5c9ca8c9b5b66c9304872604e0f02e9672adede63fbb213a8"
+    },
+    {
+      "path": "Assets/Editor/DungeonDoorwayHoleWallBakeCli.cs",
+      "sha256": "558599e584ab550d216d551b2809104c1831470e0314864e78cf65f84eb14451"
+    },
+    {
+      "path": "Assets/Editor/DungeonInternalDoorAuthoring.cs",
+      "sha256": "d83904e55d7f60979079de0740ec75e128bef456fc81beac95b822b51abd7341"
+    },
+    {
+      "path": "Assets/Editor/DungeonInternalDoorAuthoringTests.cs",
+      "sha256": "51094e3d4eeb391f61be5a50c2dd25b857007737a2ae45e85b30f6970d6f98ab"
+    },
+    {
+      "path": "Assets/Editor/DungeonLightmapShaderVariantCollector.cs",
+      "sha256": "9a836cb53f1f86db287dd51484577f8a1ab130a54e6395e608342f02fa540c72"
+    },
+    {
+      "path": "Assets/Editor/DungeonMapContentBuild.cs",
+      "sha256": "01490e3a3f885d0ba29ff070b78d2c3200eed9e5cc5a1b2065e75ae2e13b7270"
+    },
+    {
+      "path": "Assets/Editor/DungeonMapLoadingRegressionTests.cs",
+      "sha256": "af55ed417f08750e6fa82bd3d62f15ccc08336991082efad667eccfbfbf16a2c"
+    },
+    {
+      "path": "Assets/Editor/DungeonNavMeshAreaEditor.cs",
+      "sha256": "5f7d975d465fc1ffd7d5a0bd661bb90a46c028cd41b4145e34d6e5fdd520c2dc"
+    },
+    {
+      "path": "Assets/Editor/DungeonNavMeshAreaSnapUtility.cs",
+      "sha256": "44783d4443f8a71bbfb9d0b617f82c0e1e935570c3b7479de4803fd599bdcb6c"
+    },
+    {
+      "path": "Assets/Editor/DungeonNavMeshFootprintBlockerAuthoring.cs",
+      "sha256": "a0612d0256ec06ce82d2e564e1f018720d3ae7e9dfb395c76a0f2a3ad54e6f97"
+    },
+    {
+      "path": "Assets/Editor/DungeonProbeSpatialBlendWindow.cs",
+      "sha256": "a77a99e7f364e449ba82971c17fc938b39c00f58954f9f065826209105296dbc"
+    },
+    {
+      "path": "Assets/Editor/DungeonRoomAuthoringSceneTools.cs",
+      "sha256": "427abfb35d6329ffa0e3910c861f6b47bc7ab519a40d14b0b812a62ea40c718a"
+    },
+    {
+      "path": "Assets/Editor/DungeonSingleBakedLightingTests.cs",
+      "sha256": "4c1cd3e07c612369d2e7a8061839efd5abcafc8e484e594ec79124f8df1f9bfb"
+    },
+    {
+      "path": "Assets/Editor/DungeonStartRoomBranchingTests.cs",
+      "sha256": "b0e3972e5ecf9302e8e5e4d61a99e258e63bd52875925d8fca0d964aedeadfbf"
+    },
+    {
+      "path": "Assets/Editor/DungeonTileProbeBakeDiagnostics.cs",
+      "sha256": "dd0f1bbf378e17f2abc1a1702cbf2cad6a1dbff16ea5352b72abde1b535fe4f8"
+    },
+    {
+      "path": "Assets/Editor/DungeonTileRotationBakeTool.cs",
+      "sha256": "cf2ea88d4f550fa03cdef6a7376931364e7a82f49605850913a1882c656392b1"
+    },
+    {
+      "path": "Assets/Editor/DungeonV2ControlCenter.cs",
+      "sha256": "4b80c4592addf050b20b7da4c6075b0cdc653108a206fa6a68e10dc89ee55db3"
+    },
+    {
+      "path": "Assets/Editor/DungeonV2NavigationPrefabAuthoring.cs",
+      "sha256": "6d79ceb334583d80f8da3f35c04cf8f2e317ba6c40e772704c7e75b3a2f0b9c2"
+    },
+    {
+      "path": "Assets/Editor/DungeonV2NonBakeSettingsSync.cs",
+      "sha256": "562f3c47a85648faea50f26320c2ca9eba86a56599a5ac2c4231bd7cb568ae40"
+    },
+    {
+      "path": "Assets/Editor/DungeonV2ProductionFlowAuthoring.cs",
+      "sha256": "2569c053f93e6c02f182984eda46e83749c3ebf0a50a5684778145ac15c947b6"
+    },
+    {
+      "path": "Assets/Editor/EnableMeshReadWrite.cs",
+      "sha256": "7ba3d95080462ae7c2ce9aafce40dfdfa2eac6eaa43cf4c4a18ae16421c55567"
+    },
+    {
+      "path": "Assets/Editor/FPSMovementGroundingTests.cs",
+      "sha256": "b584f9361784ebb4f52768016fd8d4c45439af0845aea490b41e6d6aec9a3fba"
+    },
+    {
+      "path": "Assets/Editor/FixDoorPrefabs.cs",
+      "sha256": "86d066c55ec4ed7acdbcd9373c8847d1cbb7a2eb0d73b72ba2c0bfc4ff2e2f81"
+    },
+    {
+      "path": "Assets/Editor/GameplayAuditRegressionTests.cs",
+      "sha256": "836ba581cca0c37f48e2149a76a5d5ee2e0205911f939662b0a7954c5f9775a9"
+    },
+    {
+      "path": "Assets/Editor/GameplaySessionRecorder.cs",
+      "sha256": "1a8db41a1fcb6d1f05742021fc8800eb74e2f61b5e0f8f440cdb517961152e00"
+    },
+    {
+      "path": "Assets/Editor/HeldItemAdjustmentStudioEditor.cs",
+      "sha256": "2e5db6f3085d50df09e62e856310a539639e8407af5f7d981433275fca0b6cfe"
+    },
+    {
+      "path": "Assets/Editor/HeldItemAuthoringTool.cs",
+      "sha256": "d273f3d51ee6ddc8b22bd7992db19566e906550410425c5081231ef00cd3977a"
+    },
+    {
+      "path": "Assets/Editor/HeldItemStudioTests.cs",
+      "sha256": "9f4963ebc05f0861dd8f4b646e3e1aa59d1b847a6557cbbd45912bab89fe6e91"
+    },
+    {
+      "path": "Assets/Editor/InventoryNetworkPrefabAudit.cs",
+      "sha256": "7dbbb0b217860391697f65814bde89e0643228423300f4520c378b12f238197b"
+    },
+    {
+      "path": "Assets/Editor/InventoryTransactionPlayAudit.cs",
+      "sha256": "047ff24ca94a1527d419e0cedcc6e6cf47797e145ae5e6a61590ce1d0328932b"
+    },
+    {
+      "path": "Assets/Editor/LocalTransportRegressionTests.cs",
+      "sha256": "755855e9ac4084d09a9f6a54fd833724ca598677c457fbdf4fef1f0af1186430"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonDecalMaterialSetup.cs",
+      "sha256": "f561c53598917f7e95badbb5e169935524ca95685a25179a85e13e2822bad59c"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonDecalUtility.cs",
+      "sha256": "f0e63fbfeb7cc81b58051abc232e18869e40bc35f2bec24de28de34adf619f81"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonEmissionMaterialSetup.cs",
+      "sha256": "8946c359de1814b0f28c72011282e4250fcaec88042f20e987fab99872de8de1"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonLightingDiagnostics.cs",
+      "sha256": "cee40ad6b55a975a696515734a8514c78e97e72b8f9a27138bd4b232f0f272dc"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonLightingIntegrityValidator.cs",
+      "sha256": "885253b7cf93eace5a064228269101c46451c031b611adca7ce7d4896e6abc55"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonLightingPrefabNormalizer.cs",
+      "sha256": "e61986d057c89aed9e6a2e2239ab79dec4a06d95847fa3662b0170d2000c9842"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonReceptionWindowBakeSafeSetup.cs",
+      "sha256": "a40cef58d7d1335e09d52e5aa4abc61ea0d2dfd54dc7acc3ee3bf127f2c53e23"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonStartTileSetUtility.cs",
+      "sha256": "e83cc3da8457cdc5b69d1fb9eb4c21441d414ef021f51335cc59a6659c670933"
+    },
+    {
+      "path": "Assets/Editor/NewPrisonTileSetUtility.cs",
+      "sha256": "3d12509967013e701e0c60a8252e4b52e5eb5188ba4054bcb03552265fad0934"
+    },
+    {
+      "path": "Assets/Editor/OC_ForceReserializeAssetsMenu.cs",
+      "sha256": "7d2413023c6b29f793b6b3eda4aae4b03fabb0962d26d0d6a5b6ab5ac64b24fc"
+    },
+    {
+      "path": "Assets/Editor/OctopusSwarmProductionTests.cs",
+      "sha256": "05d41eec2a2147405756ff96dde022b1f955f1b93011bc7294a8b3dd72f4612c"
+    },
+    {
+      "path": "Assets/Editor/OutdoorCorridorLightingAuthoring.cs",
+      "sha256": "4ab30c139ad3ebc0a2341d7b5868d05f3419b51359a15bf2e32da398b9d3d24e"
+    },
+    {
+      "path": "Assets/Editor/PhoneLookUMotionSetup.cs",
+      "sha256": "3b58f99ad21cc1a783dfa980cfa46e9815aec670590969096ae00496fe721daa"
+    },
+    {
+      "path": "Assets/Editor/RemoveCeilSpawnPoints.cs",
+      "sha256": "d88ac59cdce819a586245de63d0defbd619c7ab1018020f58c6e52412d42abf6"
+    },
+    {
+      "path": "Assets/Editor/RoomPowerPhoneAuthoring.cs",
+      "sha256": "afcabf154d3c2697fe62ab1de25a1c4d007a5e4246d7ba786e459143e71968a5"
+    },
+    {
+      "path": "Assets/Editor/RpgProjectileProductionTests.cs",
+      "sha256": "3c4a3a5e4fc1c3e632bdb1e8bde663abcbc45b954ea2b85e47b57dcbb88f0f14"
+    },
+    {
+      "path": "Assets/Editor/RunSaveRegressionTests.cs",
+      "sha256": "b62e64f2839064a4666d64bf4f8914d54e0a8164852a995bed0faf8a971cba56"
+    },
+    {
+      "path": "Assets/Editor/RunningJumpAaaAuthoring.cs",
+      "sha256": "cd13d13a76e88014f8bc0caa2ce63accfe6c3758dd3b865633962b407c745316"
+    },
+    {
+      "path": "Assets/Editor/RunningJumpIntegrationTests.cs",
+      "sha256": "8eeff01ba725925095d22bcdc8a839be50d657d0a0b362447cf3a3bc1bbc6139"
+    },
+    {
+      "path": "Assets/Editor/RuntimeNavMeshAgentTypeDebugWindow.cs",
+      "sha256": "46a8a3aa44386574379900cbbd0cb73b800a8bfccc1c48225f1e4cd51e95f43d"
+    },
+    {
+      "path": "Assets/Editor/ServerInventoryTransactionTests.cs",
+      "sha256": "d7173dfb39f2512253d59c9388cb25b1c1df117d22d0d465adcfd96baf7541b3"
+    },
+    {
+      "path": "Assets/Editor/SkillPerkEffectRegressionTests.cs",
+      "sha256": "6a620b21635564c2268e56af160b0fad605c470b826e95b053a9527cb0086b4a"
+    },
+    {
+      "path": "Assets/Editor/SkillTerminalHudRegressionTests.cs",
+      "sha256": "727b811a8ed0f3fe0e50310d4f0857aac729d31ea2b00d4df3ef112911213c55"
+    },
+    {
+      "path": "Assets/Editor/SkillTerminalInputRegressionTests.cs",
+      "sha256": "51bef35d03be60b2aebbb90b07e1c530aaeebd674ff710999c5409a0ba48f026"
+    },
+    {
+      "path": "Assets/Editor/SkillTerminalUiAuthoring.cs",
+      "sha256": "0ef5eaf1baff909a2f2bc944194072473e7380a84dcb8a8a2644421a8d4e6ae5"
+    },
+    {
+      "path": "Assets/Editor/SkillWebPerkAuthoring.cs",
+      "sha256": "aa22ae9b161a4688a2941e09c87da0bd8f13f1d18cf937964758ee199ac113a3"
+    },
+    {
+      "path": "Assets/Editor/SkillWebSequenceRegressionTests.cs",
+      "sha256": "f5e0a9ccb06df6a00ab91eb56704d9ecb70fd8b90762786a24ba33534015a144"
+    },
+    {
+      "path": "Assets/Editor/SmilyInvestigationLogicTests.cs",
+      "sha256": "0a23af854104226c93096c0e974464b64c8b034f3ef085624c5f5d90aab0c854"
+    },
+    {
+      "path": "Assets/Editor/StandaloneInteractionValidationBuild.cs",
+      "sha256": "a4af65c5e1e084aa4abbee1b4fabd8621f36282997045408cbc1b8f52b381691"
+    },
+    {
+      "path": "Assets/Editor/StartRoomZExpansionTool.cs",
+      "sha256": "2ed115e3b59bcb26012fc03a33093f3d46ec7b2411ec089adf48e2fc21917076"
+    },
+    {
+      "path": "Assets/Editor/SteamRoomRegressionTests.cs",
+      "sha256": "ae74963fd38ebb838f7f4c7d161eb43764fa63be28e3fe1cadc650fc21948920"
+    },
+    {
+      "path": "Assets/Editor/StillWorkingRoomGenerator.cs",
+      "sha256": "46c8ab51dda9399b66a53dc7ea8531dbd5d6e978e83d49c09329c91cef347ed9"
+    },
+    {
+      "path": "Assets/Editor/UI/GameMenuAuthoring.cs",
+      "sha256": "307c798cf5cde90991530e619e91e594a93223d85f7a5aade691cdde7215361f"
+    },
+    {
+      "path": "Assets/Editor/UI/InventoryAaaAuthoring.cs",
+      "sha256": "cd4cb236b1720b87c8d908efe58c1895cc7e48cf0183915493a0b291ffb5728f"
+    },
+    {
+      "path": "Assets/Editor/UI/InventoryAaaVariantAuthoring.cs",
+      "sha256": "92dd546f85b7aa57c39a62fe3013b4544de4bc31930d834704600abcd45f885e"
+    },
+    {
+      "path": "Assets/Editor/UI/InventoryRaritySetup.cs",
+      "sha256": "047cfe5b87ca5f1b9ee6f4d094d61b22705612db088f06241423bbda6e1528d8"
+    },
+    {
+      "path": "Assets/Editor/UI/InventoryUiPhase1Authoring.cs",
+      "sha256": "f6ed819acaf127573aabc575f384377b1d8a043aacdd512da78525931c7196a4"
+    },
+    {
+      "path": "Assets/Editor/UI/InventoryUiPhase3Authoring.cs",
+      "sha256": "cd62f17390c8e4177a600105d3a698ffec2dbfaa8cec027dea9e88ae4c661226"
+    },
+    {
+      "path": "Assets/Editor/UI/InventoryUiPolish.cs",
+      "sha256": "0b35ac553bb380dacb07967259722c6cb033c3eb4c57fff87714b07b4641fe1b"
+    },
+    {
+      "path": "Assets/Editor/UI/ItemIconBaker.cs",
+      "sha256": "c8b7d88b13376fb35fb6328393de56d641e465a7456073d125fd3e3e04967149"
+    },
+    {
+      "path": "Assets/Editor/UI/NineSliceBaker.cs",
+      "sha256": "07881a96669d448a5a3bb893af1b48cc25f9d15e192648f2572624d3761ddc45"
+    },
+    {
+      "path": "Assets/Editor/UI/PlayerVitalsHudPreviewMenu.cs",
+      "sha256": "fd6a206917382abb46aa3452672d8a698f27c2a0be171e7b337477d3300ff59a"
+    },
+    {
+      "path": "Assets/Editor/UI/VitalsFontAssetBuilder.cs",
+      "sha256": "5b477af712352809afba180567bea7fffec6a6684d749f6dd8cc8aea1be3caa5"
+    },
+    {
+      "path": "Assets/Editor/VfxShaderVariantStripper.cs",
+      "sha256": "6b0113474b3fe830c65a09ccc3ee093cec454dcb684c9e218e3d4a3ea5bfb7a6"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Core/DungeonAdjacentDoorwayIdentity.cs",
+      "sha256": "b0f21e46f2792a3b6453ed765d8954201906e8ddd603f4d3444576447fb30546"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Core/DungeonAdjacentLightmapProjection.cs",
+      "sha256": "4d01df78f683e80469c87c5db6ffe35a0b09ab40b98fd1c6a83dc65a578a27bf"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Core/DungeonAdjacentRendererUtility.cs",
+      "sha256": "4002430ac87bceed6368cee134167bb10385d8259214bb43f8ca62605919ed4e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCBaker.cs",
+      "sha256": "74dece4391440e170fe0944f525d893dc958b0c3288fda7cf6aff3b732655e3e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCEditorState.cs",
+      "sha256": "f2bf24ca0fe054b3b4aa73deb6ce938342cbb45320c09b3eb8ba19eff95618a7"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCReceiverMeshTessellator.cs",
+      "sha256": "c619240f3e0d4b1c79741ac8608c5ea2605662cfb446b1ed52d7a693ab77c2a9"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCSceneBuilder.cs",
+      "sha256": "f5545901904df80a4e8a808f69b8aa9fe9ac99b2efb5ff398b9b747d43b458b0"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCStartMapValidationBuilder.cs",
+      "sha256": "ff7e617009e4934c025d6ab61f15a6be9a951ccea2aff2d02ed2f476c2371350"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCStillRenderer.cs",
+      "sha256": "c46409e8efa9655c9ba11991cc78e9479bba7cd77b30438aaa86874b0f98d757"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightingPoCValidation.cs",
+      "sha256": "e0fab773823398327b7721fb677038895f4c867175973a2254e5a9b0acf6b296"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentLightmapExtensionAuthoring.cs",
+      "sha256": "064894e9728c654e4f17f31e5941b86bdc186efd9c2bdd1153ba0f3ec4c77423"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Editor/DungeonAdjacentPairLightmapBaker.cs",
+      "sha256": "2e80812ef67a4af60d96d49c9ebc07e6833ef34cd93edf0f67d32317f71ffeac"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentLightingPoCFirstPersonController.cs",
+      "sha256": "f06e31f93c1e3588b263bed95df2c0311a427518ace6d5bb63e3e078df645aaf"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentLightingPoCPreviewController.cs",
+      "sha256": "8bb5f60cddfafc15d1ba45c4863b9b2b723585f74413a319f6d151d643338720"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentLightingPoCStartMapEnvironmentController.cs",
+      "sha256": "74a8cefbe08740a84c2cfe7e63fee415f32e4eb881bca123627bd31d50f3733d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentLightingPoCStartMapRuntimeValidationController.cs",
+      "sha256": "17cc541cd3fb013b95ec36f45b31474f3bd08af014f032b0727386d7e0e4a912"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentLightmapExtension.cs",
+      "sha256": "e639a90d39e388c219fb4f43a296e0f4b31da44d7529a98f028b487ffecb7dea"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentLightmapReceiver.cs",
+      "sha256": "46e7f0c17f8284a12a7b5ee4f06ad61377014fc675dbd2baf6e52baaa2feee85"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Runtime/DungeonAdjacentPairLightmapData.cs",
+      "sha256": "549bec859d302b371b606af225bc60117f350ce322d04017ced6a088dd1cf31b"
+    },
+    {
+      "path": "Assets/Experiments/DungeonAdjacentLightingPoC/Tests/Editor/DungeonAdjacentLightmapProjectionTests.cs",
+      "sha256": "5b5cdff70296bd209d26504a0237d102547f13918a5f070924923a8805c49406"
+    },
+    {
+      "path": "Assets/Experiments/DungeonLightingRotationPoC/Editor/DungeonLightingRotationPoCValidator.cs",
+      "sha256": "74dfc8e2653b51a94a94ede0921fbd76aedb01762494e73af28358791a0c8dee"
+    },
+    {
+      "path": "Assets/Experiments/DungeonLightingRotationPoC/Editor/DungeonLightingRotationRenderPoC.cs",
+      "sha256": "03849e723c2e6486e9cef8b7f38712453f226e6db5bd166a89a0903a5b368869"
+    },
+    {
+      "path": "Assets/Experiments/DungeonLightingRotationPoC/Editor/DungeonLightingSHRotationPoC.cs",
+      "sha256": "b3117dd1feb5825edaa418e522ed119fac01ce485218845b915ff0ed454227e5"
+    },
+    {
+      "path": "Assets/Experiments/DungeonLightingRotationV2/DungeonTileRotationLightingSetV2.cs",
+      "sha256": "717deb46213174f5ca657d211a8665ca07b5667487afd3911aecdd24e95b5b64"
+    },
+    {
+      "path": "Assets/Experiments/DungeonLightingRotationV2/DungeonTileRotationSelectorV2.cs",
+      "sha256": "4ffe8073966be75a85f5ed6a4ef36c06ce932d81113446bac92709b5d06db418"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Editor/AngleCapture/DungeonPortalBakedBasisAngleCaptureBaker.cs",
+      "sha256": "eba273451bb0cb25083985a750aff1f9986d937582d61c32956d625fa02f5221"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Editor/AngleCapture/DungeonPortalBakedBasisAngleCaptureTestSeams.cs",
+      "sha256": "ff8408f285ce1c49e32d214ca69b7dc873a5bf710ec6d6094e078022ad8c3ded"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Editor/AngleCapture/DungeonPortalBakedBasisAngleProbeStencil.cs",
+      "sha256": "3d0fc18302969b16d213da3a475c5e1a54b1a8254a7821abef62b12060a9b155"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Editor/AngleCapture/DungeonPortalBakedBasisDoorAngleCapture.cs",
+      "sha256": "2d9df5323a3c2f135f121766ffaf843c57490ce219edd0d731cc2006332df390"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Editor/DungeonPortalBakedBasisAuthoring.cs",
+      "sha256": "0e6f4daf5490944fddb7f4402da38bc01fede1c1a4b43e566068e2e7f42edc81"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Editor/DungeonPortalBakedBasisGeneratedManifest.cs",
+      "sha256": "4f61fe3b428ed490c4429aa6dd8562946c383bf614bf2b4e468f0d98da99c079"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Runtime/DungeonPortalBakedBasisGpuComposer.cs",
+      "sha256": "2bce4383c15202bfa214f2c03eb01e481ff2fa4bcb3c3fe89cc83c5b6cd0f74c"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Runtime/DungeonPortalBakedBasisLightmapRegistry.cs",
+      "sha256": "c102163d2362c34ce0d17494adcbc338e9881ec226ca4be0ad66bda4d5b9962f"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Runtime/DungeonPortalBakedBasisRoomCompositor.cs",
+      "sha256": "388720cc73c49bdfa6e59aa4b69ac25130bedb46aace3816443da1046af66860"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Runtime/DungeonPortalBakedRoomBasisData.cs",
+      "sha256": "2a276a627883e15ae6e95c755b5f40911fac450bb52158024837dbfc5b432049"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Editor/DungeonPortalBakedBasisSceneBuilder.cs",
+      "sha256": "d493e481e3db894d9724ca5ece491717e01d41c728d1b7eafc6de9f8207d23c1"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Editor/DungeonPortalBakedBasisSmokeCapture.cs",
+      "sha256": "e580d5c5ceee6e448c9d23d17df05460ae4b4daea9d1380e863761cf7936489e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Editor/DungeonPortalBakedBasisStartMapRealtimeDirectOracleCapture.cs",
+      "sha256": "bc0b986980df59f56a772954e4bc23e56b0c73ffc3cba8a833d7f5bc30b11047"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Editor/DungeonPortalBakedBasisStartMapValidationBuilder.cs",
+      "sha256": "c31fb90583e94f695cf28e6aed5c2ee01ada4bcc94131da3b0df8be90df8438e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Editor/DungeonPortalBakedBasisV2ReflectionProfileAuthoring.cs",
+      "sha256": "2c5204e9d191801e4951ac792921cdd0d11fb7b3361cc7f940560a7fd6c08bcb"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Editor/DungeonPortalBakedBasisValidationContract.cs",
+      "sha256": "968c7a1a36a9614b255389d3dc209a3651b6449bd368d89a260e4947825a9fae"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Runtime/DungeonPortalBakedBasisConnectionDriver.cs",
+      "sha256": "bea181d5834fbae8dba54f0a15f03ec90b9881946f117daddde28bdca5b6385a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Runtime/DungeonPortalBakedBasisDoorShDriver.cs",
+      "sha256": "8840c0e4027619c96d0c488e160331637074c15021e84d3ccbe3c7000eb21c5b"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Runtime/DungeonPortalBakedBasisReflectionDriver.cs",
+      "sha256": "8003a78eff9fee129a480abf1a81bd4abc8c1534d9f0901efdb928f5aa07b70c"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Runtime/DungeonPortalBakedBasisRuntimeEnvironmentFingerprint.cs",
+      "sha256": "4ade2de49abcaee0e708f100e771a7b0e50a6dd7cbabf05c1774c3e323fdbe39"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Runtime/DungeonPortalBakedBasisStartMapRuntimeController.cs",
+      "sha256": "fa15090aef75f55ff2949fd5706da29deab8a991f2319d416dc35384816e756a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisAngleCaptureTests.cs",
+      "sha256": "6dbf2363122f3e4c52192d86bd0c10433fd68ae0a3268fd634c759e908c2309f"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisAuthoringBindingTests.cs",
+      "sha256": "2d935a832c711a4b25e3c07909f1162da62119017ec6bb244b0cbb2217b3fe04"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisBaseTransitionTests.cs",
+      "sha256": "abe08dab82debfdb1c87319cf28cd5bdd5c66995db3789de8e4afa216b20377c"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisCompactResponseTests.cs",
+      "sha256": "07ea35f3d278052613483aaad2be2dbd3dbd970be2320d2ad9e98a2de422663a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisConnectionDriverTests.cs",
+      "sha256": "4f3b94c9eac6f744fd1581b1691878d1963f13ac20288921373cfdba7e6da5b2"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisDoorShPoseBridgeTests.cs",
+      "sha256": "dd7a2e78638740c5e5f67d1f2e8e516975af244951ce0e43f2b39b93a81a1997"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisEndpointNativeRuntimeTests.cs",
+      "sha256": "401be10d8fc2df94289a2a97e845143109e02e0df9355e5725033679a33da360"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisEvidencePolicyTests.cs",
+      "sha256": "38233504d9faa2b01f77b0f10454b13b810c29e8a879e9278eaf3490aed0fc0e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisPoseInterpolationTests.cs",
+      "sha256": "0f416b8c14c33174402828b6d3062ad46c25f7a08c771243bf12610c77f8c6e7"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisReflectionDriverTests.cs",
+      "sha256": "cb08a719d9e35ab87faf16024c09769b3684f16815311210fe7c124e0e12148f"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisStartMapEnvironmentContractTests.cs",
+      "sha256": "6750cb89df06732a4a97e329fb03cdff42a58e45487ecb064d162ea76219bf4d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalBakedBasisPoC/Validation/Tests/Editor/DungeonPortalBakedBasisStartMapSpatialContractTests.cs",
+      "sha256": "eb785af0e4d0bcb3905b10143a4354ca775b68c87e32bb6c281b809d091d2d04"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Core/PortalPowerTransition.cs",
+      "sha256": "ba73172fd8b2958d56780c3056f65126613a20c66ae2eebee73949e9bf39dd84"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Core/PortalTransportMath.cs",
+      "sha256": "5b43e7cbd4cb0184b1c62e9083f6bad09c70e7dad22ca53b845256a3db848d17"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Diagnostics/RenderGraphFrameSpaced/Editor/DungeonPortalRenderGraphFrameSpacedCanary.cs",
+      "sha256": "34f500d60c158b0921e29d1b476037e5ce3469183b091e92e967cb185da5bc92"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalEndpointAuthoring.cs",
+      "sha256": "a389523675024edc85784fadbe2de9d9aaa356cbc6911232ceaef8cae4288082"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalReceiverBounceBaker.cs",
+      "sha256": "442412fdfdd1d0fe3998d8ff4f264d9cac8e67bced8cf2ee104e6ed82a495caa"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalReceiverBounceDirectOnlyRenderSession.cs",
+      "sha256": "cb43ba6d68c3b8e866b3e8995ad2e6b6391cac8199e5ed96273f574382ac9d79"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalReceiverBounceFitter.cs",
+      "sha256": "a9e413b7a32ce9ad611d8faed7a5ece3b98610386dbbe8331cc0eaa560c1e2ff"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalReceiverBounceRenderArtifactAuthoring.cs",
+      "sha256": "a50b799bde40253781be48104cc65743dd1482b78f3bc808d61aa8a0aeafb545"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalReflectionAuthoring.cs",
+      "sha256": "80fdb98ff4828768b326fa0cc897d8b8e1d418fd17b557d57b8fbe0b5d99bc79"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalRendererParityAuditWindow.cs",
+      "sha256": "2087b38c418e3094c61f848c6f4bb8b7f07a0f43f7251679377dbb4fb6aec6bd"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalTargetedEditModeTestRunner.cs",
+      "sha256": "254cfec3fbdd7ed21dda9222a21cba588cf6077184aae72441f656589048b5c4"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalTransportPoCSceneBuilder.cs",
+      "sha256": "09fa28c839804c2d31eb7a87188c9863ff1e54ab1b82e098796738ed837ffa08"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Editor/DungeonPortalTransportSmokeCapture.cs",
+      "sha256": "fc0a6715878ce6f029fc123699a163ff3d84bb22d24ded386a1bbc0618a2503e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/BakedRoomState/Editor/DungeonPortalBakedRoomBaseReferenceCapture.cs",
+      "sha256": "65ed5b547bff884197ef7ca765ea6fa51d1f3e3a05c1b582097fb51e8a520f1d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/Editor/DungeonPortalRealtimeDirectGroundTruthCapture.cs",
+      "sha256": "02d3540fd5c024d43eb715607a1faf8190e059055a13d3b79eb16e8ae6b8cb84"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/Editor/DungeonPortalStaticPairReferenceCapture.cs",
+      "sha256": "c889e40e12f11b86f357ba96943ab2a60b649401f08216ac5e1dcb3e853b9500"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/JointPairTotalPilot/Editor/DungeonPortalJointPairTotalPilotCapture.cs",
+      "sha256": "fefb057ac10502f1b969e575e311df8c0adea09fc3b57e7b38d5eeb78e9741e6"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/K1ProxyDirect/Editor/DungeonPortalK1ProxyDirectValidationCapture.cs",
+      "sha256": "e8da2bcd7cfa1e7ccfeda64dde9b8b044d752e7dee69c4690a7b783967371140"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/KExactProductionLights/Editor/DungeonPortalKExactProductionLightsCapture.cs",
+      "sha256": "06efe6b10e2d2ad476d7c87884ac6b6fce42be7511842f6ddd7cddaf5e0c9325"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/GroundTruth/RealtimeProductionState/Editor/DungeonPortalRealtimeProductionStateGroundTruthCapture.cs",
+      "sha256": "50af76c002ae54c8626402b4ca40dbf8394f8d70331bc86477b4226355d9591d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Editor/KExactBasisV1EditorContract.cs",
+      "sha256": "9c024c05cc365afaff650bcd16607e15981e82a8a241484b3460d7708a622e9d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Editor/KExactBasisV1SceneBuilder.cs",
+      "sha256": "5b3c7d06c7feaa5a0ae935afa41f4e4c59a37cf07be0c86592202c0bf8e6caf0"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Editor/KExactBasisV1SmokeCapture.cs",
+      "sha256": "3253887107c1c650f57dd70d2072a7e70ee8122e13c06109665f494451fca70f"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Editor/KExactBasisV1TransitionTrace.cs",
+      "sha256": "f4d62ab961effe06240989a3ab6636e7f9583b4926e37c5ae81ddd22a99be835"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactPortalConnection.cs",
+      "sha256": "69a8ba7e9008e1eeb0ae6b6605d8d4b249a366efbf55dd559148a794c65fc1ff"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactPortalRuntimeManager.cs",
+      "sha256": "5ce4662346894121640bb2f6aa213b6da673c5bd9de97617ba95e8bb6bc881a2"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactReflectionProbeBlend.cs",
+      "sha256": "835f44952226ae14033620a7b8f74ec6f0caae95ab507d8a8abd6549bf3f8079"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactRendererLayerLeaseTable.cs",
+      "sha256": "3bdf5e072f71db017394883c97ef2c526418a2fa0b4a3859edb6706b2378317e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactRendererParitySnapshot.cs",
+      "sha256": "654ced1274a73439bb3071c13b170756b6eb203b082ca19fe92e9ace5f364fad"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactRenderingLayerRegistry.cs",
+      "sha256": "13dad55e2123d7e9179ef121547b3233e91d14d40cd47ece7411d66b8dbb0810"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactRuntimeContracts.cs",
+      "sha256": "1528512b9affa8b6905e58904fd9984a484dfb06cd590af4a1825dcf15af3280"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactRuntimeLight.cs",
+      "sha256": "1867234120c0769c3a308fc96ff7500dd5363cc93bcf970664f9f29b27805a61"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/KExactBasisV1/Runtime/KExactScalarSource.cs",
+      "sha256": "746132bc4f560fd7e9961052eeaeede6aa49e39bed1a95063f1803fedc4654f9"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalBakedBasisAngleWorkspaceMarker.cs",
+      "sha256": "5cbbef2049edc3d19f86b04720272e61047715ebe9854ffa7a0113be0ae9fd36"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalDoorAngleSource.cs",
+      "sha256": "daa4790cfc8b007d9be5b6e0df65ab8c663c95cd9d2b307f4ae1c1f565f2e44f"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalEndpoint.cs",
+      "sha256": "821106b91e4a6590a6b0b0baca0ae0f0cd50504a79f02d5858ab6b70f1240a97"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalEndpointProfile.cs",
+      "sha256": "74f13dab5d1bf088d6149c857c80082ba35f816ee32ea2fa4d37bb8a7ad91613"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalPowerEnvelope.cs",
+      "sha256": "78726a6b48a1daef5af833aea6abc7d49bb5e44697449b51a1d3f1df5c82195d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalReceiverBounceFitEvidence.cs",
+      "sha256": "0d16e953d49c1a30d378e1b3a210ed73a97c7e4557081ab36a3a40960459130e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalReceiverBounceRenderArtifact.cs",
+      "sha256": "9c0b6fef16d60d6b129450800d128fff20c1880ac55ef66bdc555fba9c7920d7"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalReceiverResponseCapture.cs",
+      "sha256": "4ff1efe9b890ff10604122fb5e6a59b328ad49702a03b35b767318a9affbf3f3"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalRoomPowerBridge.cs",
+      "sha256": "a37e7cba2f9384edefdb81c8800eee9e5b25b45561261d1593bf83cc07e4aefd"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalRoomReflectionBlend.cs",
+      "sha256": "1b7d31a4fb1f5dd713cdfea1e7a3d8226b8f78385a4e969bba3497950de96eae"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalRoomReflectionProfile.cs",
+      "sha256": "59fb891e99c743db73aa216babe497e195cdeef5c607256e50ac9a0a7a8f3c2b"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Runtime/DungeonPortalTransportConnection.cs",
+      "sha256": "59f2391523bcea494249d7aa9304686e9c394d785480b8907a3be82339684bdc"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Tests/Editor/DungeonPortalEndpointProfileTests.cs",
+      "sha256": "c306e93743b6a535e37dcc98088b626d01cdca59343728885fc0687a6c784118"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Tests/Editor/DungeonPortalReceiverBounceFitEvidenceTests.cs",
+      "sha256": "703f4babdc716eb31489d36580f69e681fa87191b1bddd5829889f10418f9180"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Tests/Editor/DungeonPortalReceiverBounceRenderArtifactDoorPoseGateTests.cs",
+      "sha256": "fc1e2b19a8675f0519cf34f2788637235b5836348deba56894e66703b8ae24dd"
+    },
+    {
+      "path": "Assets/Experiments/DungeonPortalTransportPoC/Tests/Editor/PortalTransportMathTests.cs",
+      "sha256": "a492c93b268fd7ab36b105c2a4ade489bca20ba46886b45546634f204f09914a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Core/RoomLocalDoorwayFrame.cs",
+      "sha256": "e4bd1cacf233bdb8898570ff60b3305951e38957f7d9919d6a8c8812d7bcca48"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Core/RoomLocalEndpointKeys.cs",
+      "sha256": "97854ec728559f251c6c00b07636bf714a430669dc2d0006e54c69c48bb2a0c3"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Core/RoomLocalLightShareContract.cs",
+      "sha256": "857fec6f896c58eec29232ca318d9642c69eb38d5fb36d28fe4ceebdf7af4668"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Core/RoomLocalLightShareMath.cs",
+      "sha256": "7c5bd43284df9ac5891497c218423c0fda20608a4a09380d6b6d22ae0fc4dc3f"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Core/RoomLocalRendererKeys.cs",
+      "sha256": "fd0f2d7a4fef501d1da7633fe2dd1d51807e2c51799cc2f7ae01b50cc3c487c4"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalBounceBaker.cs",
+      "sha256": "f8ebffdd0a6e96469b14b435e2a87233d4bcd91c7ac157fb49c995d13fb32156"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalEditorUtil.cs",
+      "sha256": "6b5a74459fa0c067cbb5b63ae6e6c5c9489104e933872a61445442a6ba887236"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalHashGuard.cs",
+      "sha256": "2299101fd04b50b6b92d0b4cdf2c1f589defc768483db2a578895c56e7a420da"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalLightShareMenus.cs",
+      "sha256": "d1f997ac4dc830939cb48e15c159bd93a831c777ce4aeb5d79686e892b8f4093"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalMatrixBuilder.cs",
+      "sha256": "5af38458b35355ea8bda83a5bf67be50a4fab91aefcc9fe65be45909b58613ef"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalOutgoingCapture.cs",
+      "sha256": "94be2b458ea5727c21fa02e830ab5c29546926fad567bb81d0f9b5f64e55a0eb"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalParityAudit.cs",
+      "sha256": "925a61fd940154a7aadeecf11081419face317c942df58f995bc753339a938cc"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalPreviewTuningSceneOverlay.cs",
+      "sha256": "448d30e4ab482372d65f01744b0b9d56cb685a9288f14342dd1c7f2861f7b640"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalSceneBuilder.cs",
+      "sha256": "ecbb546d5ec16dbe8b6c181db623e011c977bc5c28b06824a9fd6b7ae05f3fd8"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalSmokeCapture.cs",
+      "sha256": "c392673babf8a61390f57ebbc45a6950cdb2bb8b4801ca7e5e6ce91792eb60d6"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalStartMapHookInstaller.cs",
+      "sha256": "fe7218add3c910baa97678da8c7e0b9a8d52a1dbe381b3ae8315e685a5ba0473"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Editor/RoomLocalStateCapture.cs",
+      "sha256": "7b327e8b32c5b99ca7dec0cdd007934de0b55b7dc9a2e0cc81c8c4f82ab1150a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/IncomingBounceData.cs",
+      "sha256": "f9d85139f2c5b1e4bcc6550744f7e9824fbc9054a6356fa934c95136e6b62884"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/OutgoingPortalMap.cs",
+      "sha256": "6c3a2164061e6a848ed5087b779cef076e94ac66bf6acab7c74f5ff057dcf137"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalBounceComposer.cs",
+      "sha256": "97842b26d8d1ffc1fa0931e913a3d33bc3fc1dcc9f2a7bb4d52800c8a22e02c1"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalConnection.cs",
+      "sha256": "1022b7921b8758e9c5ee647e92f29a9c0024ccb682b325acc652d6c27c0a428a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalCookieSpot.cs",
+      "sha256": "25c8458317cf3b123f696a27e29eb13b2ce6a90b670ee2421b5943613ced563d"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalDoorAngleSource.cs",
+      "sha256": "7841b726efaed83185c53278e0a362510b81502ecacf52ec2b5f81954ce0d8a0"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalDoorFrameLightDriver.cs",
+      "sha256": "3673dfba454287ccdf5f840bb9cd66dbfe31fdc50c3b47578fd44b46fa9db8c2"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalDoorProbeDriver.cs",
+      "sha256": "3bedd40ad14b56b30c6fcb815192fa006d1b296792fbeefc4f394684d360dea3"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalEnvironment.cs",
+      "sha256": "175c7c1bdcb48050a1a855412c2c8cc721b3dc36f1e1af4b64f22571956a1961"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalLightmapRegistry.cs",
+      "sha256": "eba6f97b99632d69f09322f2d8ffa50349e03f9098000bf87c52763ab8d728cd"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalMatrixAuditRunner.cs",
+      "sha256": "0689d504ffc434138e7c5360c86cc57cd69099ca36b816fdc0d22a656088f339"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalMatrixCatalog.cs",
+      "sha256": "492200600edd77e9b484d4014dc5cbf161c1da9fc9e36e4c49419f98484d8d18"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalMatrixController.cs",
+      "sha256": "d830139287eb12088797bbb27f507b00dace1e5cfe0d127eb5e0dc9751473cb6"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalMatrixHud.cs",
+      "sha256": "299851967de3039b6d295102db747915cf5a9cdbd1041520dfcfd9344a463178"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalOutgoingFactory.cs",
+      "sha256": "0ebd5c06975fd00bd46684feb34978f8a573334caded2d96776ab19de9c9ac5b"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalPortalSampler.cs",
+      "sha256": "c4c86005f8162aee543e72e3db117b611fc0f5087efae5ddecdcd080036eca3e"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalPreviewController.cs",
+      "sha256": "162f35b9ba0092986129453e5018c7dc0f6e4aca85467be2dc4cebeb3e813432"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalPreviewHud.cs",
+      "sha256": "a41160d70f0f6d60a9b0fa761d19a9faf80ed7b106f0ba12d1818a4adca054ce"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalRenderingLayers.cs",
+      "sha256": "af49ccfd6f4d5a9e7bf404c17f6d7c844db742abfd88fd6cead517915752eaab"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalStartMapInstaller.cs",
+      "sha256": "94a491667d0407f9ab42f8fd0c7b4bb25e92fe4f97e31fcb915d6c790fc7204c"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Runtime/RoomLocalTransferState.cs",
+      "sha256": "7f1aa25cf6296f27df82e9ff52868334fbc00ae1c3b91344f103f43d7305da81"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Tests/Editor/RoomLocalEndpointKeysTests.cs",
+      "sha256": "24752e109c359adeaf1fe96007008aa72ad9e742990e34947221868ac381dd78"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Tests/Editor/RoomLocalLightShareMathTests.cs",
+      "sha256": "cb04086e7fc4617d9d61df6febb3eabe3690e489cc8d14d83de03ee573e0abfd"
+    },
+    {
+      "path": "Assets/Experiments/DungeonRoomLocalLightShare/Tests/Editor/RoomLocalRendererKeysTests.cs",
+      "sha256": "e27ff081bd25bc43f99dd820822733dbd4ca9455cf6c397fad6b2f74701984df"
+    },
+    {
+      "path": "Assets/Experiments/DungeonSHSamplingTest/Editor/SHProductionRegression.cs",
+      "sha256": "8544e5154ed14d92e29e1493141b339d71852af8b7d27b29e10f91895c88759a"
+    },
+    {
+      "path": "Assets/Experiments/DungeonSHSamplingTest/Editor/SHSamplingTestBuilder.cs",
+      "sha256": "b868bb36c1d1c577d445e167e1928520a6da8af904c8b4c53d062ca546a49605"
+    },
+    {
+      "path": "Assets/Experiments/DungeonSHSamplingTest/Editor/SHSamplingTestCoverage.cs",
+      "sha256": "225c95064a9060f556adedfaede41b61f8022f0876d09bf3161f5ab8830a49d0"
+    },
+    {
+      "path": "Assets/Experiments/DungeonSHSamplingTest/Editor/SHSamplingTestValidation.cs",
+      "sha256": "edcedf5a76ac2affcab5e226bbf70763964c4800e7c06332e41482cc7b091af5"
+    },
+    {
+      "path": "Assets/Experiments/DungeonSHSamplingTest/Runtime/SHSamplingTestRig.cs",
+      "sha256": "cac8fb43ca0572bf532265219b6e6a2bc870ec541f3de2b5e0a9d8c8aaca07f2"
+    },
+    {
+      "path": "Assets/Experiments/DungeonSHSamplingTest/Runtime/SHSamplingTestSampler.cs",
+      "sha256": "10076946b761b8db157884500005c1b7b46497574c894785561525567afa0d86"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Editor/GrokDoorwayMenus.cs",
+      "sha256": "e620343dd725bf537148c677fffdaeb16513390b381e9a6094aa26ed623f3e44"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Editor/GrokDoorwayPortalMapBaker.cs",
+      "sha256": "d8cff65118b99384c9893ca1f569c82548fedfacf3958af3fd34563c12e06762"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Editor/GrokDoorwaySceneBuilder.cs",
+      "sha256": "2abed2f5505983e08ab1e33b2de773e07fab7e963b43642a024a09814c2d5878"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Editor/GrokDoorwayStartMapHookInstaller.cs",
+      "sha256": "99f6783999a53389deaa66a19352646fa4b96c5c62b85889f07e58a9453329f1"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayConnectionRuntime.cs",
+      "sha256": "bb0fdee02bdf3c5b0b71ad65fecfc4b8282754c74255533693f87f80592e653c"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayEnvironment.cs",
+      "sha256": "6e28615c2187ff99522d7950a6b09ccc3cd4ebe1768e181e1f5a27b0a8cb37e5"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayFlyCamera.cs",
+      "sha256": "6f524cfa29e58ac570ad72433655aee0ef3f82deac11269978c62121cc4e425f"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayLightingBridge.cs",
+      "sha256": "37fc132835ecdad54ad740efe4cd6dd58ff9e1a26d3a9915ce20f3a4acf58e1c"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayMaterialUtility.cs",
+      "sha256": "c133f9f021c2efd62f627ed6737184ffe5624f47d76eacde2c7d75e48b8253e4"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayMath.cs",
+      "sha256": "fe91811eb0a0d791513f73c47205776db970845f96129a5157e035400eaa667c"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayPortalLibrary.cs",
+      "sha256": "a87c3ebdfedffc589c9c62506a25ebba366d82315dea9bb1e63de907dca9b2c7"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayPortalMap.cs",
+      "sha256": "b04ae28141dba31ddb73c601ad3db2aaa2f95a1f84725fa7a4f39490297c2648"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayPortalSampler.cs",
+      "sha256": "f5864bc7642c1aa67205db13ee1ac1ce2106aa5bfa65dc1f345e3498a89f3234"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayPreviewHud.cs",
+      "sha256": "f454bcb06e5c60ddf9c0ebe633137f4be624319589bde710d8aa350a26f7ad94"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwaySpillReceiver.cs",
+      "sha256": "750560e97292dc9e723e82b9e11d11e7f75d77689b6e87b48e550d3c0a209c25"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Runtime/GrokDoorwayStartMapInstaller.cs",
+      "sha256": "4b06edf148819759fd91ddb8657d136a60c3723cb212cc8b57103048cc00c0b8"
+    },
+    {
+      "path": "Assets/Experiments/GrokDoorwayLighting/Tests/Editor/GrokDoorwayMathTests.cs",
+      "sha256": "949ab79493a3cd9dc4cade0b827a937e36aaf8e6c9f36ee1bca0df815d3026d7"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownAcquireTargetAction.cs",
+      "sha256": "2910eb4b23753f7b06e0726b33218bdabdb90c53673fee1b3787cd857a377235"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownDeathSequence.cs",
+      "sha256": "afc338b8a2ab243013851998483963ea16d670427e9fffb65847879294cfc43e"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownGift.cs",
+      "sha256": "c004d594d52e7b10611d7bd5dc39e19bb3304f2a8b81e71beaadb7113e6fd1e6"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownGiftSettings.cs",
+      "sha256": "caf4ebe216568f913bc36320b560402417f3a74b821af1ae805a6b676fc9c08f"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownGraphDriverAction.cs",
+      "sha256": "9da6636cf6f4d11d2cf6570ebf7bccc7f05f03d293ef1139ba321f9888e13bb8"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownMonsterActor.cs",
+      "sha256": "76608654a1580b1c9613540e432fc9c3369820a7e7a020f9d6c5c6e67d1ca73f"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownMoveToTargetAction.cs",
+      "sha256": "6fb95593c3c32d836aac1ed3a49a64e3567f65944e3c2ddd58936153baa2d985"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownNavMeshConfig.cs",
+      "sha256": "d2ca95f214747031f431fe740fe0683a9ef9de657b6a8f5213b837acbc99a70c"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownRunThrowSequenceAction.cs",
+      "sha256": "2a1b8809f09fae0d7b3631b10de9c03cea9e8255e3186bbc956fdf467638a656"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownTestController.cs",
+      "sha256": "45dd27ff4cead0a3bf544c81e28035141bb20154700ce5eb8623653cb8188ea7"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownTestSceneBootstrap.cs",
+      "sha256": "6f6971b8e5aa643c5bfee9486dfe44d6cf45fb246e6359b130340106cc75b565"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/ClownThrowAction.cs",
+      "sha256": "ffae10812d3ef5ef8d1c360fd4cf2cbd871de243f9e3ff0de7e86193cc5a7f49"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/Editor/ClownAnimatorControllerBuilder.cs",
+      "sha256": "0b05ad1191a2ecf45a8865a71644ab51042880afee8430cc9bb1de895e1a9f0a"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/Editor/ClownBehaviorGraphBuilder.cs",
+      "sha256": "ef143498fb460158f7064bbc552aa116fc99802d57c9f4bc61b971c9e069c209"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/Editor/ClownProductionSetup.cs",
+      "sha256": "64738b426973ef6c2998631ff62970f4d911326536e9b151455957fbbf84d9fc"
+    },
+    {
+      "path": "Assets/Monster/Clown/Scripts/GiftEffectType.cs",
+      "sha256": "813a88dcf9d30f6c90214b6a4d320ce35c8bc6dc35ed991f43b6d049f960e93a"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/AssignJumpPoint.cs",
+      "sha256": "494d722bfc86cb9f0f2b2e09280e5d680fded14e92cddd7a8672833e7a6f47dd"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/AssignJumpPointAction.cs",
+      "sha256": "0cb4262ad06447b324ff7d9bbeaf100115a0d2c22936ab2e90781835f9e2b33f"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/AttackHitAction.cs",
+      "sha256": "0ac181ff72ace7f89d2f0277c953a1b8236bb5789f1814c43f593ea437ce6d09"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/AttackHitbox.cs",
+      "sha256": "e28591a903b136dce387cb2d28b6de34cc26ccff48e7692da7f21a8bd77174de"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/DoorAnimatorOpener.cs",
+      "sha256": "54338e04feab7d235c7adecfcbbcf0100191740316aa11ae85ce81fc3ae3aaca"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/FleeFromTarget.cs",
+      "sha256": "1a75b691f10aece37b6ddfda96bf0b0bab094d5af36c3dd129134ac7391d19af"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/FleeFromTargetAction.cs",
+      "sha256": "edb06e3283320879e4070689d3dad826eddf29734492f4368259cfea7404a860"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/IsTraversingCondition.cs",
+      "sha256": "c5e0f67ad87d6a755afc73c7da7135debf2eb9151e3d5d4ecd2b99611dc2550a"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/JumpToPoint.cs",
+      "sha256": "b74101f3d14508da3ed3cc0de4b3702dee4d3416898fed63330f36ce5d7cbe2c"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/JumpToPointAction.cs",
+      "sha256": "a947a64f3bb37181b2bab2b1032608ac8923b567209f70494220ddd72dd98506"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/LineOfSightCheckCondition.cs",
+      "sha256": "3ade949c341029b0942b5f2d363046e820f1ac8c83906ba6113621534de82a88"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/LineOfSightDetector.cs",
+      "sha256": "d8fef89d40590f766f0671be90249c3fbf42c55345f4c0d4142523cb10af3a4c"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/MonsterHealth.cs",
+      "sha256": "e4e023999012743bd3d9c14ee19bdedb4ac880db6bdf9b2a4b1cca60af85e451"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/RangeDetector.cs",
+      "sha256": "7011fd6d17cad186ec6ff911bd58edd2f3f7b5d93496edf27d9c2efd5fa387c6"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/RangeDetectorAction.cs",
+      "sha256": "e84954dc29f57716b4a329ef662e2d9c58d8175c8e5d9dcc8eb81bc851686280"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/SmilyDeathSequence.cs",
+      "sha256": "c9fc2e96dae65dc76ae103882d77e2bd27ffa76e14ca1b6825d6f5a8235eb804"
+    },
+    {
+      "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/State.cs",
+      "sha256": "2be30ff7d7fa1d62ffbc83b375a456e6843105e65d72028bc562decee64b836f"
+    },
+    {
+      "path": "Assets/Scripts/Audio/GameBackgroundAudio.cs",
+      "sha256": "c321224e576cd2b78249afeb0bf9779c4ea03b69805a4d2f1b553a9b568e4ad1"
+    },
+    {
+      "path": "Assets/Scripts/Audio/PlayerAudioRouter.cs",
+      "sha256": "a9cb42b0c76257e21d11e7285b578c90b8fd354bff7a1bca695069fd8a098dc0"
+    },
+    {
+      "path": "Assets/Scripts/Audio/PlayerFeedbackAudio.cs",
+      "sha256": "d3d9fa0927f522ffe8629c0b6f8638ebae1de4419e22d8f886c1b2e39fe59299"
+    },
+    {
+      "path": "Assets/Scripts/Audio/PlayerSoundProfile.cs",
+      "sha256": "2bbf315979ad7303205db8eb1d699731408e97b15ced02dea59e0740828cd883"
+    },
+    {
+      "path": "Assets/Scripts/Audio/SelectableFeedbackAudio.cs",
+      "sha256": "816d018a0eb542c479f9413512b51522dae2130b868de4555f1fe1c331514d5c"
+    },
+    {
+      "path": "Assets/Scripts/Combat/BloodPoolVisual.cs",
+      "sha256": "6d17dc3aeca50b7df0af003625afe956454f3e24e2d6b6af81d2653a3178cbdc"
+    },
+    {
+      "path": "Assets/Scripts/Combat/BloodVfxVisual.cs",
+      "sha256": "b90d9a4e10206b0afdf66ce7a12958a73da169d9571c06f9723a7d770c977a91"
+    },
+    {
+      "path": "Assets/Scripts/Combat/DamageRequest.cs",
+      "sha256": "2a6105618bd5b492f4bb0455760a6f97ccba943f495da3104382889ffadbee63"
+    },
+    {
+      "path": "Assets/Scripts/Currency/CorpseDropProfile.cs",
+      "sha256": "bf4a8da96933fcacd803f45e20b8195ba2bbcabfd73d9380009696c19d625576"
+    },
+    {
+      "path": "Assets/Scripts/Currency/CorpseDropTable.cs",
+      "sha256": "f2d2c1d1f3678d4e296da3008631f0fde93c12fb215a03fc9a9d37ed2b2b86c3"
+    },
+    {
+      "path": "Assets/Scripts/Currency/CorpseProcessor.cs",
+      "sha256": "c5559527890f31bd134556a3bac5478c31a99ecb7186d9502bc7cfb0e59b053a"
+    },
+    {
+      "path": "Assets/Scripts/Currency/CurrencyManager.cs",
+      "sha256": "c1d698a92a320eadb7197b4ae305669c3d1ef52c8118724185b9c579f1c131b6"
+    },
+    {
+      "path": "Assets/Scripts/Currency/CurrencyUI.cs",
+      "sha256": "f1bf5f1846cb9f1a220d7fc1a45231bfbeb3f0e775f3064d92ba465881196f64"
+    },
+    {
+      "path": "Assets/Scripts/Currency/GiftBox.cs",
+      "sha256": "767ba918857c233d4ae7c379935114fab7dd29631d92b4314aee71233796d0c4"
+    },
+    {
+      "path": "Assets/Scripts/Currency/GiftBoxItem.cs",
+      "sha256": "5a40fffcda318be6338807cc0c7c9f22cee46fc924501d92460ac023d8aa36b9"
+    },
+    {
+      "path": "Assets/Scripts/Currency/Mailbox.cs",
+      "sha256": "cd74976df40b9a5a17ea00750c116854d8545647645f02eed1d13dd6e53834f8"
+    },
+    {
+      "path": "Assets/Scripts/Debug/DebugRemoteControl.InventoryValidation.cs",
+      "sha256": "c4685d1e2da0fac25664246994f5e0cb3f50ced0e75c76ae77ed3b9be5f96f63"
+    },
+    {
+      "path": "Assets/Scripts/Debug/DebugRemoteControl.Lighting.cs",
+      "sha256": "3962e3d775fc5caecba2b5ff52b0a7b44e3c3a3dd78fd347eb3283a75ee56e14"
+    },
+    {
+      "path": "Assets/Scripts/Debug/DebugRemoteControl.cs",
+      "sha256": "5de950eaf033eaa8c76a38c55d24ebf77daebfa00e652390e985d5ad8bf18ee7"
+    },
+    {
+      "path": "Assets/Scripts/Debug/StandaloneInteractionValidationRunner.cs",
+      "sha256": "9475dee842a7f53428f0f0086389a6d5235ad30b129213d4fb154ffaccca2d07"
+    },
+    {
+      "path": "Assets/Scripts/Debug/StartupLoadingValidationRunner.cs",
+      "sha256": "b8056fbc999448c271d08807b74525b5ec05c9b305c0dbf3c479b7bd92b0c27c"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/ApplyRenderingLayer.cs",
+      "sha256": "9b99edef148dd2e7cc67676a3ac7dafa0cd943cdd1e64b15fabd2b8b7441db7b"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DoorHolderMarker.cs",
+      "sha256": "55de8fc81282745dd15549ca5f4882ba792f035004cc444e095f29b7ef69cdbd"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DoorNavLink.cs",
+      "sha256": "bf94ed55b3ecb1cba929bfe08e74db7bd9c7d485c69549ed6c755947c7699fac"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonDarknessSense.cs",
+      "sha256": "4b05d693a6d4a58320fbe1666e7aacd04362941eabca299c61601537254955d1"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonEntrance.cs",
+      "sha256": "3c1faac6c06074854b92ac8987637cdb91ea9781a07c6e79d7f3d816898ebcec"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonExit.cs",
+      "sha256": "beef1e97f2db4eeefe9396dcd75a2f463a112a2c471268931e74a8f13df78257"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonItemRenderLayerTrigger.cs",
+      "sha256": "55b8c7a80376950071b574cc55b2058ec126710d8befd5194676b0909fa97865"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonMapContent.cs",
+      "sha256": "95175d5a43aab30e6b07d30c918554ee280fb373b6499324a348d75e6fba1f50"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonMapList.cs",
+      "sha256": "ed60abdb2e32c1b6b4f5dfbf56438a9454786f3fa4206503e5dadab4ff5ba701"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonMonsterSpawner.cs",
+      "sha256": "ea64a14a708b4c91071ffa190794ebe8479c26a8deb3ac591e82d1d0381fd172"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonNavMeshArea.cs",
+      "sha256": "59a018249654891b62329594dc5f197baa990f8ecef353cc3d252d6c05c65ae4"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonNavMeshFootprintBlocker.cs",
+      "sha256": "b5752660c5a386ece19dd554bca014ca1c28a762120b486996c61acea471fcf3"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonPointRegistryRebuilder.cs",
+      "sha256": "a940e4aa39f60fdba87931a44779fbe15b88d846a035c70888cb6848c190d645"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonRuntimeNavMeshPipeline.cs",
+      "sha256": "b25087d70b641fb88c365e1f4240360c0b799c0e841150699ddf62035b08d968"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonStartPoint.cs",
+      "sha256": "d8388e81572eeb8905b8000c2e7a105dfc6c472d2277672fa7d736e2847c77e6"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/DungeonZoneManager.cs",
+      "sha256": "43dca2e88aeb51f66290bb104f8fb71e4040213e758442b53ed83ef0b326d856"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonDoorDualSideProbeReceiver.cs",
+      "sha256": "bec9a4c55f75a8c7471ceec299c069c7f29e0abd75b8118501cff2642e63af58"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonDoorProbeRendererGroup.cs",
+      "sha256": "2fc4ca0a9f0e142932e24a4dbd41366febad076cbed228a09e3dc3e439cb793a"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonDynamicProbeReceiver.cs",
+      "sha256": "9141f7b9e3594fbb282e41fe29bacb0f9fe2f4a37ce527dd9e20e200e901e118"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonProbeVisibility.cs",
+      "sha256": "55bf681b425157fa508002eb956087585629a7f25135223b1ab0f11ea0406b3a"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonRoomPowerPhone.cs",
+      "sha256": "14366ec50d2d2b55e00a15b58e0d706a356b99a7083dc0a9c1bd46f7880829ab"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTileBakeData.cs",
+      "sha256": "bb7bfe2831e1b8893cb517eefcee6e8f95a9e816b2c892b11211af81e88f80d6"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTileLightSwitch.cs",
+      "sha256": "7622198a854464b28d1f50a7f6ae1f6137692d08979e6c60060a2b082d1127f0"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTileLightingPolicy.cs",
+      "sha256": "525a747d4be058339c8fd20e95b2c70cea48ccc09cd98cd6d13f0417c281ccea"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTileLightmapSwitcher.cs",
+      "sha256": "a2f32bcaf510bf75f2a5b398aca0ffa062d3221e95c5c4ad43a357c9f9f846e8"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTilePowerBakeSet.cs",
+      "sha256": "2a5b97a2c1f94293d251e4f57ee0cffd98dbfed609f8ea629b7c09309b6817aa"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTileProbeRegistry.cs",
+      "sha256": "a0885c10286303174f77a0da98959fa0c8f3a73822f10035eaedda34543cf583"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/IgnoreEmissionControl.cs",
+      "sha256": "cfdc5698ba25c27ff92cea5ee7e995eb8d33a8840918703e8010b0f2b15802db"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/Lighting/IgnoreLightControl.cs",
+      "sha256": "fd8a22eadb58042df84d8b4c78005a2610ab203b43fe9ba9d342cd0350fe14f4"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/MyCustomPostProcessor.cs",
+      "sha256": "a67b1f9328f74ab3aaf79d2a84b42776d6986b2b2c75c3a43c632b5604de72bb"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/NavBakeInvisibleRenderer.cs",
+      "sha256": "3cbc87f73ac62f95086e7b65548320d662402667c8b052415efe6744d32e2903"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/NetworkDoorPostProcessor.cs",
+      "sha256": "bb97e3088e21691c80b656f2ed5fc4c4ebb6b32b669088569b89f9ed83a2a9ed"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/NetworkDungeonController.cs",
+      "sha256": "a5f4171296d092ae1183f395b5c904ab03223482fa9046709abc73bc3c73f0d7"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/item/DungeonLootPostProcessor.cs",
+      "sha256": "9e94114bcc8dd2110cd64b90bedc49fbe92815ada2490d009a386b8e32e227e7"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/item/ItemList.cs",
+      "sha256": "27b5b03d1cc6de5b3912351714884f013bf0bc081eff530c206a7c39268609a5"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/item/ItemSpawnAnchor.cs",
+      "sha256": "2eb3e4fad9c19b2f1d6307eb19e87fb85bb7722a27be285e14db6fe6d8917322"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/item/ItemSpawner.cs",
+      "sha256": "3f8a27b8d6039c389cbf3db469c0983c69bdaf41da28c32ba0c3a489838d1cfb"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/item/SpawnSelector.cs",
+      "sha256": "063e4b1b4031d3c0fee4a67dedce3a15228ca1531ea0049c66e5b6a58fae8021"
+    },
+    {
+      "path": "Assets/Scripts/Dungeon 1/item/TileItemSpawnWeight.cs",
+      "sha256": "8cbab53b89014e52b2dc3869feb8be3259b1fa9698ce2100e336c3caac6fb3b2"
+    },
+    {
+      "path": "Assets/Scripts/DungeonPointRegistry.cs",
+      "sha256": "8dd571b3ad63ee5697650132c4a618e3c5f393af0355eb7e201ff9a9deb0438e"
+    },
+    {
+      "path": "Assets/Scripts/Editor/FistJumpAuthoringTool.cs",
+      "sha256": "5142a07b937af00c8e9d87c633780e057918fab91b885387f69818c75e626341"
+    },
+    {
+      "path": "Assets/Scripts/Editor/FixDrakeAmmoShopPrefab.cs",
+      "sha256": "c7a07962785d59c13d70fe23ef8db078d5c2eb43a4f058bc3c478c13b560d5aa"
+    },
+    {
+      "path": "Assets/Scripts/Editor/ScenePrefabReplacerWindow.cs",
+      "sha256": "51ec7b15aa5d25143477f46974a8bc88248f2421ae2a7773c14d49479ff1d134"
+    },
+    {
+      "path": "Assets/Scripts/Editor/SmilyBlendPreviewExporter.cs",
+      "sha256": "7cb4b595900893e8adfe937dcda1f4746e789a7b6a402a3527bc7f661da567a3"
+    },
+    {
+      "path": "Assets/Scripts/Editor/SmilyWalkClipAuthoring.cs",
+      "sha256": "76665c287329589f77c1e971ae597fac40add226e1808246c05d096610b0569c"
+    },
+    {
+      "path": "Assets/Scripts/Editor/SpellCreatorWindow.cs",
+      "sha256": "6c6963e4bd69be6138ce8596ecbfbe55df759a904085f5a44a48bf00f7a93abb"
+    },
+    {
+      "path": "Assets/Scripts/Editor/StoreAudioSetup.cs",
+      "sha256": "7873670a2f2caa83d5e1df61043c0903f55dd62ce1f66368f83fe475737e8cca"
+    },
+    {
+      "path": "Assets/Scripts/Editor/WeaponShopRegistrationSetup.cs",
+      "sha256": "48304f4e4fc764b01d1bca62277278fe1f839dfd144a3638cbcfae26e24bfaf6"
+    },
+    {
+      "path": "Assets/Scripts/Editor/WeaponSprintStabilizationAuthoringTool.cs",
+      "sha256": "647cccca316c2c604c5bfd66cd522a057c8ba88d56349a4b02391f5ec284a880"
+    },
+    {
+      "path": "Assets/Scripts/Interaction/DoorInteractable.cs",
+      "sha256": "af6789bba1ac40cf679014984ca5378bcbcb88bd362d53c7695b5d654d5af212"
+    },
+    {
+      "path": "Assets/Scripts/Interaction/InteractionHoverOutline.cs",
+      "sha256": "299885fe7433d2f29ac0248c29a1b537c4f1011b51adbb146a493aadc391ef29"
+    },
+    {
+      "path": "Assets/Scripts/Interaction/InteractionOutlineRendererFeature.cs",
+      "sha256": "8235019c8de1db870a612e5c01b548f1087639ac3ec332e6fcba3e7e74387330"
+    },
+    {
+      "path": "Assets/Scripts/Interaction/ReviveStation.cs",
+      "sha256": "0c23e17ca78c12d4f7ba6bab1d930e3978de7b68887c5d4c749a685a626ddd81"
+    },
+    {
+      "path": "Assets/Scripts/Interaction/SkillTerminalPanel.cs",
+      "sha256": "17281813d98d791697f04db014fe38a5ebd46f0b0214c1f9562d2074673757a8"
+    },
+    {
+      "path": "Assets/Scripts/Interaction/SkillWebTerminalInteraction.cs",
+      "sha256": "cd810608792e3edc915dc678c567ac336d0da72f53905f74090baa2a0fb9366e"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/ActionSlot.cs",
+      "sha256": "902d534a3aefa03d21e162aa78c6fb9c555af3e8bf5d6ce49af0148ba6e8e087"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/ActionSlotNamePopup.cs",
+      "sha256": "ed6595dc2faf492c1f24f9f2d5e2c2a291e54240a49d32d5a0c25383ce65dcd2"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/DoorInteraction.cs",
+      "sha256": "5df65869a1fa89491902f1d2d4e4b412a1f050fc1e0a0efcc66f235ad42dbb6f"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/HeldItemAdjustmentStudio.cs",
+      "sha256": "a72ac1e7d6f1562cd25b0d977cd2a829391ebf878d6708aeb285cf550144e273"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/HeldItemPresenter.cs",
+      "sha256": "e848f6a169d76f907470f99a9b1c6fe4b3706cbc527359877c5d46d9982fd37a"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/HeldItemVisualCatalog.cs",
+      "sha256": "1c9b138189e26256627f477b854d1d7b6d6f1b4f5fc18008ba55efa7197ff094"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/HeldItemVisualPlacement.cs",
+      "sha256": "4d9ed9ef374a5f2e224d6e45f715ac2e63413cc507eabc6f9f692008209da864"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/InteractionManager.cs",
+      "sha256": "260354fa22e5085f5fbcb2174594b6764a69913a39d97b399b5a1517403e30d9"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/InventoryItem.cs",
+      "sha256": "87f5a530f159e035bdf7f851901e5ef3cb5066bfb267ebf00f1c634114a7a23d"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/InventoryManager.cs",
+      "sha256": "9c1eccd7dd90728077bc25d109bfff50eff81f7b54cbe4c0ec1914fd74bc666a"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/InventorySlot.cs",
+      "sha256": "d7dc65befb009a7109d91b2e3324600a7fce42aa67e9feebc01fc785261838c3"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/InventorySlotVisual.cs",
+      "sha256": "df9da9a85cd15da99f4521cd10ebb637a48e1a4d0d9eb2f258f1f09675cbf170"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/InventoryTooltip.cs",
+      "sha256": "1fc3851b1552fb21fb08db87198b558379bfb08b5bc79f4fcfd753d90ea1766c"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Item.cs",
+      "sha256": "d018c6cbd0449423b9eecad9fb646d0eb3e5307d9ea88c568d5bdc3930ce4bbe"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/ItemDefinition.cs",
+      "sha256": "18c12c8d48f13de7054d42abab3aec46896dc4199e7a390c2dd83209abecb7a6"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/ItemRarityDefaults.cs",
+      "sha256": "6fe931c1e57f254df2c71dcc64e110ea519a71c100e95ed41490f775ab25546d"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/ItemRarityTable.cs",
+      "sha256": "fd575501dcd95d255d93b20aee84efa3ffffe7a768dbdf2bfe1d15096a1e73ca"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/PlayerInventory.cs",
+      "sha256": "dc8ddbaa4e231f15c91b2c65e7eb8da889549ed90b0981a39bf9afa2be2fd26b"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/ServerInventoryLedger.cs",
+      "sha256": "40bf94f4c7f00acaf97f790d9348810d6f701594bcbd53f8e88016bf85ec0359"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Spell/SpellData.cs",
+      "sha256": "cde6de4f46107589916f3fab0faf4b38d92998e6d22138a6784173ac769869db"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Spell/SpellRuntimeState.cs",
+      "sha256": "f72cc5861b6da9d69b438f27afdf4d9328a5160d83781dec5afe26b7a188e13f"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/UI/InventoryDetailPanel.cs",
+      "sha256": "5723d7c5be5ccd54e50018f1fa79c314ca1acc7b4a57cd3bbdc9a2f9242a3c03"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/UI/InventorySessionStatus.cs",
+      "sha256": "b904b1209be5e62d7bcdcb29f8d6812832228b477a87291e6ce871a0249a6777"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/UI/InventoryTheme.cs",
+      "sha256": "b3a52c83b671eb9208b55adff30b796eb4fd4130680930d54dd389dffa7a5e80"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/UI/SevenSegmentClockGraphic.cs",
+      "sha256": "45e721eae4de574991e5c507c9190176bd67fb6ac9c75076265edd1239109fd5"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/AmmoItem.cs",
+      "sha256": "076089ef84cd4873fd84886beed4da4e6a5b0f1920ed1603cfdea797d1f6236f"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/NetworkProjectile.cs",
+      "sha256": "46780f27eb131478d726b3cb9679523687075479723e05aa83f504ae4886ddde"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/SimpleProjectile.cs",
+      "sha256": "1403facd36b6de82dbe03c3abb6a052b5f6cd6ab27f8f88cae598a618f69853c"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/WeaponData.cs",
+      "sha256": "28b68bca118e8219771468578b73459bdd3c5e975376424e0b596eda139e1da1"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/WeaponInventoryBridge.cs",
+      "sha256": "daff752ca22b38b26fa442230241355b5cdb5fe3b181bb608dd0db9e11d3b38b"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/WeaponItem.cs",
+      "sha256": "477f1b979fc5e97ec5a95fdffdedf05bdd912fde4fa813e6bd05826a5597b5d3"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/WeaponSound.cs",
+      "sha256": "58217ef51a77a42b7a5dc1266228c8b5fa1be81dee9ea3d10b2a08b5ad9ddbcb"
+    },
+    {
+      "path": "Assets/Scripts/Inventory/Weapon/WeaponUI.cs",
+      "sha256": "aac973ea3f5f4cf996732af6ae87e44c3d17aecfc309ab6681f63654169e720f"
+    },
+    {
+      "path": "Assets/Scripts/InventoryShop/InventoryBagItem.cs",
+      "sha256": "a2e0d12cd2f781e8f8422052ed601124fd78ee4fe0261710eb5e91e5be2adb1d"
+    },
+    {
+      "path": "Assets/Scripts/InventoryShop/InventoryExpansionShop.cs",
+      "sha256": "e5576b2102f5eceee8cdf08bae9c7fe4b66967eb810a32bec7058683f87878b2"
+    },
+    {
+      "path": "Assets/Scripts/InventoryShop/InventoryManagerExtensions.cs",
+      "sha256": "885e281e9ea1047dfcbc89a93fc205bedc144adba871c8b1d2000f6aff4e4f08"
+    },
+    {
+      "path": "Assets/Scripts/Managers/GameViewManager.cs",
+      "sha256": "be5266830da6d84a54e365a9d4598e075a71af273e836e5a6265a5c8d9271887"
+    },
+    {
+      "path": "Assets/Scripts/Menu/GameMenuController.cs",
+      "sha256": "094c92e2b3c63c9c16640d62a5a7423c544e342cfcd63864242c6fb53fe8912b"
+    },
+    {
+      "path": "Assets/Scripts/Menu/GameOptions.cs",
+      "sha256": "3d9ac7f00846bce27c55668396340c8285213e66da8796640d9fa526e06bd434"
+    },
+    {
+      "path": "Assets/Scripts/Menu/GameSceneLoading.cs",
+      "sha256": "2e9891a244e2f49bf7f4b6d4c7636603be5c49f062ac4d525be6c709690bc837"
+    },
+    {
+      "path": "Assets/Scripts/Menu/MenuShotgunCinematic.cs",
+      "sha256": "14dd07a17a9aff494c4212da718e328d6a952f217b9845f072c1766d410cf7f5"
+    },
+    {
+      "path": "Assets/Scripts/Menu/RunSaveData.cs",
+      "sha256": "25a5f9a8b58494b5c4fc2660febf95a1fd6239454fa68698684ca2d198aab1e9"
+    },
+    {
+      "path": "Assets/Scripts/Menu/RunSaveService.cs",
+      "sha256": "c3dafe4a9d8dd4041681dd4f80bdeb05827f734064d4a31658c1927cdccb16c1"
+    },
+    {
+      "path": "Assets/Scripts/Menu/ShotgunPelletGraphic.cs",
+      "sha256": "e1c8cb1f1fee12d84a1b34e347f55ba7178c25bf66a4912bc460c9e357ecb65e"
+    },
+    {
+      "path": "Assets/Scripts/Menu/SteamManager.cs",
+      "sha256": "07ace8a99691c5b8cfb59ee226ef3136d59a5918d59bad50f9529453f727997f"
+    },
+    {
+      "path": "Assets/Scripts/Menu/SteamRoomPanel.cs",
+      "sha256": "b3248a411fc77e39ef5999e680c859413ff0bbce2f2c8b0ad85caf940342d43c"
+    },
+    {
+      "path": "Assets/Scripts/Menu/SteamRoomService.cs",
+      "sha256": "f52217ec486cab2899dc475f770a30a46dc3d81785de11f3b8b5f8628ab6f38d"
+    },
+    {
+      "path": "Assets/Scripts/Network_Integration/NetworkPlayer.cs",
+      "sha256": "dd0fe02bf79c23d025953fb1929f5ee32394678bb7a54291fbb09b094787d873"
+    },
+    {
+      "path": "Assets/Scripts/Network_Integration/NetworkPlayerInventory.cs",
+      "sha256": "bb50a0852d7b55caf47305a87dd6b4b76c89ac463fe323067bcda578e2f52b83"
+    },
+    {
+      "path": "Assets/Scripts/Player/CameraCollisionHandler.cs",
+      "sha256": "875212e27e7ba3820cf6effcd75c76571730184b8f88e8f319da695862fbab37"
+    },
+    {
+      "path": "Assets/Scripts/Player/CameraJitterDiagnostics.cs",
+      "sha256": "c7da0d4630e5e0ecbae5dfbc56acf415655c828e425ccb70ba95332866e856c8"
+    },
+    {
+      "path": "Assets/Scripts/Player/PerkTokenGraphic.cs",
+      "sha256": "e16bf3a9509072118ce06d3ad783c6c2701bf17b12a22712ebd97fc2590d211f"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerDeath.cs",
+      "sha256": "5c788d9c2572c82a62353b785f29caebb3b12dbc0fb346958a03d5a440c2d129"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerPerkDefinition.cs",
+      "sha256": "a59fc1f1487ce3bc62504d337af5db91df8eae60e6c0e7f024de9da4fd70c042"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerPerks.cs",
+      "sha256": "e73154b9329f2d5d5290fbf4e71e415fd4017fd1eaacabe93cb320236bfffd2e"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerVitals.cs",
+      "sha256": "a7e4e837ddce2ae3829d26cdc37e0458d3f1273cd137a5187492035175953b76"
+    },
+    {
+      "path": "Assets/Scripts/Player/PlayerVitalsHud.cs",
+      "sha256": "3a17b3f689af9395848e79fcc92a71c5bd19f1c05f71685c794c28fec361000c"
+    },
+    {
+      "path": "Assets/Scripts/Player/ReviveLedger.cs",
+      "sha256": "0a063d703f4e4764e9632d1f4a508c6eb34d0fbaeb5225c9eae593ceeea2a028"
+    },
+    {
+      "path": "Assets/Scripts/Player/SkillWebHealthTestBridge.cs",
+      "sha256": "e400dd2bf9407d389f61946cdd926f486ba652e0101abdbd3dd0ba96fa872066"
+    },
+    {
+      "path": "Assets/Scripts/Player/SkillWebQuery.cs",
+      "sha256": "7bfa5c44047818514619d3638514c190ba562d09bd14cfd3d6f0f2e793ef7c8d"
+    },
+    {
+      "path": "Assets/Scripts/Player/TeamProgress.cs",
+      "sha256": "d7f183bce17852c186ee230cc38e71230a93315abf6345740fcab798b95cdba7"
+    },
+    {
+      "path": "Assets/Scripts/Scene/StartMapReturnPoint.cs",
+      "sha256": "c8f9cdeff1fa9d38fc1bfb0f5a8014eb22a2d52f0171b1dbe6a5b39762488524"
+    },
+    {
+      "path": "Assets/Scripts/Scene/StartMapTerrainAmbienceController.cs",
+      "sha256": "5cf012d2ac162ae3f432775112bd19df5b612b0f2faf6447a3dc39e2c8a3744a"
+    },
+    {
+      "path": "Assets/Scripts/Scene/StartMapWeatherController.cs",
+      "sha256": "967215fd9bb1462e1c6e1f0fe2d600a79931b747111b3aac5ea28fcbed1e26fb"
+    },
+    {
+      "path": "Assets/Scripts/Shop/ShopPurchaseItemBase.cs",
+      "sha256": "054836ee116c961f92b86ace9fb9bccf90e0d87a21c616ba4674b3c021667191"
+    },
+    {
+      "path": "Assets/Scripts/Shop/ShopSpawnerBase.cs",
+      "sha256": "cc45e8c5cbb1899b11554f771380c2a207db01f42f1f6e443cb86a06b19fe9fd"
+    },
+    {
+      "path": "Assets/Scripts/Tax/CompanyHud.cs",
+      "sha256": "8b86d716833151ff4a6244c2c30443f003601b7f9019b8448e52422d50aaf716"
+    },
+    {
+      "path": "Assets/Scripts/Tax/ContractEvents.cs",
+      "sha256": "420132cc8cf16ff459c853da1ca5fb49c5a3b228025c305624ff0f3484c032a5"
+    },
+    {
+      "path": "Assets/Scripts/Tax/DailyContractBoard.cs",
+      "sha256": "e12fd13dce355687cf856e959990d9524fcdf4118e5fed331e9a4722cf36f3c0"
+    },
+    {
+      "path": "Assets/Scripts/Tax/Editor/TaxCollectionMachineAuthoring.cs",
+      "sha256": "63dd639805f2a13321a82eb72bc84df60c3ed251274215a1162926d1aa25f1e1"
+    },
+    {
+      "path": "Assets/Scripts/Tax/Editor/TaxScheduleTests.cs",
+      "sha256": "ab112f6b1a865661b6763edc990f2de9bff527e877cd0cf3ee49fda714728938"
+    },
+    {
+      "path": "Assets/Scripts/Tax/TaxCollectionMachine.cs",
+      "sha256": "73a233b512f3012af0ea0b7151f7aae27f8107de8097097ead4988d9cf5f1bc9"
+    },
+    {
+      "path": "Assets/Scripts/Tax/TaxMachineScreenController.cs",
+      "sha256": "c662f3ab43e317779f81c025577b943f3f76256827fbd1c7d0a33a500b0daf79"
+    },
+    {
+      "path": "Assets/Scripts/Tax/TaxSchedule.cs",
+      "sha256": "bd378ba9253955fcf5bbb6a0876aea7d6ef9a4dde7fbfbe524cf22847938f074"
+    },
+    {
+      "path": "Assets/Scripts/Test/AudioRangeGizmo.cs",
+      "sha256": "c354af53ea33b99ee3fb95891bffa40832f3c21a9dc06c0f1c192c4d93995512"
+    },
+    {
+      "path": "Assets/Scripts/TimeSync/ClockInteraction.cs",
+      "sha256": "c4b3059f810e2686eccaa6a9125e9bcde5a47139ef7556010bae55c91fa3a05e"
+    },
+    {
+      "path": "Assets/Scripts/TimeSync/DayEndBedInteraction.cs",
+      "sha256": "9a1ddf96a1831165ca323728294d990bb5d1d3d8e5b06f523da117de5057c048"
+    },
+    {
+      "path": "Assets/Scripts/TimeSync/DayEndSeatPlayer.cs",
+      "sha256": "f69a231254305259bdf262a977c50dc6f098adfbd1bce3c5b34c333ecd884657"
+    },
+    {
+      "path": "Assets/Scripts/TimeSync/TimeManager.cs",
+      "sha256": "1f5dea9eca29368966000c7645dfa380aabf596e0b6ca833285ac22e0ae16f5b"
+    },
+    {
+      "path": "Assets/Scripts/UI/AmmoHudPanelGraphic.cs",
+      "sha256": "bdb95661bebd8ef71393f5ead1d30ae985334fd5c72d8401361ea0a87c1c2c35"
+    },
+    {
+      "path": "Assets/Scripts/UI/Billboard.cs",
+      "sha256": "f6528f4c6126bc777d2332a9edecefb3f7fae4cc5de2fd9cfc6b871d18cc1417"
+    },
+    {
+      "path": "Assets/Scripts/UI/PromptPresenter.cs",
+      "sha256": "70dac597e4c46cb8c239d046b25260a06b3a04a3b6e81ee78fa3f5082141e103"
+    },
+    {
+      "path": "Assets/Scripts/UI/WorldHealthBar.cs",
+      "sha256": "9ebd0a75210a986cc4930dbcdb6ef572098d60b23764c56c368c4d054629d90b"
+    },
+    {
+      "path": "Assets/Scripts/Upgrade/AnvilInteraction.cs",
+      "sha256": "919cfa6ccb0bf9f7056a4271eaf549111f1e2e828d02c87c6204b973b96e70ef"
+    },
+    {
+      "path": "Assets/Scripts/Upgrade/AnvilUI.cs",
+      "sha256": "a9e033d0166724c848b4728de050da3a8a77b96277c6f7eba900ebcbb834126e"
+    },
+    {
+      "path": "Assets/Scripts/Upgrade/ItemUpgradeRecipe.cs",
+      "sha256": "b3450d5b0749be14094550d3cb9d8e0908b666eabdeeffabc7595848f4aa738e"
+    },
+    {
+      "path": "Assets/Scripts/VFX/RandomTileVariation.cs",
+      "sha256": "595acadf8816131849f50dd954c1cf3dac802e741287ff37182a6cae77c1d19f"
+    },
+    {
+      "path": "Assets/Scripts/VFX/RandomUVOffsetOnly.cs",
+      "sha256": "a30be18648847ef23b5f46e1c8c0008e60c96d5dfd0af9fcc7da85acb41655e5"
+    },
+    {
+      "path": "Assets/Scripts/WeaponShop/WeaponShop.cs",
+      "sha256": "cd9ea5ad8d40ecaf97d23ad20d161e8d0e8fce49046fa689543a2daf21d89af7"
+    },
+    {
+      "path": "Assets/Scripts/WeaponShop/WeaponShopItem.cs",
+      "sha256": "336c8abe93344f3c3bc9a98d354e4038ad31c3e3f3e673fd313444416a93bac7"
+    },
+    {
+      "path": "Assets/Scripts/monster/DoorAutoOpener.cs",
+      "sha256": "84d4164e1a7f1520759ae5c1e07a2a537cbc19475adbf999f56598907638a5c4"
+    },
+    {
+      "path": "Assets/Scripts/monster/Editor/CombatFeelSceneBuildRequest.cs",
+      "sha256": "b12ddb54f36f417bef718a435ade93a7cfccd0d1ce0fa1916043512f725314f3"
+    },
+    {
+      "path": "Assets/Scripts/monster/Editor/MonsterTestSceneSetup.cs",
+      "sha256": "127c65244baafa8254cc96b9f4f3f66b2d846afff0a01fff6ea257187fc5a4cd"
+    },
+    {
+      "path": "Assets/Scripts/monster/Editor/SmilyActionVerificationChecklist.cs",
+      "sha256": "725f3d59e3d575eabf2088d9549fe96e9a067d2eef0b0de13cc62f306eb2465e"
+    },
+    {
+      "path": "Assets/Scripts/monster/Editor/SmilyAudioControllerEditor.cs",
+      "sha256": "fe93056a533c994b7dcb21bb02e19c55fd9c149cb65ac12d5dd310e4e46871cf"
+    },
+    {
+      "path": "Assets/Scripts/monster/IMonsterFlowTelemetry.cs",
+      "sha256": "6a82f995b2247507e8a74ce35f9b282f9619a56ffd7b0e5934a23ccd835f278d"
+    },
+    {
+      "path": "Assets/Scripts/monster/LootScent.cs",
+      "sha256": "ef7b9d0be014f1617033f23489e02fe45f8fcb3aa7d06fe9bed64d4e0577cc2d"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterConfig.cs",
+      "sha256": "5f8d99b24e5242d57fe3c74dd23cacf16b45c63d8eed69854f7c5b9150a03446"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterDoorLinkBinding.cs",
+      "sha256": "25dc69214592efca017c663b250be08f3b9e1b25034c40384577a9367514ff94"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterDoorTraversalGroup.cs",
+      "sha256": "5e435a0eaf5550b726394ad731a58c665a9f7b8d133d73c1890be12e575810e8"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterIntent.cs",
+      "sha256": "f87e97bb1fc5b04860b7238c1385ed445162fc649f562f52f6e772f612632f3e"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterNoise.cs",
+      "sha256": "55053cdf529c8a0ae083c97269ab32e35954ea261475093f7ed4c88ded0671be"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterPatrolSelector.cs",
+      "sha256": "5c42f858dfea34060be2fe7eb918f6ceefe2b563114b9b41d09deb7645896317"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterSpawnPointMarker.cs",
+      "sha256": "bc18e6382075b3d663af49d2469b16fe5973a2f448daf14b7375e235a18edb98"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterTargeting.cs",
+      "sha256": "6aa4037cbd49825e92366bf47c3b100a60a25fc3f71596ad96dd90a3f133c9f9"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterTestAutoHost.cs",
+      "sha256": "600de12bf95ef754d0135028ff49d6c843e9a96ddef73405f09314fddf56e134"
+    },
+    {
+      "path": "Assets/Scripts/monster/MonsterTestSceneController.cs",
+      "sha256": "687825c0055118476427f87500d7fc8e98561306e1760437056f8db75585e781"
+    },
+    {
+      "path": "Assets/Scripts/monster/Octopus/Editor/OctopusSwarmPrototypeSetup.cs",
+      "sha256": "012d13de9009dd74c0cb8074800a99fbec338610036cf6d50641efb6a42b2f58"
+    },
+    {
+      "path": "Assets/Scripts/monster/Octopus/OctopusAttackHitbox.cs",
+      "sha256": "3c47f4171675d36e17e55e309bf29913d1cafd62483a51b6f8f93bf568ced14b"
+    },
+    {
+      "path": "Assets/Scripts/monster/Octopus/OctopusDeathHideTimer.cs",
+      "sha256": "0b38d254ef7403d9197a1d1cc62f6dfaf6329f51f44c6180b2e7f468fdbd383d"
+    },
+    {
+      "path": "Assets/Scripts/monster/Octopus/OctopusSwarmController.cs",
+      "sha256": "5328fd43a64410874b587155027931212f9b658f5c60017d589d826ec226d9fe"
+    },
+    {
+      "path": "Assets/Scripts/monster/Octopus/OctopusSwarmMember.cs",
+      "sha256": "e74cc97f91baa9fef6c6824b183ffb93a26609614a2b3697fc82600c6e1aca76"
+    },
+    {
+      "path": "Assets/Scripts/monster/Octopus/OctopusSwarmPresentation.cs",
+      "sha256": "e311374cf7940b38c4858e4072be11974746c8d4e5ebe5ca26ddbe4fd0f6d50e"
+    },
+    {
+      "path": "Assets/Scripts/monster/PatrolPointMarker.cs",
+      "sha256": "3f4c61d4efd4e9d5463ee6a1fd78dc7646080086d01d1b42cc432d8fb5242a1a"
+    },
+    {
+      "path": "Assets/Scripts/monster/PlayerPawn.cs",
+      "sha256": "76a4a4b4cc745aff54f16d8b7ee5321c1f510fe0d68412b451fd3f309ebbb523"
+    },
+    {
+      "path": "Assets/Scripts/monster/SmilyActionRuntimeDiagnostics.cs",
+      "sha256": "ec568b674030c4bce0e02e638caa67f293991e47fe75c734e494a52dc47dc805"
+    },
+    {
+      "path": "Assets/Scripts/monster/SmilyAttackState.cs",
+      "sha256": "bb2dc5ce2c1571394e4c642648db35bd3d1cea9d0e6d16d3711e00f65150cf8d"
+    },
+    {
+      "path": "Assets/Scripts/monster/SmilyAudioController.cs",
+      "sha256": "9f440976abc3fd502b970ececfb6c2498846bd1e6e7909cbbca03df12f847f66"
+    },
+    {
+      "path": "Assets/Scripts/monster/SmilyBrain.cs",
+      "sha256": "b8254b5f12ecd0572632fb1796306cbad189db7c9250d8bd7a5bc409ff1bae52"
+    },
+    {
+      "path": "Assets/Scripts/monster/SmilyPortalEffect.cs",
+      "sha256": "431bfbca5c6ebd99bd72dd59b42121dc8fbf07a9dc1902dc21529c9bde765c7f"
+    },
+    {
+      "path": "Assets/Scripts/monster/SmilyWallClearanceController.cs",
+      "sha256": "1895d4b5610b734e6d3f6a8efd956c9110f536b580fe5f4a94021637b07bcd6a"
+    },
+    {
+      "path": "Assets/Scripts/server/MyConnectionStarter.cs",
+      "sha256": "5c39c7f37839bef4a58862d9868cdeb877f82c08242e1f1a48f630ca121a4e49"
+    },
+    {
+      "path": "Assets/Tests/Editor/CameraCollisionSmokeRunner.cs",
+      "sha256": "a7750bfa106f4dda55faa05aee007425fabc54411e1d80efeafc89e9b02766f8"
+    },
+    {
+      "path": "Assets/Tests/Editor/CombatDeathContractTests.cs",
+      "sha256": "96c07185ae0880f654467195c1a1657373ec5f1d412c82c92140bc64966435a6"
+    }
+  ]
+}

@@ -31,6 +31,9 @@ public class TimeManager : NetworkBehaviour
 
     private readonly SyncVar<float> syncedTime = new(DayStartHour);
     private readonly SyncVar<bool> isClockRunning = new(false);
+    private readonly SyncVar<bool> dungeonPreparing = new(false);
+    private Coroutine _pendingClockStart;
+    public bool IsPreparingDungeon => dungeonPreparing.value;
     private readonly SyncVar<int> sleepVoteCount = new(0);
     private readonly SyncVar<int> totalPlayers = new(0);
     private readonly SyncVar<int> currentDay = new(1);
@@ -264,7 +267,7 @@ public class TimeManager : NetworkBehaviour
         var checkpoint = RunSaveService.Instance;
         if (checkpoint != null && checkpoint.IsSoloCheckpointSession && !checkpoint.IsReady)
             return;
-        if (isClockRunning.value)
+        if (isClockRunning.value || _pendingClockStart != null)
         {
             Debug.Log("[TimeManager] Clock is already running!");
             return;
@@ -276,10 +279,38 @@ public class TimeManager : NetworkBehaviour
             return;
         }
 
-        isClockRunning.value = true;
         if (dungeonController != null)
+        {
+            dungeonPreparing.value = true;
             dungeonController.StartDungeonServer();
-        Debug.Log("[TimeManager] Clock start command sent to all clients");
+            _pendingClockStart = StartCoroutine(StartClockAfterDungeonReady());
+        }
+        else isClockRunning.value = true;
+    }
+
+    private System.Collections.IEnumerator StartClockAfterDungeonReady()
+    {
+        yield return null;
+        float deadline = Time.realtimeSinceStartup + 240f;
+        Debug.Log("[TimeManager] Waiting for every connected player to prepare the dungeon; clock and battery are paused.");
+        while (dungeonController != null && dungeonController.IsDungeonActive && !_isForwardingTime)
+        {
+            if (!string.IsNullOrEmpty(dungeonController.MapLoadError) || Time.realtimeSinceStartup > deadline)
+            {
+                Debug.LogError("[TimeManager] Dungeon preparation failed or timed out; the day clock was not started.");
+                dungeonController.ClearDungeonServer();
+                break;
+            }
+            if (_playersManager != null && dungeonController.ArePlayersReady(_playersManager.players))
+            {
+                isClockRunning.value = true;
+                Debug.Log("[TimeManager] All players ready; clock started.");
+                break;
+            }
+            yield return null;
+        }
+        dungeonPreparing.value = false;
+        _pendingClockStart = null;
     }
 
     [Header("Midnight Curfew")]

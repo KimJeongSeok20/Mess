@@ -7,12 +7,17 @@ public static class BloodVfxVisual
         Vector3 position,
         Quaternion rotation,
         float scale,
-        float lifetime)
+        float lifetime,
+        uint renderingLayerMask)
     {
         if (prefab == null)
             return null;
 
         GameObject instance = Object.Instantiate(prefab, position, rotation);
+        // Detached effects must receive the same room lighting as the struck monster.
+        foreach (Renderer renderer in instance.GetComponentsInChildren<Renderer>(true))
+            renderer.renderingLayerMask = renderingLayerMask;
+
         ParticleSystem[] particles = instance.GetComponentsInChildren<ParticleSystem>(true);
         foreach (ParticleSystem particle in particles)
             particle.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);

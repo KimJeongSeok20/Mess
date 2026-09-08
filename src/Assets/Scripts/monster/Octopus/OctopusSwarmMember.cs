@@ -223,6 +223,7 @@ public sealed class OctopusSwarmMember : MonoBehaviour
     public int AttackDamage => attackDamage;
     public int StableMemberId => stableMemberId;
     public Collider DamageCollider => damageCollider;
+    public uint RenderingLayerMask => visualRenderer != null ? visualRenderer.renderingLayerMask : 1u;
     public int NavMeshAgentTypeId => agent != null ? agent.agentTypeID : 0;
     public int NavMeshAreaMask => agent != null ? agent.areaMask : NavMesh.AllAreas;
     public bool IsInAttackSequence => _attackPhase != AttackPhase.None;

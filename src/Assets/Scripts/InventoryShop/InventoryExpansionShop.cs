@@ -322,7 +322,7 @@ public class InventoryExpansionShop : ShopSpawnerBase
         if (item == null || item.SoldOnServer)
         {
             // Already sold (audit M1): reject the duplicate request instead of charging twice.
-            ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, false, 0);
+            ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, false, 0, feedbackWasBroadcast: false);
             return;
         }
 
@@ -330,7 +330,7 @@ public class InventoryExpansionShop : ShopSpawnerBase
         if (success)
             item.SoldOnServer = true;
         PlayPurchaseFeedbackAtIndexRpc(spawnIndex, success);
-        ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, success, currentCurrency);
+        ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, success, currentCurrency, feedbackWasBroadcast: true);
 
         if (success)
             RemovePurchasedEntryAtIndexRpc(spawnIndex);
@@ -349,13 +349,13 @@ public class InventoryExpansionShop : ShopSpawnerBase
     }
 
     [ObserversRpc]
-    private void ResolvePurchaseAtIndexRpc(int spawnIndex, string purchaseToken, bool success, int currentCurrency)
+    private void ResolvePurchaseAtIndexRpc(int spawnIndex, string purchaseToken, bool success, int currentCurrency, bool feedbackWasBroadcast)
     {
         InventoryBagItem item = GetBagItemAtIndex(spawnIndex);
         if (item == null)
             return;
 
-        item.ResolvePurchaseLocally(purchaseToken, success, currentCurrency);
+        item.ResolvePurchaseLocally(purchaseToken, success, currentCurrency, feedbackWasBroadcast);
     }
 
     [ObserversRpc]

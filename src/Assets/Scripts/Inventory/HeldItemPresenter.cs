@@ -163,6 +163,10 @@ public sealed class HeldItemPresenter : NetworkBehaviour
         instance.name = "Visual";
         HeldItemVisualPlacement.Apply(pivot.transform, instance.transform, entry);
 
+        // The owner's dungeon probe receiver cached its renderers at Awake; give it the new visual
+        // right away so the held item is lit like the hand holding it.
+        heldItemAnchor.GetComponentInParent<DungeonDynamicProbeReceiver>()?.RefreshRenderers();
+
         if (!HeldItemVisualPlacement.TryGetWorldRendererBounds(instance.transform, out _))
             Debug.LogWarning($"[HeldItemPresenter] '{instance.name}' has no visible renderer bounds.", this);
 

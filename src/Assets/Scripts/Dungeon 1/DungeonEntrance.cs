@@ -44,9 +44,10 @@ public class DungeonEntrance : AInteractable
         }
 
         // A client that is still generating would be teleported into empty space (audit M4).
-        if (!dungeonController.IsLocalDungeonReady)
+        if (!dungeonController.IsLocalDungeonReady || (TimeManager.Active != null && TimeManager.Active.IsPreparingDungeon))
         {
-            if (_prompt != null) _prompt.Show("The dungeon is still forming...");
+            if (_prompt != null) _prompt.Show(string.IsNullOrEmpty(dungeonController.MapLoadError)
+                ? "The dungeon is still forming..." : "Dungeon preparation failed. Return to the title.");
             return;
         }
 

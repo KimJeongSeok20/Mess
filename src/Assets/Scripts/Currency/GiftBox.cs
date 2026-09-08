@@ -10,6 +10,11 @@ public class GiftBox : AInteractable
     [Header("Gift Box Settings")]
     [SerializeField] private GiftBoxItem giftBoxItemPrefab; // GiftBoxItem GameObject 프리팹
 
+    [Header("Packaging Audio")]
+    [SerializeField] private AudioSource packagingAudioSource;
+    [SerializeField] private AudioClip packagingSound;
+    [SerializeField, Range(0f, 1f)] private float packagingSoundVolume = 0.4f;
+
     // 캐시된 컴포넌트들
     private InventoryManager _inventoryManager;
     private PromptPresenter _promptPresenter;
@@ -119,6 +124,16 @@ public override void Interact()
             player.transform.position + player.transform.forward + Vector3.up)) return;
         player.ServerInventory.Consume(token, out _);
         player.CompleteItemUse(token, "Item packaged");
+        PlayPackagingSoundObserversRpc();
+    }
+
+    [ObserversRpc]
+    private void PlayPackagingSoundObserversRpc()
+    {
+        if (packagingAudioSource == null || packagingSound == null)
+            return;
+
+        packagingAudioSource.PlayOneShot(packagingSound, packagingSoundVolume);
     }
 
     public override void OnHover()

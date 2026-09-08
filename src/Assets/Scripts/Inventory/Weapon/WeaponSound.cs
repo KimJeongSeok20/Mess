@@ -78,6 +78,7 @@ public class WeaponSound : MonoBehaviour
         if (_weapon == null || _weapon.WeaponData == null || _audio == null) return;
 
         var sfx = _weapon.WeaponData.sfx;
+        _audio.dopplerLevel = 0f;
 
         if (!sfx.use3D)
         {
@@ -141,10 +142,15 @@ public class WeaponSound : MonoBehaviour
     // =========================
     public void PlayWeaponSound()
     {
-        PlayWeaponSound(0);
+        // Legacy animation callback: Weapon owns full reload playback.
     }
 
     public void PlayWeaponSound(int _ignoredIndex)
+    {
+        // Keep existing animation events valid without replaying the full clip.
+    }
+
+    public void PlayReloadSound()
     {
         if (_weapon == null || _weapon.WeaponData == null) return;
         if (!EnsureAudioSourceBinding()) return;
@@ -157,6 +163,7 @@ public class WeaponSound : MonoBehaviour
 
             _lastReloadPlaybackDebug = $"played owner={IsOwnerSoundSource()} clip={clip.name} local={_localReloadCount} remote={_remoteReloadCount}";
 
+            _audio.pitch = 1f;
             _audio.PlayOneShot(clip, _weapon.WeaponData.sfx.reloadVolumeMultiplier);
         }
     }

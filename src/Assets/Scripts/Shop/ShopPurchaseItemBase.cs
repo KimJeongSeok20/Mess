@@ -20,12 +20,13 @@ public abstract class ShopPurchaseItemBase : Item
     [SerializeField] private AudioClip buySuccessClip;
     [SerializeField] private AudioClip buyFailClip;
     [SerializeField] private AudioMixerGroup purchaseMixerGroup;
+    [SerializeField, Range(0f, 1f)] private float purchaseSuccessVolume = 0.45f;
+    [SerializeField, Range(0f, 1f)] private float purchaseFailureVolume = 0.35f;
 
     protected PromptPresenter PromptPresenterInstance { get; private set; }
     protected string PendingPurchaseToken { get; private set; }
     protected CurrencyManager PurchaseCurrencyManager { get; private set; }
     protected InventoryManager PurchaseInventoryManager { get; private set; }
-    private AudioSource _purchaseAudioSource;
 
     protected override void OnSpawned()
     {
@@ -146,22 +147,12 @@ public abstract class ShopPurchaseItemBase : Item
 
     protected virtual void PlaySuccessAudio()
     {
-        if (buySuccessClip == null)
-            return;
-
-        EnsurePurchaseAudioSource();
-        if (_purchaseAudioSource != null)
-            _purchaseAudioSource.PlayOneShot(buySuccessClip);
+        PlayPurchaseClip(buySuccessClip, purchaseSuccessVolume);
     }
 
     protected virtual void PlayFailureAudio()
     {
-        if (buyFailClip == null)
-            return;
-
-        EnsurePurchaseAudioSource();
-        if (_purchaseAudioSource != null)
-            _purchaseAudioSource.PlayOneShot(buyFailClip);
+        PlayPurchaseClip(buyFailClip, purchaseFailureVolume);
     }
 
     public void PlayPurchaseAudioFromNetwork(bool success)
@@ -180,22 +171,26 @@ public abstract class ShopPurchaseItemBase : Item
         return _lastPurchaseAudioDebug;
     }
 
-    private void EnsurePurchaseAudioSource()
+    private void PlayPurchaseClip(AudioClip clip, float volume)
     {
-        if (_purchaseAudioSource != null)
+        if (clip == null)
             return;
 
-        _purchaseAudioSource = GetComponent<AudioSource>();
-        if (_purchaseAudioSource == null)
-            _purchaseAudioSource = gameObject.AddComponent<AudioSource>();
-
-        _purchaseAudioSource.playOnAwake = false;
-        _purchaseAudioSource.spatialBlend = 1f;
-        _purchaseAudioSource.minDistance = 1f;
-        _purchaseAudioSource.maxDistance = 12f;
-
-        if (purchaseMixerGroup != null)
-            _purchaseAudioSource.outputAudioMixerGroup = purchaseMixerGroup;
+        // The purchased entry despawns before longer clips finish.
+        var audioObject = new GameObject("Purchase Audio");
+        audioObject.transform.position = transform.position;
+        var source = audioObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.clip = clip;
+        source.outputAudioMixerGroup = purchaseMixerGroup;
+        source.volume = volume;
+        source.pitch = 1f;
+        source.dopplerLevel = 0f;
+        source.spatialBlend = 1f;
+        source.minDistance = 1f;
+        source.maxDistance = 12f;
+        source.Play();
+        Destroy(audioObject, clip.length + 0.1f);
     }
 
     private void PlayPurchaseEffectLocal()

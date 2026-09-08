@@ -78,8 +78,8 @@ namespace DungeonRoomLocalLightShare
         // doorway — that is the projector stamp on a half-open leaf.
         public const int DoorReceiveStartRenderingLayerMask = 16;
         public const int DoorReceiveAdministrativeRenderingLayerMask = 32;
-        // Floors/walls that should receive doorway cookies. Characters stay on Dungeon
-        // only, so a cookie never lights the player even though both share GameObject Default.
+        // Environment receives projected cookies. Characters keep Dungeon only and sample
+        // the incoming connection as SH, gated to the receiving room and the actual aperture.
         public const int CookieEnvironmentRenderingLayerMask = 128;
         public const int StartIncomingCookieLightingLayerMask =
             CookieEnvironmentRenderingLayerMask | DoorReceiveStartRenderingLayerMask;

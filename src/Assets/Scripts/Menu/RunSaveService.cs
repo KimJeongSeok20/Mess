@@ -27,7 +27,9 @@ public sealed class RunSaveService : MonoBehaviour
 
     public static RunSaveService Instance { get; private set; }
     public static bool IsSoloStartRequested => _request != StartRequest.None;
-    public static string SavePath => Path.Combine(Application.persistentDataPath, "solo-morning-checkpoint.json");
+    // Only the opt-in standalone validator sets this, to exercise new-game saves in its own directory.
+    internal static string ValidationSaveDirectory { get; set; }
+    public static string SavePath => Path.Combine(ValidationSaveDirectory ?? Application.persistentDataPath, "solo-morning-checkpoint.json");
     public static bool HasSave => RunSaveStorage.TryRead(SavePath, out _, out _);
     public static string SaveSummary => RunSaveStorage.TryRead(SavePath, out var save, out _)
         ? $"Day {save.day} · 09:00 · ${save.currency:N0}" : "No morning checkpoint";

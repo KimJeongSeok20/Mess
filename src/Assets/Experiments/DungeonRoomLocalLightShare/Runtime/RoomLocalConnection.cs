@@ -19,6 +19,7 @@ namespace DungeonRoomLocalLightShare
         [SerializeField] private Shader composeShader;
         [SerializeField] private RoomLocalDoorAngleSource doorAngle;
         [SerializeField] private bool connectionEnabled = true;
+        [SerializeField] private bool openPassage;
         [SerializeField, Min(0.05f)] private float startDirectResponseScale = 1f;
         [SerializeField, Min(0.05f)] private float administrativeDirectResponseScale = 1f;
         [SerializeField, Min(0.5f)] private float directRange = RoomLocalDoorwayFrame.DirectRange;
@@ -43,6 +44,60 @@ namespace DungeonRoomLocalLightShare
         public Transform AdministrativeDoorway => administrativeDoorway;
         public float DirectIntensityMultiplier => directIntensityMultiplier;
         public float DirectRange => directRange;
+
+        public RoomLocalTransferState EvaluateTransferState()
+        {
+            RoomLocalPortalBinding binding = RoomLocalPortalBinding.Unresolved;
+            float open = 0f;
+            float aperture = 0f;
+            if (doorAngle != null && doorAngle.IsConfigured)
+            {
+                doorAngle.EvaluateNow();
+                binding = RoomLocalPortalBinding.Door;
+                open = doorAngle.OpenFraction;
+                aperture = doorAngle.ApertureFraction;
+            }
+            else if (openPassage)
+            {
+                binding = RoomLocalPortalBinding.OpenPassage;
+                open = aperture = 1f;
+            }
+
+            return new RoomLocalTransferState(
+                isActiveAndEnabled && connectionEnabled && !faultLatched &&
+                binding != RoomLocalPortalBinding.Unresolved,
+                binding, open, aperture, Power01(startLighting), Power01(administrativeLighting));
+        }
+
+        public void SetOpenPassage(bool value)
+        {
+            openPassage = value;
+        }
+
+        public bool TrySampleDirectSH(DunGen.Tile receiverTile, Vector3 worldPosition,
+            Transform ignoredGeometryRoot, out UnityEngine.Rendering.SphericalHarmonicsL2 contribution)
+        {
+            contribution = default;
+            RoomLocalTransferState state = EvaluateTransferState();
+            if (!state.Enabled || receiverTile == null || DungeonTileProbeRegistry.Active == null)
+                return false;
+            bool receivesInStart = startRoot != null && startRoot.IsChildOf(receiverTile.transform);
+            bool receivesInAdministrative = administrativeRoot != null && administrativeRoot.IsChildOf(receiverTile.transform);
+            if (receivesInStart == receivesInAdministrative)
+                return false;
+            RoomLocalCookieSpot spot = receivesInStart ? startIncomingSpot : administrativeIncomingSpot;
+            float sourcePower = receivesInStart ? state.AdministrativePower01 : state.StartPower01;
+            if (spot == null || !spot.TrySampleRadiance(worldPosition, sourcePower, state.ApertureFraction,
+                    out Color radiance, out Vector3 portalEntry, out Vector3 directionToLight))
+                return false;
+
+            Vector3 segment = worldPosition - portalEntry;
+            Vector3 start = portalEntry + segment.normalized * Mathf.Min(0.001f, segment.magnitude * 0.5f);
+            if (!DungeonTileProbeRegistry.Active.IsPortalSegmentVisible(receiverTile, start, worldPosition, ignoredGeometryRoot))
+                return false;
+            contribution.AddDirectionalLight(directionToLight, radiance, 1f);
+            return true;
+        }
 
         public void Configure(
             Transform start,
@@ -126,27 +181,17 @@ namespace DungeonRoomLocalLightShare
 
         private void ApplyTransport()
         {
-            if (!connectionEnabled)
+            RoomLocalTransferState state = EvaluateTransferState();
+            if (!state.Enabled)
             {
                 DisableTransport(true);
                 return;
             }
 
-            float aperture = 1f;
-            float openFraction = 1f;
-            if (doorAngle != null && doorAngle.IsConfigured)
-            {
-                doorAngle.EvaluateNow();
-                aperture = doorAngle.ApertureFraction;
-                openFraction = doorAngle.OpenFraction;
-                UpdateCookieDoorShadows();
-            }
-            else
-            {
-                SetCookieShadowsDungeonOnly();
-            }
-            float startPower01 = Power01(startLighting);
-            float adminPower01 = Power01(administrativeLighting);
+            float aperture = state.ApertureFraction;
+            float openFraction = state.OpenFraction;
+            float startPower01 = state.StartPower01;
+            float adminPower01 = state.AdministrativePower01;
 
             if (startIncomingSpot != null &&
                 !startIncomingSpot.TryApply(
@@ -253,40 +298,9 @@ namespace DungeonRoomLocalLightShare
             }
         }
 
-        private void SetCookieShadowsDungeonOnly()
+        private void OnDisable()
         {
-            int dungeon = RoomLocalLightShareContract.DungeonRenderingLayerMask;
-            if (startIncomingSpot != null)
-                startIncomingSpot.SetShadowRenderingLayers(dungeon);
-            if (administrativeIncomingSpot != null)
-                administrativeIncomingSpot.SetShadowRenderingLayers(dungeon);
-        }
-
-        private void UpdateCookieDoorShadows()
-        {
-            int dungeon = RoomLocalLightShareContract.DungeonRenderingLayerMask;
-            int doorLeaf = RoomLocalLightShareContract.DoorShadowRenderingLayerMask;
-            bool doorInStart = false;
-            if (doorAngle != null && doorAngle.DoorLeaf != null && startDoorway != null)
-            {
-                Vector3 doorPoint = doorAngle.DoorLeaf.position;
-                Renderer leafRenderer = doorAngle.DoorLeaf.GetComponent<Renderer>();
-                if (leafRenderer != null)
-                    doorPoint = leafRenderer.bounds.center;
-                doorInStart = Vector3.Dot(
-                    doorPoint - startDoorway.position,
-                    -startDoorway.forward) > 0f;
-            }
-
-            // 3D leaf shadows only the cookie lighting the room the door is actually in.
-            // The other cookie sits in that room and fires through the portal; if the
-            // inward leaf also shadowed it, D50 would occult the whole opening.
-            if (startIncomingSpot != null)
-                startIncomingSpot.SetShadowRenderingLayers(
-                    doorInStart ? dungeon | doorLeaf : dungeon);
-            if (administrativeIncomingSpot != null)
-                administrativeIncomingSpot.SetShadowRenderingLayers(
-                    doorInStart ? dungeon : dungeon | doorLeaf);
+            DisableTransport(true);
         }
 
         private void ApplyDirectTuning()

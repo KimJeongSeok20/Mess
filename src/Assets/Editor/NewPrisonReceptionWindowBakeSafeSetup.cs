@@ -482,13 +482,14 @@ public static class NewPrisonReceptionWindowBakeSafeSetup
             var sampleObject = new GameObject(SamplePointName);
             sampleObject.transform.SetParent(visual, false);
             samplePoint = sampleObject.transform;
-        }
 
-        if (renderer != null)
-        {
-            MeshFilter filter = renderer.GetComponent<MeshFilter>();
-            if (filter != null && filter.sharedMesh != null)
-                samplePoint.localPosition = filter.sharedMesh.bounds.center;
+            // Preserve existing authored anchors, which may be offset out of wall geometry.
+            if (renderer != null)
+            {
+                MeshFilter filter = renderer.GetComponent<MeshFilter>();
+                if (filter != null && filter.sharedMesh != null)
+                    samplePoint.localPosition = filter.sharedMesh.bounds.center;
+            }
         }
 
         var receiver = visual.GetComponent<DungeonDynamicProbeReceiver>();

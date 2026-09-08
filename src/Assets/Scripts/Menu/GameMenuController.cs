@@ -23,15 +23,18 @@ public sealed class GameMenuController : MonoBehaviour
     [SerializeField] private GameObject homePanel;
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private GameObject confirmationPanel;
+    [SerializeField] private GameObject creditsPanel;
     [SerializeField] private UnityEngine.UI.Button newGameButton;
     [SerializeField] private UnityEngine.UI.Button continueButton;
     [SerializeField] private UnityEngine.UI.Button optionsButton;
+    [SerializeField] private UnityEngine.UI.Button creditsButton;
     [SerializeField] private UnityEngine.UI.Button quitButton;
     [SerializeField] private UnityEngine.UI.Button resumeButton;
     [SerializeField] private UnityEngine.UI.Button returnButton;
     [SerializeField] private UnityEngine.UI.Button confirmButton;
     [SerializeField] private UnityEngine.UI.Button cancelButton;
     [SerializeField] private UnityEngine.UI.Button optionsBackButton;
+    [SerializeField] private UnityEngine.UI.Button creditsBackButton;
     [SerializeField] private UnityEngine.UI.Button defaultsButton;
     [SerializeField] private UnityEngine.UI.Button qualityButton;
     [SerializeField] private UnityEngine.UI.Button frameRateButton;
@@ -45,6 +48,7 @@ public sealed class GameMenuController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Slider sensitivitySlider;
     [SerializeField] private UnityEngine.UI.Toggle fullscreenToggle;
     [SerializeField] private UnityEngine.UI.Toggle vSyncToggle;
+    [SerializeField] private UnityEngine.UI.ScrollRect creditsScroll;
     [SerializeField] private SteamRoomPanel steamRoomPanel;
 
     private enum PendingAction { None, NewGame, ReturnToTitle, Quit }
@@ -83,17 +87,19 @@ public sealed class GameMenuController : MonoBehaviour
 
     private void Awake()
     {
-        _buttons = new[] { newGameButton, continueButton, optionsButton, quitButton, resumeButton,
-            returnButton, confirmButton, cancelButton, optionsBackButton, defaultsButton, qualityButton, frameRateButton };
+        _buttons = new[] { newGameButton, continueButton, optionsButton, creditsButton, quitButton, resumeButton,
+            returnButton, confirmButton, cancelButton, optionsBackButton, creditsBackButton, defaultsButton, qualityButton, frameRateButton };
         newGameButton.onClick.AddListener(RequestNewGame);
         continueButton.onClick.AddListener(ContinueGame);
         optionsButton.onClick.AddListener(ShowOptions);
+        creditsButton.onClick.AddListener(ShowCredits);
         quitButton.onClick.AddListener(RequestQuit);
         resumeButton.onClick.AddListener(CloseGameplayMenu);
         returnButton.onClick.AddListener(RequestReturn);
         confirmButton.onClick.AddListener(ConfirmAction);
         cancelButton.onClick.AddListener(ShowHome);
         optionsBackButton.onClick.AddListener(ShowHome);
+        creditsBackButton.onClick.AddListener(ShowHome);
         defaultsButton.onClick.AddListener(RestoreDefaults);
         qualityButton.onClick.AddListener(CycleQuality);
         frameRateButton.onClick.AddListener(CycleFrameRate);
@@ -108,6 +114,7 @@ public sealed class GameMenuController : MonoBehaviour
         sensitivitySlider.maxValue = GameOptions.MaximumSensitivity;
         newGameButton.gameObject.SetActive(titleScreen);
         continueButton.gameObject.SetActive(titleScreen);
+        creditsButton.gameObject.SetActive(titleScreen);
         resumeButton.gameObject.SetActive(!titleScreen);
         returnButton.gameObject.SetActive(!titleScreen);
         menuRoot.SetActive(titleScreen);
@@ -152,7 +159,7 @@ public sealed class GameMenuController : MonoBehaviour
         if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame) return;
         if (IsOpen && _openMenu == this)
         {
-            if (optionsPanel.activeSelf || confirmationPanel.activeSelf) ShowHome();
+            if (optionsPanel.activeSelf || confirmationPanel.activeSelf || creditsPanel.activeSelf) ShowHome();
             else if (!titleScreen && !_sessionFailed) CloseGameplayMenu();
         }
         else if (!titleScreen && CanOpenGameplayMenu())
@@ -262,6 +269,7 @@ public sealed class GameMenuController : MonoBehaviour
         }
         _sessionReady = connected && _playerInput != null
             && (save == null || !save.IsSoloCheckpointSession || save.IsReady);
+        if (_sessionReady) GameSceneLoading.PlayerReady();
         if (!_sessionReady && Time.realtimeSinceStartup - _startedAt >= 60f)
         {
             FailSession("Startup failed. Return to title and retry.");
@@ -315,10 +323,12 @@ public sealed class GameMenuController : MonoBehaviour
 
     private void ShowHome()
     {
+        bool wasShowingCredits = creditsPanel.activeSelf;
         _pendingAction = PendingAction.None;
         homePanel.SetActive(true);
         optionsPanel.SetActive(false);
         confirmationPanel.SetActive(false);
+        creditsPanel.SetActive(false);
         if (steamRoomPanel != null) steamRoomPanel.ShowHome();
         if (titleScreen)
         {
@@ -335,6 +345,23 @@ public sealed class GameMenuController : MonoBehaviour
             if (!_sessionFailed && save != null && !string.IsNullOrEmpty(save.LastError))
                 statusText.text += (statusText.text.Length > 0 ? "\n" : string.Empty) + save.LastError;
         }
+        if (wasShowingCredits && creditsButton.gameObject.activeInHierarchy && creditsButton.interactable)
+            creditsButton.Select();
+    }
+
+    private void ShowCredits()
+    {
+        if (_loading || !titleScreen) return;
+        if (steamRoomPanel != null) steamRoomPanel.HidePanels();
+        _pendingAction = PendingAction.None;
+        homePanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        confirmationPanel.SetActive(false);
+        creditsPanel.SetActive(true);
+        creditsScroll.StopMovement();
+        Canvas.ForceUpdateCanvases();
+        creditsScroll.verticalNormalizedPosition = 1f;
+        creditsBackButton.Select();
     }
 
     private void RequestNewGame()
@@ -384,6 +411,7 @@ public sealed class GameMenuController : MonoBehaviour
         _pendingAction = action;
         homePanel.SetActive(false);
         optionsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
         confirmationPanel.SetActive(true);
         confirmationText.text = message;
     }
@@ -495,9 +523,12 @@ public sealed class GameMenuController : MonoBehaviour
         _loading = true;
         ShowHome();
         SetBusy(true);
+        statusText.text = "Loading map...";
+        // Show feedback before the first synchronous part of LoadSceneAsync.
+        yield return null;
         AsyncOperation operation = null;
         string loadError = null;
-        try { operation = SceneManager.LoadSceneAsync(scenePath); }
+        try { operation = GameSceneLoading.Begin(scenePath); }
         catch (Exception exception) { loadError = exception.Message; }
         if (operation == null)
         {
@@ -509,7 +540,8 @@ public sealed class GameMenuController : MonoBehaviour
         }
         while (!operation.isDone)
         {
-            statusText.text = $"Loading... {Mathf.RoundToInt(Mathf.Clamp01(operation.progress / 0.9f) * 100f)}%";
+            statusText.text = operation.progress >= 0.9f ? "Preparing map..."
+                : $"Loading map... {Mathf.RoundToInt(Mathf.Clamp01(operation.progress / 0.9f) * 100f)}% · {GameSceneLoading.ElapsedSeconds:F0}s";
             yield return null;
         }
     }
@@ -536,6 +568,7 @@ public sealed class GameMenuController : MonoBehaviour
         if (steamRoomPanel != null) steamRoomPanel.HidePanels();
         homePanel.SetActive(false);
         confirmationPanel.SetActive(false);
+        creditsPanel.SetActive(false);
         optionsPanel.SetActive(true);
         RefreshOptions();
     }

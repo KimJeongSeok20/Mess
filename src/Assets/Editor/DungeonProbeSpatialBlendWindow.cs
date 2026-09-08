@@ -38,6 +38,16 @@ public sealed class DungeonProbeSpatialBlendWindow : EditorWindow
             Repaint();
         }
 
+        string portalLabel = registry.DynamicReceiversReceivePortalDirectSH
+            ? "Portal Direct SH (player, monsters, items): ON"
+            : "Portal Direct SH (player, monsters, items): OFF";
+
+        if (GUILayout.Button(portalLabel, GUILayout.Height(28f)))
+        {
+            registry.SetDynamicReceiversReceivePortalDirectSH(!registry.DynamicReceiversReceivePortalDirectSH);
+            Repaint();
+        }
+
         using (new EditorGUILayout.HorizontalScope())
         {
             if (GUILayout.Button("Force Refresh Receivers"))
@@ -45,6 +55,9 @@ public sealed class DungeonProbeSpatialBlendWindow : EditorWindow
 
             if (GUILayout.Button("Log Current Player Sample"))
                 LogCurrentPlayerSample(registry);
+
+            if (GUILayout.Button("Log Receiver Portal Report"))
+                Debug.Log(DebugRemoteControl.PortalSHReport(float.PositiveInfinity, 64), registry);
         }
     }
 

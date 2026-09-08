@@ -1769,6 +1769,8 @@ public partial class DebugRemoteControl : MonoBehaviour
         sb.AppendLine("  SpawnMonster(name,cnt)  Spawn monster(s) near player");
         sb.AppendLine("  SpawnItem(name,cnt)     Spawn item(s) near player");
         sb.AppendLine("  ListDungeonEntities()   List nearby dungeon entities");
+        sb.AppendLine("  PortalSH(on)            Door-spill SH for player, monsters and items");
+        sb.AppendLine("  PortalSHReport()        List probe receivers and their portal SH state");
         sb.AppendLine("  LaunchCurrentClownGiftAtPlayer(speed) Launch live clown gift into player");
         sb.AppendLine("  InspectCurrentClownGift() Show current clown gift rigidbody state");
         sb.AppendLine("  BeginClownGiftImpactTest() Start clown gift impact freeze test");

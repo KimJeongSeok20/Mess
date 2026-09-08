@@ -31,6 +31,15 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
     [SerializeField] private Camera playerCamera;
     [SerializeField] private PlayerSound playerSound;
 
+    [Header("Sleep Audio (Local Player)")]
+    [SerializeField] private AudioSource sleepAudioSource;
+    [SerializeField] private AudioClip sitSound;
+    [SerializeField, Range(0f, 1f)] private float sitSoundVolume = 0.25f;
+    [SerializeField] private AudioClip lieDownSound;
+    [SerializeField, Range(0f, 1f)] private float lieDownSoundVolume = 0.3f;
+    [SerializeField] private AudioClip wakeSound;
+    [SerializeField, Range(0f, 1f)] private float wakeSoundVolume = 0.3f;
+
     [Header("Day End Animation")]
     [SerializeField] private AnimationClip standToSitClip;
     [SerializeField] private AnimationClip sitToStandClip;
@@ -411,6 +420,7 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
     private IEnumerator FinishSitDown(float duration, Vector3 standingPosition, Vector3 seatedPosition)
     {
         float elapsed = 0f;
+        bool playedSitSound = false;
         float timeout = duration + Mathf.Max(0.5f, transitionDuration * 4f);
         while (elapsed < timeout)
         {
@@ -425,6 +435,12 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
                 standingPosition,
                 seatedPosition,
                 Mathf.SmoothStep(0f, 1f, animationProgress));
+
+            if (!playedSitSound && _state == SeatState.SittingDown && animationProgress >= 0.75f)
+            {
+                playedSitSound = true;
+                PlaySleepSound(sitSound, sitSoundVolume);
+            }
 
             if (foundState && normalizedTime >= 0.995f)
                 break;
@@ -466,6 +482,7 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
         Vector3 lyingStartAnchor = _activeBeltAnchor;
 
         _state = SeatState.LyingDown;
+        PlaySleepSound(lieDownSound, lieDownSoundVolume);
         networkAnimator.SetLayerWeight(_dayEndLayer, 1f);
         networkAnimator.CrossFade(lyingDownStateName, lyingTransitionDuration, _dayEndLayer, 0f);
 
@@ -513,6 +530,9 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
 
     private void BeginWakeUpToSit()
     {
+        if (!isOwner || _state != SeatState.LyingDown)
+            return;
+
         if (lyingToSitClip == null || _seatPoint == null)
         {
             Debug.LogError("[DayEndSeatPlayer] Cannot wake through seated pose: reversed lying clip or SeatPoint is missing.", this);
@@ -521,6 +541,7 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
 
         StopTransition();
         _state = SeatState.WakingToSit;
+        PlaySleepSound(wakeSound, wakeSoundVolume);
         networkAnimator.SetLayerWeight(_dayEndLayer, 1f);
         networkAnimator.CrossFade(lyingToSitStateName, lyingTransitionDuration, _dayEndLayer, 0f);
 
@@ -693,6 +714,16 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
     {
         StopTransition();
         _transitionRoutine = StartCoroutine(routine);
+    }
+
+    private void PlaySleepSound(AudioClip clip, float volume)
+    {
+        if (!isOwner || sleepAudioSource == null || clip == null)
+            return;
+
+        sleepAudioSource.spatialBlend = 0f;
+        sleepAudioSource.Stop();
+        sleepAudioSource.PlayOneShot(clip, volume);
     }
 
     private void StopTransition()

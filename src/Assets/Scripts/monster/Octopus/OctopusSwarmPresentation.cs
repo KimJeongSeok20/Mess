@@ -158,21 +158,24 @@ public sealed class OctopusSwarmPresentation : MonoBehaviour
     public void PlayMemberDamaged(OctopusSwarmMember member, Vector3 position, Quaternion rotation)
     {
         PlayMemberOneShot(member, damagedClips, "Damaged", position);
-        BloodVfxVisual.Spawn(damagedPrefab, position, rotation, damagedVfxScale, damagedLifetime);
+        BloodVfxVisual.Spawn(damagedPrefab, position, rotation, damagedVfxScale, damagedLifetime,
+            member != null ? member.RenderingLayerMask : 1u);
     }
 
     public void PlayMemberDeath(OctopusSwarmMember member, Vector3 position, Quaternion rotation)
     {
         // Members are disabled shortly after death; let the cue finish independently.
         PlayDetachedOneShot(deathClips, "MemberDeath", position);
-        BloodVfxVisual.Spawn(deathPrefab, position, rotation, deathVfxScale, deathLifetime);
+        BloodVfxVisual.Spawn(deathPrefab, position, rotation, deathVfxScale, deathLifetime,
+            member != null ? member.RenderingLayerMask : 1u);
         SpawnDeathDecal(position);
     }
 
     public void PlayMemberExplosiveDeath(OctopusSwarmMember member, Vector3 position, Quaternion rotation)
     {
         PlayDetachedOneShot(deathClips, "MemberExplosiveDeath", position);
-        BloodVfxVisual.Spawn(explosiveDeathPrefab, position, rotation, deathVfxScale, explosiveDeathLifetime);
+        BloodVfxVisual.Spawn(explosiveDeathPrefab, position, rotation, deathVfxScale, explosiveDeathLifetime,
+            member != null ? member.RenderingLayerMask : 1u);
         SpawnDeathDecal(position);
         SpawnExplosiveFragments(position);
     }

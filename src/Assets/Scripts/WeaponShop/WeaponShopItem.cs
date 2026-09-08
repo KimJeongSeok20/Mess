@@ -58,8 +58,9 @@ public class WeaponShopItem : ShopPurchaseItemBase
 
         if (!PurchaseCurrencyManager.CanAfford(Price))
         {
-            ShowInsufficientFunds(Price, PurchaseCurrencyManager.SharedCurrency, playAudio: false);
-            _weaponShop?.TryRequestPurchaseFeedback(this, success: false);
+            bool feedbackRequested = _weaponShop != null &&
+                _weaponShop.TryRequestPurchaseFeedback(this, success: false);
+            ShowInsufficientFunds(Price, PurchaseCurrencyManager.SharedCurrency, playAudio: !feedbackRequested);
             CancelPendingPurchaseRequest();
             return;
         }
@@ -100,14 +101,14 @@ public class WeaponShopItem : ShopPurchaseItemBase
         {
             Destroy(itemObj);
             Debug.Log($"[WeaponShopItem] Added to inventory after server approval: {ItemName}");
-            ShowPurchaseSuccess("Added to inventory!");
+            ShowPurchaseSuccess("Added to inventory!", playAudio: false);
             return;
         }
 
         Debug.Log("[WeaponShopItem] Inventory full after server approval - dropping item on ground");
         Destroy(itemObj);
         NetworkPlayer.Local?.RequestDropReceiptServerRpc(receipt.token);
-        ShowPurchaseSuccess("Purchased! (Dropped on ground)");
+        ShowPurchaseSuccess("Purchased! (Dropped on ground)", playAudio: false);
     }
 
     private GameObject CreateInventoryItem()
@@ -171,14 +172,14 @@ public class WeaponShopItem : ShopPurchaseItemBase
         return true;
     }
 
-    public void ResolvePurchaseLocally(string purchaseToken, bool success, int currentCurrency, InventoryReceipt receipt)
+    public void ResolvePurchaseLocally(string purchaseToken, bool success, int currentCurrency, InventoryReceipt receipt, bool feedbackWasBroadcast)
     {
         if (!TryResolvePurchaseToken(purchaseToken))
             return;
 
         if (!success)
         {
-            ShowPurchaseFailure($"Need ${Price} (You have ${currentCurrency})", playAudio: false);
+            ShowPurchaseFailure($"Need ${Price} (You have ${currentCurrency})", playAudio: !feedbackWasBroadcast);
             return;
         }
 

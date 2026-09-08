@@ -22,11 +22,19 @@ public class NetworkDungeonController : NetworkBehaviour
     private readonly SyncVar<int> _seed = new SyncVar<int>(0);
     private readonly SyncVar<int> _flowIndex = new SyncVar<int>(-1);
     private readonly SyncVar<bool> _active = new SyncVar<bool>(false);
+    private readonly SyncVar<string> _flowContentId = new SyncVar<string>(string.Empty);
+    private Coroutine _mapLoadRoutine;
+    private bool _destroying;
+    private readonly HashSet<PlayerID> _readyPlayers = new();
+    private int _reportedReadySeed;
+    private int _reportedReadyFlow = -1;
+    public string MapLoadError { get; private set; }
     private readonly SyncVar<string> _debugRoomPowerStatePayload = new SyncVar<string>(string.Empty);
     private readonly SyncVar<string> _dungeonDoorStatePayload = new SyncVar<string>(string.Empty);
 
     private void OnSeedChanged(int _) => TryGenerateIfReady();
     private void OnFlowChanged(int _) => TryGenerateIfReady();
+    private void OnFlowContentChanged(string _) => TryGenerateIfReady();
 
     // 중복 Generate 방지용
     private bool _generated;
@@ -79,10 +87,32 @@ public class NetworkDungeonController : NetworkBehaviour
 
     private void Update()
     {
-        if (!isServer || !_active.value)
-            return;
+        if (!_active.value) return;
+        if (isClient && IsLocalDungeonReady &&
+            (_reportedReadySeed != _seed.value || _reportedReadyFlow != _flowIndex.value))
+        {
+            _reportedReadySeed = _seed.value;
+            _reportedReadyFlow = _flowIndex.value;
+            ReportMapReadyServerRpc(_seed.value, _flowIndex.value, _flowContentId.value);
+        }
+        if (!isServer || (TimeManager.Active != null && TimeManager.Active.IsPreparingDungeon)) return;
 
         TickPowerServer(Time.deltaTime);
+    }
+
+    [ServerRpc(requireOwnership: false)]
+    private void ReportMapReadyServerRpc(int seed, int flowIndex, string contentId, RPCInfo info = default)
+    {
+        if (!_active.value || seed != _seed.value || flowIndex != _flowIndex.value || contentId != _flowContentId.value) return;
+        _readyPlayers.Add(info.sender);
+    }
+
+    public bool ArePlayersReady(IEnumerable<PlayerID> participants)
+    {
+        if (!isServer || !IsLocalDungeonReady || participants == null) return false;
+        foreach (var participant in participants)
+            if (!_readyPlayers.Contains(participant)) return false;
+        return true;
     }
 
     private void TickPowerServer(float deltaTime)
@@ -174,6 +204,8 @@ public class NetworkDungeonController : NetworkBehaviour
     }
 
     private bool _generatorHooksRegistered;
+    private LightmapData[] _campLightmaps;
+    private LightmapsMode _campLightmapsMode;
     private Coroutine _generationWatchdogCoroutine;
     private GenerationStatus _lastGenerationStatus = GenerationStatus.NotStarted;
     private float _generationStartedRealtime;
@@ -192,6 +224,9 @@ public class NetworkDungeonController : NetworkBehaviour
     public bool IsLocalDungeonReady =>
         _active.value
         && _generated
+        && _generatedSeed == _seed.value
+        && _generatedFlowIndex == _flowIndex.value
+        && string.IsNullOrEmpty(MapLoadError)
         && runtimeDungeon != null
         && runtimeDungeon.Generator != null
         && runtimeDungeon.Generator.Status == GenerationStatus.Complete
@@ -211,6 +246,7 @@ public class NetworkDungeonController : NetworkBehaviour
 
         _seed.onChanged += OnSeedChanged;
         _flowIndex.onChanged += OnFlowChanged;
+        _flowContentId.onChanged += OnFlowContentChanged;
         _active.onChanged += OnActiveChanged;
         _debugRoomPowerStatePayload.onChanged += OnDebugRoomPowerStatePayloadChanged;
         _dungeonDoorStatePayload.onChanged += OnDungeonDoorStatePayloadChanged;
@@ -223,12 +259,17 @@ public class NetworkDungeonController : NetworkBehaviour
         // 늦게 들어온 클라도 현재 상태 반영
         if (_active.value) TryGenerateIfReady();
         else ClearLocalGenerated();
+        if (mapList != null && mapList.UsesDeferredLoading && mapList.Count == 1)
+            StartCoroutine(WarmSingleMapAfterCampReady());
     }
 
     protected override void OnDestroy()
     {
+        _destroying = true;
+        if (mapList != null) mapList.ReleaseLoadedFlow();
         _seed.onChanged -= OnSeedChanged;
         _flowIndex.onChanged -= OnFlowChanged;
+        _flowContentId.onChanged -= OnFlowContentChanged;
         _active.onChanged -= OnActiveChanged;
         _debugRoomPowerStatePayload.onChanged -= OnDebugRoomPowerStatePayloadChanged;
         _dungeonDoorStatePayload.onChanged -= OnDungeonDoorStatePayloadChanged;
@@ -244,6 +285,8 @@ public class NetworkDungeonController : NetworkBehaviour
     {
         if (!isActive)
         {
+            _reportedReadySeed = 0;
+            _reportedReadyFlow = -1;
             _generated = false;
             ClearDebugRoomPowerState();
             _openDungeonDoorKeys.Clear();
@@ -269,10 +312,24 @@ public class NetworkDungeonController : NetworkBehaviour
             return;
         }
 
-        // Flow 적용이 성공해야만 Generate
+        if (mapList == null || _flowIndex.value < 0 || _flowIndex.value >= mapList.Count)
+        {
+            MapLoadError = "The selected dungeon is not in this build's map catalog.";
+            return;
+        }
+        if (string.IsNullOrEmpty(_flowContentId.value)) return; // Wait for the complete network selection.
+        if (_flowContentId.value != mapList.GetContentId(_flowIndex.value))
+        {
+            MapLoadError = "Dungeon catalogs differ between players. Use the same game build.";
+            Debug.LogError("[DungeonContent] " + MapLoadError, this);
+            return;
+        }
+
+        // Assets must be ready on this peer before any dungeon generation/spawning starts.
         if (!ApplyFlowLocal(_flowIndex.value))
         {
-            Debug.LogWarning($"[NetworkDungeonController] generate skipped: flow {_flowIndex.value} could not be applied (mapList={(mapList != null ? mapList.Count.ToString() : "null")}, runtimeDungeon={(runtimeDungeon != null)})", this);
+            if (_mapLoadRoutine == null)
+                _mapLoadRoutine = StartCoroutine(LoadRequestedMaps());
             return;
         }
 
@@ -299,13 +356,66 @@ public class NetworkDungeonController : NetworkBehaviour
         return runtimeDungeon.Generator.DungeonFlow != null;
     }
 
+    private IEnumerator WarmSingleMapAfterCampReady()
+    {
+        while (!_destroying && (NetworkPlayer.Local == null || GameMenuController.IsOpen)) yield return null;
+        yield return new WaitForSecondsRealtime(1f);
+        // With multiple maps the selected index is not yet known. Never preload the whole catalog.
+        if (!_destroying && !_active.value && !mapList.TryGetFlow(0, out _) && _mapLoadRoutine == null)
+            _mapLoadRoutine = StartCoroutine(LoadRequestedMaps());
+    }
+
+    private IEnumerator LoadRequestedMaps()
+    {
+        yield return null; // Assign the coroutine handle before any immediate error/completion.
+        MapLoadError = null;
+        while (!_destroying)
+        {
+            int index = _active.value ? _flowIndex.value : mapList.Count == 1 ? 0 : -1;
+            if (index < 0 || index >= mapList.Count) break;
+            if (mapList.LoadedFlowIndex >= 0 && mapList.LoadedFlowIndex != index)
+            {
+                // Release the old graph before collecting; existing inventory/network items keep their own references.
+                ClearLocalGenerated();
+                runtimeDungeon.Generator.DungeonFlow = null;
+                mapList.ReleaseLoadedFlow();
+                yield return null;
+                yield return Resources.UnloadUnusedAssets();
+            }
+            float started = Time.realtimeSinceStartup;
+            Debug.Log($"[DungeonContent] begin index={index} id={mapList.GetContentId(index)}");
+            yield return mapList.LoadFlowAsync(index);
+            if (!string.IsNullOrEmpty(mapList.LoadError))
+            {
+                MapLoadError = mapList.LoadError;
+                Debug.LogError("[DungeonContent] " + MapLoadError, this);
+                break;
+            }
+            Debug.Log($"[DungeonContent] ready index={index} seconds={Time.realtimeSinceStartup - started:F3}");
+            // A clear, changed seed or late-join update may arrive while the disk request is in flight.
+            if (_active.value && _flowIndex.value != index) continue;
+            if (_active.value) TryGenerateIfReady();
+            break;
+        }
+        _mapLoadRoutine = null;
+    }
+
     public void StartDungeonServer()
     {
         if (!isServer) return;
         if (_active.value) return;
 
         int flowIndex = (mapList != null && mapList.Count > 0) ? Random.Range(0, mapList.Count) : -1;
+        if (flowIndex < 0)
+        {
+            MapLoadError = "No dungeon maps are registered.";
+            Debug.LogError("[DungeonContent] " + MapLoadError, this);
+            return;
+        }
         int seed = Random.Range(int.MinValue, int.MaxValue);
+        if (seed == 0) seed = 1;
+        MapLoadError = null;
+        _readyPlayers.Clear();
         ClearDungeonDoorStateServer();
 
         // 새 던전 = 배터리 가득
@@ -315,6 +425,7 @@ public class NetworkDungeonController : NetworkBehaviour
 
         // ✅ 핵심: prerequisites 먼저, active는 마지막에
         _flowIndex.value = flowIndex;
+        _flowContentId.value = mapList.GetContentId(flowIndex);
         _seed.value = seed;
         _active.value = true;
 
@@ -326,10 +437,12 @@ public class NetworkDungeonController : NetworkBehaviour
     {
         if (!isServer) return;
 
+        _readyPlayers.Clear();
         ClearDungeonDoorStateServer();
         _active.value = false;
         _seed.value = 0;
         _flowIndex.value = -1;
+        _flowContentId.value = string.Empty;
 
         // 서버 로컬 즉시 정리
         ClearLocalGenerated();
@@ -999,6 +1112,11 @@ public class NetworkDungeonController : NetworkBehaviour
             return;
 
         var gen = runtimeDungeon.Generator;
+        // This scene has one active dungeon. Preserve the camp's lightmap indices before
+        // generated tiles append their rotation/power maps to Unity's global table.
+        _campLightmaps = LightmapSettings.lightmaps;
+        _campLightmapsMode = LightmapSettings.lightmapsMode;
+        gen.Cleared += RestoreCampLightmaps;
         gen.OnGenerationStarted += OnGeneratorStarted;
         gen.OnGenerationStatusChanged += OnGeneratorStatusChanged;
         gen.OnGenerationComplete += OnGeneratorComplete;
@@ -1012,11 +1130,19 @@ public class NetworkDungeonController : NetworkBehaviour
             return;
 
         var gen = runtimeDungeon.Generator;
+        gen.Cleared -= RestoreCampLightmaps;
         gen.OnGenerationStarted -= OnGeneratorStarted;
         gen.OnGenerationStatusChanged -= OnGeneratorStatusChanged;
         gen.OnGenerationComplete -= OnGeneratorComplete;
         gen.Retrying -= OnGeneratorRetrying;
         _generatorHooksRegistered = false;
+    }
+
+    private void RestoreCampLightmaps()
+    {
+        if (_campLightmaps == null) return;
+        LightmapSettings.lightmaps = _campLightmaps;
+        LightmapSettings.lightmapsMode = _campLightmapsMode;
     }
 
     private void BeginGenerationDiagnostics(DunGen.DungeonGenerator gen, int seed)

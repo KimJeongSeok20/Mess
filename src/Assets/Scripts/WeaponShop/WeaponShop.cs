@@ -364,7 +364,7 @@ public class WeaponShop : ShopSpawnerBase
         {
             // Already sold: the client-side removal is a delayed coroutine, so a second request
             // for the same entry can still arrive (audit M1).
-            ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, false, 0, default);
+            ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, false, 0, default, feedbackWasBroadcast: false);
             return;
         }
 
@@ -380,7 +380,7 @@ public class WeaponShop : ShopSpawnerBase
             item.SoldOnServer = true;
         }
         PlayPurchaseFeedbackAtIndexRpc(spawnIndex, success);
-        ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, success, currentCurrency, receipt);
+        ResolvePurchaseAtIndexRpc(spawnIndex, purchaseToken, success, currentCurrency, receipt, feedbackWasBroadcast: true);
 
         if (success)
             RemovePurchasedEntryAtIndexRpc(spawnIndex);
@@ -399,13 +399,13 @@ public class WeaponShop : ShopSpawnerBase
     }
 
     [ObserversRpc]
-    private void ResolvePurchaseAtIndexRpc(int spawnIndex, string purchaseToken, bool success, int currentCurrency, InventoryReceipt receipt)
+    private void ResolvePurchaseAtIndexRpc(int spawnIndex, string purchaseToken, bool success, int currentCurrency, InventoryReceipt receipt, bool feedbackWasBroadcast)
     {
         WeaponShopItem item = GetWeaponShopItemAtIndex(spawnIndex);
         if (item == null)
             return;
 
-        item.ResolvePurchaseLocally(purchaseToken, success, currentCurrency, receipt);
+        item.ResolvePurchaseLocally(purchaseToken, success, currentCurrency, receipt, feedbackWasBroadcast);
     }
 
     [ObserversRpc]

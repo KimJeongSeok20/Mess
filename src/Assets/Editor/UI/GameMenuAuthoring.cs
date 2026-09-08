@@ -20,6 +20,118 @@ public static class GameMenuAuthoring
     private static readonly Color Muted = new(0.58f, 0.64f, 0.65f, 1f);
     private static TMP_FontAsset _font;
 
+    public static string AddCredits()
+    {
+        if (EditorApplication.isPlaying || EditorApplication.isCompiling)
+            throw new InvalidOperationException("Stopped, compiled Editor required.");
+        var document = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/UI/Menu/Credits.txt");
+        if (document == null || string.IsNullOrWhiteSpace(document.text))
+            throw new InvalidOperationException("Credits document missing.");
+
+        var contents = PrefabUtility.LoadPrefabContents(PrefabPath);
+        try
+        {
+            var controller = contents.GetComponent<GameMenuController>();
+            var canvas = contents.transform.Find("MenuCanvas");
+            var existing = canvas.Find("Credits");
+            if (existing != null)
+            {
+                existing.GetComponent<UnityEngine.UI.Image>().color = Ink;
+                existing.Find("Card/Scroll View/Viewport/Content/Text").GetComponent<TMP_Text>().text = document.text;
+                PrefabUtility.SaveAsPrefabAsset(contents, PrefabPath);
+                return "Updated the existing credits text.";
+            }
+
+            var actions = canvas.Find("Home/Actions");
+            var template = actions.Find("Options").GetComponent<UnityEngine.UI.Button>();
+            _font = template.GetComponentInChildren<TMP_Text>().font;
+            var open = UnityEngine.Object.Instantiate(template, actions);
+            open.name = "Credits";
+            open.onClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            open.GetComponentInChildren<TMP_Text>().text = "CREDITS";
+            open.transform.SetSiblingIndex(template.transform.GetSiblingIndex() + 1);
+
+            var panel = Panel("Credits", canvas);
+            var shield = panel.gameObject.AddComponent<UnityEngine.UI.Image>();
+            shield.color = Ink;
+            var card = Rect("Card", panel);
+            Place(card, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1520, 928));
+
+            var header = Label("Heading", card, "CREDITS", 58, Paper);
+            Place(header.rectTransform, new Vector2(0, 1), new Vector2(0, 1), Vector2.zero, new Vector2(1100, 78));
+            var subtitle = Label("Subtitle", card, "MessUP  /  THE PEOPLE BEHIND THE WORLD", 24, Amber);
+            Place(subtitle.rectTransform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, -80), new Vector2(1400, 38));
+            var line = Rect("Divider", card);
+            Place(line, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, -134), new Vector2(1520, 2));
+            var lineImage = line.gameObject.AddComponent<UnityEngine.UI.Image>();
+            lineImage.color = Amber; lineImage.raycastTarget = false;
+
+            var scrollRoot = Panel("Scroll View", card);
+            scrollRoot.offsetMin = new Vector2(0, 100);
+            scrollRoot.offsetMax = new Vector2(0, -158);
+            var scroll = scrollRoot.gameObject.AddComponent<UnityEngine.UI.ScrollRect>();
+            scroll.horizontal = false;
+            scroll.vertical = true;
+            scroll.movementType = UnityEngine.UI.ScrollRect.MovementType.Clamped;
+            scroll.scrollSensitivity = 48;
+            var viewport = Panel("Viewport", scrollRoot);
+            viewport.offsetMax = new Vector2(-40, 0);
+            var viewportImage = viewport.gameObject.AddComponent<UnityEngine.UI.Image>();
+            viewportImage.color = Color.white;
+            viewport.gameObject.AddComponent<UnityEngine.UI.Mask>().showMaskGraphic = false;
+            var content = Rect("Content", viewport);
+            content.anchorMin = new Vector2(0, 1); content.anchorMax = Vector2.one;
+            content.pivot = new Vector2(0.5f, 1); content.sizeDelta = Vector2.zero;
+            var layout = content.gameObject.AddComponent<UnityEngine.UI.VerticalLayoutGroup>();
+            layout.childControlWidth = layout.childControlHeight = true;
+            layout.childForceExpandWidth = true; layout.childForceExpandHeight = false;
+            layout.padding = new RectOffset(0, 20, 0, 28);
+            var fitter = content.gameObject.AddComponent<UnityEngine.UI.ContentSizeFitter>();
+            fitter.verticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
+            var text = Label("Text", content, document.text, 26, Paper);
+            text.alignment = TextAlignmentOptions.TopLeft;
+            text.overflowMode = TextOverflowModes.Overflow;
+            text.richText = true;
+            text.lineSpacing = 4;
+            scroll.viewport = viewport; scroll.content = content;
+
+            var track = Rect("Scrollbar", scrollRoot);
+            track.anchorMin = new Vector2(1, 0); track.anchorMax = Vector2.one;
+            track.pivot = new Vector2(1, 0.5f); track.sizeDelta = new Vector2(16, 0);
+            track.anchoredPosition = Vector2.zero;
+            track.gameObject.AddComponent<UnityEngine.UI.Image>().color = new Color(0.13f, 0.16f, 0.18f, 1);
+            var sliding = Panel("Sliding Area", track);
+            var handle = Panel("Handle", sliding);
+            var handleImage = handle.gameObject.AddComponent<UnityEngine.UI.Image>();
+            handleImage.color = Amber;
+            var scrollbar = track.gameObject.AddComponent<UnityEngine.UI.Scrollbar>();
+            scrollbar.handleRect = handle;
+            scrollbar.targetGraphic = handleImage;
+            scrollbar.direction = UnityEngine.UI.Scrollbar.Direction.BottomToTop;
+            scrollbar.value = 1;
+            scroll.verticalScrollbar = scrollbar;
+            scroll.verticalScrollbarVisibility = UnityEngine.UI.ScrollRect.ScrollbarVisibility.Permanent;
+
+            var backTemplate = canvas.Find("Options/Settings/Back").GetComponent<UnityEngine.UI.Button>();
+            var back = UnityEngine.Object.Instantiate(backTemplate, card);
+            back.name = "Back";
+            back.onClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            Place((RectTransform)back.transform, Vector2.zero, Vector2.zero, Vector2.zero, new Vector2(280, 62));
+            var hint = Label("Scroll Hint", card, "SCROLL TO VIEW ALL CREDITS  /  ESC TO RETURN", 22, Muted);
+            Place(hint.rectTransform, new Vector2(1, 0), new Vector2(1, 0), Vector2.zero, new Vector2(1100, 62));
+            hint.alignment = TextAlignmentOptions.MidlineRight;
+
+            Set(controller, "creditsPanel", panel.gameObject);
+            Set(controller, "creditsButton", open);
+            Set(controller, "creditsBackButton", back);
+            Set(controller, "creditsScroll", scroll);
+            panel.gameObject.SetActive(false);
+            PrefabUtility.SaveAsPrefabAsset(contents, PrefabPath);
+            return "Added title credits button, scrollable credits panel and Inspector references.";
+        }
+        finally { PrefabUtility.UnloadPrefabContents(contents); }
+    }
+
     public static string FinishMessUp()
     {
         if (EditorApplication.isPlaying || EditorApplication.isCompiling || SceneManager.GetActiveScene().path != TitleScene)
@@ -162,6 +274,8 @@ public static class GameMenuAuthoring
         var authored = BuildMenu();
         var prefab = PrefabUtility.SaveAsPrefabAsset(authored, PrefabPath);
         UnityEngine.Object.DestroyImmediate(authored);
+        AddCredits();
+        prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
         var inGame = (GameObject)PrefabUtility.InstantiatePrefab(prefab, game);
         SetBool(inGame.GetComponent<GameMenuController>(), "titleScreen", false);
         inGame.transform.Find("MenuCanvas").gameObject.SetActive(false);
@@ -246,8 +360,8 @@ public static class GameMenuAuthoring
         var home = Panel("Home", canvasObject);
         var buttons = Column("Actions", home, new Vector2(112, -406), new Vector2(630, 472), 12);
         Set(controller, "homePanel", home.gameObject);
-        Set(controller, "newGameButton", Button("New Game", buttons, "START NEW GAME", true));
-        Set(controller, "continueButton", Button("Continue", buttons, "CONTINUE"));
+        Set(controller, "newGameButton", Button("New Game", buttons, "LOCAL PLAY", true));
+        Set(controller, "continueButton", Button("Continue", buttons, "CONTINUE LOCAL"));
         Set(controller, "resumeButton", Button("Resume", buttons, "RESUME"));
         Set(controller, "optionsButton", Button("Options", buttons, "OPTIONS"));
         Set(controller, "returnButton", Button("Return", buttons, "MAIN MENU"));
