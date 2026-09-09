@@ -27,12 +27,6 @@ public static class InventoryNetworkPrefabAudit
             if (map != null && map.selector != null && map.selector.Source != null)
                 foreach (var loot in map.selector.Source.Items) if (loot != null) Add(loot.prefab);
 
-        foreach (var processor in UnityEngine.Object.FindObjectsByType<CorpseProcessor>(FindObjectsSortMode.None))
-        {
-            var table = new SerializedObject(processor).FindProperty("dropTable").objectReferenceValue as CorpseDropTable;
-            if (table != null) foreach (var corpse in table.corpseDrops)
-                foreach (var drop in corpse.possibleDrops) Add(drop.itemPrefab);
-        }
         foreach (var station in UnityEngine.Object.FindObjectsByType<GiftBox>(FindObjectsSortMode.None))
             if (new SerializedObject(station).FindProperty("giftBoxItemPrefab").objectReferenceValue is Item gift) Add(gift.gameObject);
         foreach (var shop in UnityEngine.Object.FindObjectsByType<WeaponShop>(FindObjectsSortMode.None))
@@ -57,6 +51,21 @@ public static class InventoryNetworkPrefabAudit
         EditorUtility.SetDirty(registry);
         AssetDatabase.SaveAssetIfDirty(registry);
         return missing.Select(AssetDatabase.GetAssetPath).ToArray();
+    }
+
+    [Test]
+    public static void StartMapProcessorOrbsAreRegisteredForMultiplayer()
+    {
+        var registry = AssetDatabase.LoadAssetAtPath<NetworkPrefabs>(RegistryPath);
+        var processors = UnityEngine.Object.FindObjectsByType<CorpseProcessor>(FindObjectsSortMode.None);
+        Assert.That(processors, Is.Not.Empty);
+        foreach (var processor in processors)
+        {
+            var orb = new SerializedObject(processor).FindProperty("processedOrbPrefab").objectReferenceValue as SkillPointOrb;
+            Assert.That(orb, Is.Not.Null);
+            Assert.That(registry.prefabs.Any(e => e.prefab == orb.gameObject), Is.True,
+                "Processor rewards must be visible and collectible on every peer.");
+        }
     }
 
     [Test]

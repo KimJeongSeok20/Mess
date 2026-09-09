@@ -77,6 +77,7 @@ public class MonsterHealth : NetworkBehaviour
     [SerializeField, Min(0.1f)] private float hitVfxLifetime = 2f;
 
     [Header("Death VFX (Optional)")]
+    [SerializeField] private SkillPointOrb deathOrbPrefab;
     [SerializeField] private GameObject deathVfxPrefab;
     [SerializeField] private Vector3 deathVfxOffset = new Vector3(0f, 1f, 0f);
     [SerializeField, Min(0.1f)] private float deathVfxScale = 1f;
@@ -306,6 +307,8 @@ public class MonsterHealth : NetworkBehaviour
             _netDeathHitDirection.value = request.HitDirection;
             MarkTrophyGrade(request);
             _netDead.value = true;
+
+            SkillPointOrb.Spawn(deathOrbPrefab, transform.position + Vector3.up * 0.65f);
 
             if (isSpawned)
                 DieObserversRpc((int)request.DamageType, hitPoint, request.HitDirection);
@@ -570,6 +573,7 @@ public class MonsterHealth : NetworkBehaviour
             ApplyCorpseDeathImpulse(hitDirection);
         }
 
+        int itemLayer = LayerMask.NameToLayer("Item");
         int deadExcludeMask = LayerMask.GetMask("Player", "Item");
         if (_colliders != null)
         {
@@ -579,6 +583,9 @@ public class MonsterHealth : NetworkBehaviour
                     continue;
 
                 collider.excludeLayers = deadExcludeMask;
+                // Pickup queries ignore triggers. Include the solid ragdoll colliders
+                // so aiming at the fallen body works even away from the root volume.
+                collider.gameObject.layer = itemLayer;
                 if (_goreSimulator == null || !_goreSimulator.ragdollInitialized)
                     collider.enabled = collider == corpsePickupCollider;
             }
@@ -587,7 +594,6 @@ public class MonsterHealth : NetworkBehaviour
         if (corpsePickupCollider != null)
         {
             corpsePickupCollider.enabled = true;
-            int itemLayer = LayerMask.NameToLayer("Item");
             corpsePickupCollider.gameObject.layer = itemLayer;
             gameObject.layer = itemLayer;
         }

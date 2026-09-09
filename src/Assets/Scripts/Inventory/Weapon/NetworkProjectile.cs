@@ -57,6 +57,7 @@ public class NetworkProjectile : MonoBehaviour
     /// FPSController가 이 이벤트를 받아 ObserversRpc로 VFX 전파.
     /// </summary>
     public event System.Action<Vector3, Vector3> OnExploded;
+    public event System.Action OnMonsterHit;
 
     /// <summary>
     /// 서버에서 스폰 직후 호출. WeaponData 값을 주입하고 Rigidbody 초기 속도 설정.
@@ -101,11 +102,13 @@ public class NetworkProjectile : MonoBehaviour
     private void Explode(Vector3 point, Vector3 normal, Collider directTarget = null)
     {
         _exploded = true;
+        bool damagedMonster = false;
+        System.Action confirmMonster = () => damagedMonster = true;
 
         // ── 1) 폭발 범위 데미지 (서버 권위) ──
         if (_explosionRadius > 0f)
         {
-            int damagedTargetCount = ApplyExplosionDamage(point, _explosionRadius, _explosionDamage, _explosionHitMask);
+            int damagedTargetCount = ApplyExplosionDamage(point, _explosionRadius, _explosionDamage, _explosionHitMask, confirmMonster);
 
             Debug.Log($"[NetworkProjectile] Explosion at {point}, radius={_explosionRadius}, " +
                       $"damaged {damagedTargetCount} unique targets");
@@ -113,12 +116,14 @@ public class NetworkProjectile : MonoBehaviour
         else
         {
             if (directTarget != null)
-                ApplyDamage(directTarget, _damage, point);
+                ApplyDamage(directTarget, _damage, point, confirmMonster);
 
             Debug.Log($"[NetworkProjectile] Direct hit at {point}, damage={_damage}");
         }
 
         // ── 2) 폭발 이벤트 발생 → FPSController가 받아서 ObserversRpc 전파 ──
+        if (damagedMonster)
+            OnMonsterHit?.Invoke();
         OnExploded?.Invoke(point, normal);
 
         // ── 3) 서버 오브젝트 파괴 ──
@@ -132,7 +137,8 @@ public class NetworkProjectile : MonoBehaviour
         Explode(transform.position, Vector3.up);
     }
 
-    internal static int ApplyExplosionDamage(Vector3 point, float radius, int explosionDamage, LayerMask hitMask)
+    internal static int ApplyExplosionDamage(Vector3 point, float radius, int explosionDamage, LayerMask hitMask,
+        System.Action onMonsterHit = null)
     {
         if (radius <= 0f || explosionDamage <= 0)
             return 0;
@@ -166,7 +172,7 @@ public class NetworkProjectile : MonoBehaviour
         int damagedTargets = 0;
         foreach (ExplosionDamageCandidate candidate in candidates.Values)
         {
-            if (ApplyDamage(candidate.Collider, candidate.Damage, point))
+            if (ApplyDamage(candidate.Collider, candidate.Damage, point, onMonsterHit))
                 damagedTargets++;
         }
 
@@ -233,7 +239,7 @@ public class NetworkProjectile : MonoBehaviour
         return receiverRoot != null ? receiverRoot.GetInstanceID() : target.GetInstanceID();
     }
 
-    private static bool ApplyDamage(Collider target, int damage, Vector3 hitPoint)
+    private static bool ApplyDamage(Collider target, int damage, Vector3 hitPoint, System.Action onMonsterHit = null)
     {
         if (target == null || damage <= 0)
             return false;
@@ -242,7 +248,10 @@ public class NetworkProjectile : MonoBehaviour
         if (octopus != null)
         {
             Vector3 direction = (octopus.transform.position - hitPoint).normalized;
+            int healthBefore = octopus.CurrentHealth;
             octopus.TakeDamage(DamageRequest.Explosive(damage, hitPoint, direction));
+            if (octopus.CurrentHealth < healthBefore)
+                onMonsterHit?.Invoke();
             return true;
         }
 
@@ -250,7 +259,10 @@ public class NetworkProjectile : MonoBehaviour
         if (monsterHealth != null)
         {
             Vector3 direction = (monsterHealth.transform.position - hitPoint).normalized;
+            int healthBefore = monsterHealth.Health;
             monsterHealth.TakeDamage(DamageRequest.Explosive(damage, hitPoint, direction));
+            if (monsterHealth.Health < healthBefore)
+                onMonsterHit?.Invoke();
             return true;
         }
 

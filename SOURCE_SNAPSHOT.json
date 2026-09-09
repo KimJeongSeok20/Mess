@@ -1,8 +1,9 @@
 {
-  "release": "alpha-0.21",
+  "release": "alpha-0.3",
+  "projectCommit": "f4111dc13d97f32daad34982a9993d211f0597de",
   "scope": "Existing public C# roots only; not a complete Unity project",
   "hashFormat": "SHA-256 of exported file bytes with LF line endings",
-  "fileCount": 492,
+  "fileCount": 494,
   "files": [
     {
       "path": "Assets/Clown/Editor/ClownSkin2CombinedPrefabSetup.cs",
@@ -170,11 +171,11 @@
     },
     {
       "path": "Assets/Editor/InventoryNetworkPrefabAudit.cs",
-      "sha256": "7dbbb0b217860391697f65814bde89e0643228423300f4520c378b12f238197b"
+      "sha256": "bf6fa993d1ef997ae1b57594d6bed607a403d10f1c5b250b37a05a4cd0ff61bc"
     },
     {
       "path": "Assets/Editor/InventoryTransactionPlayAudit.cs",
-      "sha256": "047ff24ca94a1527d419e0cedcc6e6cf47797e145ae5e6a61590ce1d0328932b"
+      "sha256": "0d950511548d5fe219fd6112b8fb95d054147ffb098c160a1df8126ac94d4c8b"
     },
     {
       "path": "Assets/Editor/LocalTransportRegressionTests.cs",
@@ -1154,7 +1155,7 @@
     },
     {
       "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/MonsterHealth.cs",
-      "sha256": "e4e023999012743bd3d9c14ee19bdedb4ac880db6bdf9b2a4b1cca60af85e451"
+      "sha256": "f20ea4f37370df861c5d5da2c373570f95d3bebde6f9862da2aaa43ab891b0e7"
     },
     {
       "path": "Assets/Monster/smily/smily-horror-monster_cc_attribution/Scripts/RangeDetector.cs",
@@ -1182,7 +1183,7 @@
     },
     {
       "path": "Assets/Scripts/Audio/PlayerFeedbackAudio.cs",
-      "sha256": "d3d9fa0927f522ffe8629c0b6f8638ebae1de4419e22d8f886c1b2e39fe59299"
+      "sha256": "bb3525c51a4cc21c2038e2569743229eb3891418f7a553a0fbb5e0bd109f38e5"
     },
     {
       "path": "Assets/Scripts/Audio/PlayerSoundProfile.cs",
@@ -1194,7 +1195,7 @@
     },
     {
       "path": "Assets/Scripts/Combat/BloodPoolVisual.cs",
-      "sha256": "6d17dc3aeca50b7df0af003625afe956454f3e24e2d6b6af81d2653a3178cbdc"
+      "sha256": "ec2527e023786075c3bc2f0b2fd420a0a28ffb753376bb730b1b9d4e898e92e5"
     },
     {
       "path": "Assets/Scripts/Combat/BloodVfxVisual.cs",
@@ -1203,6 +1204,10 @@
     {
       "path": "Assets/Scripts/Combat/DamageRequest.cs",
       "sha256": "2a6105618bd5b492f4bb0455760a6f97ccba943f495da3104382889ffadbee63"
+    },
+    {
+      "path": "Assets/Scripts/Combat/SkillPointOrb.cs",
+      "sha256": "f6272d35dddcad0e39ec66e6e4cc72e23d7aca1c1c528f1e054edc15b41fc39a"
     },
     {
       "path": "Assets/Scripts/Currency/CorpseDropProfile.cs",
@@ -1214,7 +1219,7 @@
     },
     {
       "path": "Assets/Scripts/Currency/CorpseProcessor.cs",
-      "sha256": "c5559527890f31bd134556a3bac5478c31a99ecb7186d9502bc7cfb0e59b053a"
+      "sha256": "74e9f5a906aa57cae1ae4c4616c176ba87673bc1bd34a948cd2caf6a8828ecb6"
     },
     {
       "path": "Assets/Scripts/Currency/CurrencyManager.cs",
@@ -1338,7 +1343,7 @@
     },
     {
       "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonRoomPowerPhone.cs",
-      "sha256": "14366ec50d2d2b55e00a15b58e0d706a356b99a7083dc0a9c1bd46f7880829ab"
+      "sha256": "d40e4363b42cdc6240eed5fa228118f1420f06a5f972c71504142f2e64dfc6c1"
     },
     {
       "path": "Assets/Scripts/Dungeon 1/Lighting/DungeonTileBakeData.cs",
@@ -1386,7 +1391,7 @@
     },
     {
       "path": "Assets/Scripts/Dungeon 1/NetworkDungeonController.cs",
-      "sha256": "a5f4171296d092ae1183f395b5c904ab03223482fa9046709abc73bc3c73f0d7"
+      "sha256": "97476ad06ed04f7e9241deb044d0563eef526cd8dc7c31c0c8199eb9da397ea3"
     },
     {
       "path": "Assets/Scripts/Dungeon 1/item/DungeonLootPostProcessor.cs",
@@ -1506,7 +1511,7 @@
     },
     {
       "path": "Assets/Scripts/Inventory/InteractionManager.cs",
-      "sha256": "260354fa22e5085f5fbcb2174594b6764a69913a39d97b399b5a1517403e30d9"
+      "sha256": "fd49ec6bae67954d7cc8275770fae25a3da08950017a0127279ce732f81af73b"
     },
     {
       "path": "Assets/Scripts/Inventory/InventoryItem.cs",
@@ -1514,7 +1519,7 @@
     },
     {
       "path": "Assets/Scripts/Inventory/InventoryManager.cs",
-      "sha256": "9c1eccd7dd90728077bc25d109bfff50eff81f7b54cbe4c0ec1914fd74bc666a"
+      "sha256": "955d9d43de7ae920185117c9b1359e1ec75d93ce2b49eebd5b3b88156f60d428"
     },
     {
       "path": "Assets/Scripts/Inventory/InventorySlot.cs",
@@ -1582,7 +1587,7 @@
     },
     {
       "path": "Assets/Scripts/Inventory/Weapon/NetworkProjectile.cs",
-      "sha256": "46780f27eb131478d726b3cb9679523687075479723e05aa83f504ae4886ddde"
+      "sha256": "35270d879500fabd2d06ea32c1f09c4deaf53e78e2e86b2ebb0b09fc2d5ad6f9"
     },
     {
       "path": "Assets/Scripts/Inventory/Weapon/SimpleProjectile.cs",
@@ -1626,7 +1631,7 @@
     },
     {
       "path": "Assets/Scripts/Menu/GameMenuController.cs",
-      "sha256": "094c92e2b3c63c9c16640d62a5a7423c544e342cfcd63864242c6fb53fe8912b"
+      "sha256": "101405c66d42d4733f02bfc972f48567aa98a47a874502fa30dfa94332fbf8cd"
     },
     {
       "path": "Assets/Scripts/Menu/GameOptions.cs",
@@ -1698,7 +1703,7 @@
     },
     {
       "path": "Assets/Scripts/Player/PlayerVitals.cs",
-      "sha256": "a7e4e837ddce2ae3829d26cdc37e0458d3f1273cd137a5187492035175953b76"
+      "sha256": "20ba8a11f12b752f76d2cbe7a41e8d900d230656963e4e742cc0c1c055c3f6f0"
     },
     {
       "path": "Assets/Scripts/Player/PlayerVitalsHud.cs",
@@ -1762,7 +1767,7 @@
     },
     {
       "path": "Assets/Scripts/Tax/TaxCollectionMachine.cs",
-      "sha256": "73a233b512f3012af0ea0b7151f7aae27f8107de8097097ead4988d9cf5f1bc9"
+      "sha256": "6786b22b9a808f592dbda63e09e5947655be0c1b1776cff2bb8e65c72723cbc5"
     },
     {
       "path": "Assets/Scripts/Tax/TaxMachineScreenController.cs",
@@ -1786,11 +1791,11 @@
     },
     {
       "path": "Assets/Scripts/TimeSync/DayEndSeatPlayer.cs",
-      "sha256": "f69a231254305259bdf262a977c50dc6f098adfbd1bce3c5b34c333ecd884657"
+      "sha256": "5a9f038b2641fc4d8591077f2826d5da49b465e807b514a936fa6472f9611936"
     },
     {
       "path": "Assets/Scripts/TimeSync/TimeManager.cs",
-      "sha256": "1f5dea9eca29368966000c7645dfa380aabf596e0b6ca833285ac22e0ae16f5b"
+      "sha256": "d599c298145170ca07d1d1b2cbb464f59ce93a506a775a9287fb6379c59d256a"
     },
     {
       "path": "Assets/Scripts/UI/AmmoHudPanelGraphic.cs",
@@ -1809,16 +1814,20 @@
       "sha256": "9ebd0a75210a986cc4930dbcdb6ef572098d60b23764c56c368c4d054629d90b"
     },
     {
+      "path": "Assets/Scripts/Upgrade/AnvilInteraction.StarCatch.cs",
+      "sha256": "a080ff104de6eeecae05bb11776a54f7275b491f1d3a9232a08d404a15044284"
+    },
+    {
       "path": "Assets/Scripts/Upgrade/AnvilInteraction.cs",
-      "sha256": "919cfa6ccb0bf9f7056a4271eaf549111f1e2e828d02c87c6204b973b96e70ef"
+      "sha256": "98518ba5773288db22493f67a986d4bcab7327e2a504cc16465cf0cbf63affa6"
     },
     {
       "path": "Assets/Scripts/Upgrade/AnvilUI.cs",
-      "sha256": "a9e033d0166724c848b4728de050da3a8a77b96277c6f7eba900ebcbb834126e"
+      "sha256": "26206098dbb80977de4137180b39705de677e8e920d1c6d68b8f014c8e7653ed"
     },
     {
       "path": "Assets/Scripts/Upgrade/ItemUpgradeRecipe.cs",
-      "sha256": "b3450d5b0749be14094550d3cb9d8e0908b666eabdeeffabc7595848f4aa738e"
+      "sha256": "2395883f0bb3e1256ed1b8820ab064473440335ed1035941f38b280a07a7f63c"
     },
     {
       "path": "Assets/Scripts/VFX/RandomTileVariation.cs",
@@ -1918,7 +1927,7 @@
     },
     {
       "path": "Assets/Scripts/monster/Octopus/OctopusSwarmController.cs",
-      "sha256": "5328fd43a64410874b587155027931212f9b658f5c60017d589d826ec226d9fe"
+      "sha256": "002b2ceda70281d088774e2db35a5a84f28984bab81a2b39df36b8573f913847"
     },
     {
       "path": "Assets/Scripts/monster/Octopus/OctopusSwarmMember.cs",
@@ -1970,7 +1979,7 @@
     },
     {
       "path": "Assets/Tests/Editor/CombatDeathContractTests.cs",
-      "sha256": "96c07185ae0880f654467195c1a1657373ec5f1d412c82c92140bc64966435a6"
+      "sha256": "9f480afb7bc53556b9df4ae51af67f54d3b7b95fe24e5c94db6c1f9b8a3a1091"
     }
   ]
 }

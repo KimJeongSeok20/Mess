@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using PurrNet;
 using System.Collections.Generic;
 using Demo.Scripts.Runtime.Character;
@@ -11,17 +11,17 @@ public struct UpgradeOption
 {
     public ItemUpgradeRecipe recipe;
     public int highestOwnedTier;   // 보유 중 최고 티어
-    public int materialCount;      // 재료로 사용할 수 있는 아이템 수 (전체 - 1)
+    public int materialCount;      // 메인 무기를 제외한 같은 종류의 +0 재료 수
     public int resultTier;         // 강화 결과 = highestOwnedTier + 1
 }
 
 /// <summary>
 /// 대장간 모루 상호작용
-/// - 같은 무기 2개 이상 → 최고 티어 + 1 강화
+/// - 강화할 무기 + 같은 종류의 미강화(+0) 무기 1개 → 한 단계 강화 도전
 /// - +999까지 무한 강화 지원
 /// - 스탯은 ItemUpgradeRecipe의 공식으로 계산
 /// </summary>
-public class AnvilInteraction : AInteractable
+public partial class AnvilInteraction : AInteractable
 {
     private static string _lastUpgradeAudioDebug = "none";
 
@@ -161,7 +161,7 @@ public class AnvilInteraction : AInteractable
 
     /// <summary>
     /// 인벤토리 스캔 → 강화 가능한 옵션 목록.
-    /// 규칙(스타포스식): 무기 1개만 있어도 한 단계 도전 가능. 같은 무기가 더 있으면 재료로 써서 성공률 보너스.
+    /// 보유 무기를 표시하고, 같은 종류의 +0 재료 수를 별도로 계산한다.
     /// </summary>
     public List<UpgradeOption> DetectAvailableUpgrades()
     {
@@ -187,7 +187,7 @@ public class AnvilInteraction : AInteractable
             {
                 recipe = recipe,
                 highestOwnedTier = highestTier,
-                materialCount = totalCount - 1, // 최고 티어 아이템 제외한 나머지 (선택 재료)
+                materialCount = Mathf.Max(0, _inventoryManager.CountItemsWithTier(baseName, 0) - (highestTier == 0 ? 1 : 0)),
                 resultTier = resultTier
             });
         }
@@ -217,7 +217,7 @@ public class AnvilInteraction : AInteractable
     private int _pendingHighestTier;
 
     /// <summary>
-    /// 업그레이드 가능 여부 확인 (무기 1개 이상)
+    /// 최고 단계 무기와 같은 종류의 미강화 무기 한 개가 필요하다.
     /// </summary>
     public bool CanUpgrade(UpgradeOption option)
     {
@@ -227,30 +227,33 @@ public class AnvilInteraction : AInteractable
         string baseName = option.recipe.baseItemName;
         int totalCount = _inventoryManager.CountItemsByName(baseName);
 
-        if (totalCount < 1) return false;
+        if (totalCount < 2) return false;
+        int highestTier = _inventoryManager.GetHighestUpgradeTier(baseName);
+        int baseCount = _inventoryManager.CountItemsWithTier(baseName, 0);
+        if (baseCount < (highestTier == 0 ? 2 : 1)) return false;
+        if (option.highestOwnedTier != highestTier || option.resultTier != highestTier + 1) return false;
         if (option.resultTier > option.recipe.EffectiveMaxTier) return false;
 
         return true;
     }
 
     /// <summary>클라이언트 표시용 성공률 (서버와 같은 공식; 퍼크는 로컬 추정).</summary>
-    public float PreviewSuccessChance(UpgradeOption option, bool useMaterial)
+    public float PreviewSuccessChance(UpgradeOption option, bool starCatchHit)
     {
         if (option.recipe == null)
             return 0f;
 
-        bool material = useMaterial && option.materialCount > 0;
-        float perk = LocalSteadyHandsBonus() + (material ? LocalMasterSmithBonus() : 0f);
-        return option.recipe.GetSuccessChance(option.resultTier, material, GetLocalPity(option.recipe, option.resultTier), perk);
+        float perk = LocalSteadyHandsBonus() + LocalMasterSmithBonus() + (starCatchHit ? StarCatchBonus : 0f);
+        return option.recipe.GetSuccessChance(option.resultTier, false, GetLocalPity(option.recipe, option.resultTier), perk);
     }
 
-    public bool TryUpgrade(UpgradeOption option) => TryUpgrade(option, false);
+    public bool TryUpgrade(UpgradeOption option) => TryUpgrade(option, -1f);
 
     /// <summary>
     /// 강화 시도. 서버가 결제와 판정을 함께 처리하고(TargetRpc로 결과 통보) 클라이언트는 결과만 인벤토리에 적용한다.
     /// 오프라인(미스폰)에서는 로컬에서 굴린다.
     /// </summary>
-    public bool TryUpgrade(UpgradeOption option, bool useMaterial)
+    public bool TryUpgrade(UpgradeOption option, float starCatchElapsed)
     {
         CacheManagers();
 
@@ -267,19 +270,18 @@ public class AnvilInteraction : AInteractable
 
         if (!CanUpgrade(option))
         {
-            _prompt?.Show("You need the weapon in your inventory.");
+            _prompt?.Show("Requires the weapon and one matching unenhanced (+0) weapon.");
             return false;
         }
 
         string baseName = recipe.baseItemName;
         int highestTier = _inventoryManager.GetHighestUpgradeTier(baseName);
         int resultTier = highestTier + 1;
-        useMaterial = useMaterial && _inventoryManager.CountItemsByName(baseName) >= 2;
+        const bool useMaterial = true;
 
         if (!isSpawned)
         {
-            RollOfflineAndApply(recipe, highestTier, useMaterial);
-            return true;
+            return RollOfflineAndApply(recipe, highestTier, IsStarCatchHit(starCatchElapsed));
         }
 
         if (_pendingUpgrade)
@@ -302,12 +304,13 @@ public class AnvilInteraction : AInteractable
         _prompt?.Show("Rolling...");
         string mainToken = _inventoryManager.FindReceipt(baseName, highest: true);
         string materialToken = useMaterial ? _inventoryManager.FindReceipt(baseName, mainToken) : null;
-        RequestUpgradeRollServerRpc(mainToken, materialToken);
+        RequestUpgradeRollServerRpc(mainToken, materialToken, _localStarCatchId, starCatchElapsed);
+        _localStarCatchId = null;
         return true;
     }
 
     [ServerRpc(requireOwnership: false)]
-    private void RequestUpgradeRollServerRpc(string mainToken, string materialToken, RPCInfo info = default)
+    private void RequestUpgradeRollServerRpc(string mainToken, string materialToken, string starCatchId, float starCatchElapsed, RPCInfo info = default)
     {
         var player = NetworkPlayer.FindPlayer(info.sender);
         if (player == null || !player.CanUseStation(this) || !player.ServerInventory.TryGet(mainToken, out var held))
@@ -321,13 +324,14 @@ public class AnvilInteraction : AInteractable
         ItemUpgradeRecipe recipe = FindRecipe(baseName);
         int resultTier = currentTier + 1;
         if (recipe == null || !recipe.IsValid() || currentTier < 0 || resultTier > recipe.EffectiveMaxTier
-            || (useMaterial && (materialToken == mainToken || !player.ServerInventory.TryGet(materialToken, out var material)
-                || material.itemName != held.itemName)))
+            || !player.ServerInventory.TryGet(materialToken, out var material)
+            || !IsValidUpgradePair(held, material))
         {
             ConfirmUpgradeRollTargetRpc(info.sender, baseName, currentTier, (int)RollOutcome.Rejected, 0, 0f, false, mainToken, materialToken, default);
             return;
         }
 
+        bool starCatchHit = ConsumeStarCatch(info.sender, mainToken, materialToken, starCatchId, starCatchElapsed);
         PlayerVitals payer = FindVitalsForPlayer(info.sender);
 
         // ── 비용: 서버가 다시 계산. Free Forge는 하루 첫 강화 무료.
@@ -348,14 +352,14 @@ public class AnvilInteraction : AInteractable
             }
         }
 
-        // ── 성공률: 기본표 + 재료 + pity + 퍼크
+        // ── 성공률: 기본표 + Star Catch + pity + 퍼크
         float perkBonus = payer != null ? payer.ServerSteadyHandsBonus : 0f;
         if (useMaterial && payer != null)
             perkBonus += payer.ServerMasterSmithBonus;
 
         string pityKey = $"{info.sender}|{baseName}|{resultTier}";
         _serverPity.TryGetValue(pityKey, out int fails);
-        float chance = recipe.GetSuccessChance(resultTier, useMaterial, fails, perkBonus);
+        float chance = recipe.GetSuccessChance(resultTier, false, fails, perkBonus + (starCatchHit ? StarCatchBonus : 0f));
 
         RollOutcome outcome;
         if (Random.value < chance)
@@ -414,22 +418,33 @@ public class AnvilInteraction : AInteractable
         if (recipe == null || outcome == RollOutcome.Rejected)
         {
             _prompt?.Show(cost > 0 ? $"Team funds insufficient for ${cost:N0}" : "Upgrade rejected.");
+            OnRollResolved?.Invoke(recipe, currentTier + 1, RollOutcome.Rejected, chance);
             RefreshOpenUi();
             return;
         }
 
         CacheManagers();
+        string localPityKey = PityKey(recipe, currentTier + 1);
+        if (outcome == RollOutcome.Success) _localPity.Remove(localPityKey);
+        else _localPity[localPityKey] = GetLocalPity(recipe, currentTier + 1) + 1;
         _inventoryManager?.ReplaceReceipt(mainToken, materialToken, replacement);
         AnnounceOutcome(recipe, currentTier, outcome, chance, cost);
         OnRollResolved?.Invoke(recipe, currentTier + 1, outcome, chance);
         RefreshOpenUi();
     }
 
-    private void RollOfflineAndApply(ItemUpgradeRecipe recipe, int currentTier, bool useMaterial)
+    private bool RollOfflineAndApply(ItemUpgradeRecipe recipe, int currentTier, bool starCatchHit)
     {
         int resultTier = currentTier + 1;
         int fails = GetLocalPity(recipe, resultTier);
-        float chance = recipe.GetSuccessChance(resultTier, useMaterial, fails, LocalSteadyHandsBonus());
+        int cost = recipe.GetUpgradeCost(resultTier);
+        if (cost > 0 && (_currencyManager == null || !_currencyManager.TrySpendCurrencyImmediateOnServer(cost)))
+        {
+            _prompt?.Show($"Need ${cost:N0}");
+            return false;
+        }
+        float chance = recipe.GetSuccessChance(resultTier, false, fails,
+            LocalSteadyHandsBonus() + LocalMasterSmithBonus() + (starCatchHit ? StarCatchBonus : 0f));
         RollOutcome outcome;
         if (Random.value < chance)
         {
@@ -442,11 +457,12 @@ public class AnvilInteraction : AInteractable
             outcome = recipe.DowngradesOnFail(resultTier) && currentTier > 0 ? RollOutcome.Downgrade : RollOutcome.Fail;
         }
 
-        if (ApplyRollOutcomeLocally(recipe, currentTier, outcome, useMaterial))
-            PlayUpgradeSoundLocal(outcome == RollOutcome.Success);
+        if (!ApplyRollOutcomeLocally(recipe, currentTier, outcome, true)) return false;
+        PlayUpgradeSoundLocal(outcome == RollOutcome.Success);
         AnnounceOutcome(recipe, currentTier, outcome, chance, recipe.GetUpgradeCost(resultTier));
         OnRollResolved?.Invoke(recipe, resultTier, outcome, chance);
         RefreshOpenUi();
+        return true;
     }
 
     private void AnnounceOutcome(ItemUpgradeRecipe recipe, int currentTier, RollOutcome outcome, float chance, int cost)
@@ -482,8 +498,7 @@ public class AnvilInteraction : AInteractable
 
         if (usedMaterial && _inventoryManager.CountItemsByName(baseName) >= 2)
         {
-            if (!_inventoryManager.RemoveItemLowestTier(baseName))
-                Debug.LogWarning($"[AnvilInteraction] Could not consume material for {baseName}.", this);
+            if (!_inventoryManager.RemoveItemWithTier(baseName, 0)) return false;
         }
 
         if (outcome == RollOutcome.Fail || outcome == RollOutcome.Rejected)

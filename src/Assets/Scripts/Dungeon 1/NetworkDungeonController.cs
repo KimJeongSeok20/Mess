@@ -169,6 +169,16 @@ public class NetworkDungeonController : NetworkBehaviour
         return lit;
     }
 
+    public void RestorePowerServer()
+    {
+        if (!isServer)
+            return;
+
+        _serverPower = ResolveTeamPowerCapacity();
+        _powerCapacity.value = _serverPower;
+        _power.value = _serverPower;
+    }
+
     private void ForceAllRoomsDarkServer()
     {
         if (!isServer)
@@ -419,9 +429,7 @@ public class NetworkDungeonController : NetworkBehaviour
         ClearDungeonDoorStateServer();
 
         // 새 던전 = 배터리 가득
-        _serverPower = ResolveTeamPowerCapacity();
-        _powerCapacity.value = _serverPower;
-        _power.value = _serverPower;
+        RestorePowerServer();
 
         // ✅ 핵심: prerequisites 먼저, active는 마지막에
         _flowIndex.value = flowIndex;

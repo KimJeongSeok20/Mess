@@ -16,6 +16,7 @@ public sealed class PlayerFeedbackAudio : MonoBehaviour
     [SerializeField] private AudioClip inventoryOpenClip;
     [SerializeField] private AudioClip inventoryCloseClip;
     [SerializeField] private AudioClip dryFireClip;
+    [SerializeField] private AudioClip monsterHitClip;
 
     [Header("Levels")]
     [SerializeField, Range(0f, 1f)] private float hurtVolume = 0.55f;
@@ -23,6 +24,7 @@ public sealed class PlayerFeedbackAudio : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float pickupVolume = 0.4f;
     [SerializeField, Range(0f, 1f)] private float inventoryVolume = 0.3f;
     [SerializeField, Range(0f, 1f)] private float dryFireVolume = 0.55f;
+    [SerializeField, Range(0f, 1f)] private float monsterHitVolume = 0.55f;
 
     private bool _ready;
     private bool _deathPlayed;
@@ -107,6 +109,11 @@ public sealed class PlayerFeedbackAudio : MonoBehaviour
         if (vitals == null || vitals.IsDead || !IsOwner || Time.unscaledTime < _nextDryFireTime) return;
         _nextDryFireTime = Time.unscaledTime + 0.2f;
         Play(dryFireClip, dryFireVolume);
+    }
+
+    public void PlayMonsterHit()
+    {
+        Play(monsterHitClip, monsterHitVolume);
     }
 
     private void Play(AudioClip clip, float volume)

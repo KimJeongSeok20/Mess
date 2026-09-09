@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using Demo.Scripts.Runtime.Character;
 using Esper.SkillWeb.UI.UGUI;
@@ -155,7 +155,7 @@ public sealed class GameMenuController : MonoBehaviour
             return;
         }
 
-        if (SkillWebTerminalInteraction.BlocksGameplayInput) return;
+        if (SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput) return;
         if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame) return;
         if (IsOpen && _openMenu == this)
         {

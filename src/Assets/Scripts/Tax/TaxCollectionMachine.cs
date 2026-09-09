@@ -46,6 +46,7 @@ public sealed class TaxCollectionMachine : AInteractable
     [SerializeField] private Light statusLamp;
     [SerializeField] private Renderer statusLampRenderer;
     [SerializeField] private AudioSource paymentAudioSource;
+    [SerializeField] private ParticleSystem paymentMoneyEffect;
     [SerializeField] private TaxMachineScreenController screenController;
     [SerializeField] private Vector3 shutterOpenLocalPosition;
     [SerializeField] private Vector3 shutterClosedLocalPosition;
@@ -374,6 +375,12 @@ public sealed class TaxCollectionMachine : AInteractable
 
         if (paymentAudioSource != null && paymentAudioSource.clip != null)
             paymentAudioSource.Play();
+
+        if (paymentMoneyEffect != null)
+        {
+            paymentMoneyEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            paymentMoneyEffect.Play(true);
+        }
 
         float elapsed = 0f;
         float duration = Mathf.Max(0.05f, cashInsertDuration);

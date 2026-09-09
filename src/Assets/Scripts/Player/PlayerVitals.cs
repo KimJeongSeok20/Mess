@@ -750,16 +750,23 @@ public class PlayerVitals : NetworkBehaviour
 
     private void HandleDayResetServer()
     {
+        if (!isServer)
+            return;
+
         ResetDailyPerkUsage();
 
         // New day: everyone waiting in the revive room comes back for free.
-        if (isServer && _isDead)
+        if (_isDead)
         {
             ReviveToFull();
             var player = GetComponent<NetworkPlayer>();
             if (player != null && owner.HasValue)
                 player.ReviveAtOwnerTarget(owner.Value, StartMapReturnPoint.Instance != null
                     ? StartMapReturnPoint.Instance.position : transform.position);
+        }
+        else
+        {
+            Heal(MaxHealth);
         }
     }
 

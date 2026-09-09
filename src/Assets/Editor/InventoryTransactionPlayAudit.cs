@@ -141,11 +141,18 @@ public static class InventoryTransactionPlayAudit
         yield return null;
         token = Inventory.FindReceipt("Octopus");
         Check(!string.IsNullOrEmpty(token), "Octopus trophy pickup obtains ownership");
+        var priorOrbs = new HashSet<SkillPointOrb>(UnityEngine.Object.FindObjectsByType<SkillPointOrb>(FindObjectsSortMode.None));
         Request(processor, "ProcessCorpseServerRpc", token, default(RPCInfo));
         Request(processor, "ProcessCorpseServerRpc", token, default(RPCInfo));
         yield return null;
-        Check(TeamProgress.SkillPointsEarned == points + 1 && Inventory.FindReceipt("Octopus") == null,
-            "Owned Octopus gives one point and cannot be processed twice");
+        var rewardOrbs = UnityEngine.Object.FindObjectsByType<SkillPointOrb>(FindObjectsSortMode.None)
+            .Where(orb => !priorOrbs.Contains(orb)).ToArray();
+        Check(rewardOrbs.Length == 1 && TeamProgress.SkillPointsEarned == points && Inventory.FindReceipt("Octopus") == null,
+            "Processing consumes the trophy once and creates one orb without granting points directly");
+        MoveLocalTo(rewardOrbs[0].transform.position - Vector3.up * 0.65f);
+        yield return null;
+        Check(TeamProgress.SkillPointsEarned == points + 1,
+            "Collecting the processor orb grants its point once");
         MoveLocalTo(anvil.transform.position + Vector3.up);
         item = SpawnFixture("AK", 800, 0);
         yield return null;

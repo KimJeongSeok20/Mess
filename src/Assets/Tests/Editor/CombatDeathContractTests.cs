@@ -351,6 +351,62 @@ public sealed class CombatDeathContractTests
     }
 
     [UnityTest]
+    public IEnumerator LargeMonsterDeath_FallenBodyRemainsFocusableForPickup()
+    {
+        yield return new EnterPlayMode();
+
+        foreach (string path in new[] { SmilyPrefab, ClownPrefab })
+        {
+            GameObject instance = UnityEngine.Object.Instantiate(
+                AssetDatabase.LoadAssetAtPath<GameObject>(path), Vector3.up * 100f, Quaternion.identity);
+            GameObject interactorObject = new("CorpsePickupTest_Interactor");
+            try
+            {
+                instance.SetActive(true);
+                yield return null;
+                MonsterHealth health = instance.GetComponent<MonsterHealth>();
+                Item item = instance.GetComponent<Item>();
+                health.TakeDamage(DamageRequest.Bullet(health.MaxHealth,
+                    instance.transform.position + Vector3.up, Vector3.forward));
+                Assert.That(health.IsDead, Is.True, path);
+
+                // The old root pickup volume does not follow the articulated body.
+                // Verify the actual body remains targetable without relying on that volume.
+                foreach (Collider rootCollider in instance.GetComponents<Collider>())
+                    rootCollider.enabled = false;
+                Physics.SyncTransforms();
+                int itemLayer = LayerMask.NameToLayer("Item");
+                Collider[] bodyColliders = instance.GetComponentsInChildren<Collider>()
+                    .Where(c => c.enabled && !c.isTrigger).ToArray();
+                Assert.That(bodyColliders.Length, Is.GreaterThan(0), path);
+                Assert.That(bodyColliders.All(c => c.gameObject.layer == itemLayer), Is.True,
+                    path + ": fallen body colliders must be visible to the Item query.");
+
+                InteractionManager interactor = interactorObject.AddComponent<InteractionManager>();
+                var serializedInteractor = new SerializedObject(interactor);
+                serializedInteractor.FindProperty("interactableLayer").intValue = 1 << itemLayer;
+                serializedInteractor.ApplyModifiedPropertiesWithoutUndo();
+                var resolve = typeof(InteractionManager).GetMethod("TryResolveInteractable",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                Vector3 origin = bodyColliders[0].bounds.center + Vector3.up * 2f;
+                foreach (float radius in new[] { 0f, 0.45f })
+                {
+                    object[] args = { origin, Vector3.down, radius, radius > 0f, null };
+                    Assert.That((bool)resolve.Invoke(interactor, args), Is.True, path);
+                    Assert.That(args[4], Is.SameAs(item), path);
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(interactorObject);
+                UnityEngine.Object.DestroyImmediate(instance);
+            }
+        }
+
+        yield return new ExitPlayMode();
+    }
+
+    [UnityTest]
     public IEnumerator SmilyBulletDeath_KeepsAttachedItemizedCorpseStable()
     {
         yield return new EnterPlayMode();

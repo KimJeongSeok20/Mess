@@ -1,17 +1,36 @@
 using UnityEngine;
 using PurrNet;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Demo.Scripts.Runtime.Character;
+using System.Collections;
 
 public class CorpseProcessor : AInteractable
 {
-    [Header("=== Drop Settings ===")]
-    [SerializeField] private CorpseDropTable dropTable;
+    [Header("Processed Trophy Orb")]
+    [SerializeField] private SkillPointOrb processedOrbPrefab;
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private float spawnRadius = 1.5f;
-    [SerializeField] private float spawnHeight = 0.5f;
+    [SerializeField, Min(0f)] private float orbEjectionSpeed = 2.5f;
+
+    [Header("Processing Blood VFX")]
+    [SerializeField] private GameObject processingBloodVfxPrefab;
+    [SerializeField] private Transform bloodOutputPoint;
+    [SerializeField, Min(0.01f)] private float processingBloodVfxScale = 0.65f;
+    [SerializeField, Min(0.1f)] private float processingBloodVfxLifetime = 4f;
+    [SerializeField, Min(0f)] private float processingBloodDelay = 1f;
+    [SerializeField, Range(1, 12)] private int processingBloodBursts = 8;
+    [SerializeField, Min(0.05f)] private float processingBloodBurstInterval = 0.14f;
+
+    [Header("Processing Blood Puddle")]
+    [SerializeField] private GameObject processingBloodPuddlePrefab;
+    [SerializeField, Min(0.1f)] private float processingBloodPuddleScale = 1.25f;
+    [SerializeField, Min(1f)] private float processingBloodPuddleLifetime = 90f;
+    private GameObject _processingPuddle;
+
+    [Header("Processing Sound")]
+    [SerializeField] private AudioSource processingAudioSource;
+    [SerializeField] private AudioClip processingSound;
+    [SerializeField, Range(0f, 1f)] private float processingSoundVolume = 0.16f;
+    [SerializeField, Min(0.1f)] private float processingSoundDuration = 2.4f;
+    private Coroutine _processingSoundRoutine;
+    private float _processingSoundUntil;
 
     // 캐시된 컴포넌트들
     private InventoryManager _inventoryManager;
@@ -46,11 +65,7 @@ public class CorpseProcessor : AInteractable
             spawnPoint = transform;
         }
 
-        // 드롭 테이블 체크
-        if (dropTable == null)
-        {
-            Debug.LogWarning("[CorpseProcessor] Drop table not assigned!");
-        }
+
     }
 
     private void Start()
@@ -138,52 +153,134 @@ public class CorpseProcessor : AInteractable
 
         Debug.Log($"[CorpseProcessor] Processing server-authorized corpse: {requestedCorpseName}");
 
-        // 드롭 아이템 결정 (테이블 기반)
-        var itemsToSpawn = GetDropsForCorpse(requestedCorpseName);
-        if (spawnPoint == null || NetworkManager.main == null || NetworkManager.main.prefabProvider == null) return;
-        foreach (var drop in itemsToSpawn)
-            if (drop.itemPrefab == null || drop.itemPrefab.GetComponent<Item>() == null
-                || !NetworkManager.main.prefabProvider.TryGetPrefabData(drop.itemPrefab, out _)) return;
-        Debug.Log($"[CorpseProcessor] Will spawn {itemsToSpawn.Count} items");
+        int points = ResolveTrophyPoints(requestedCorpseName);
+        if (trophyRarity >= (int)ItemRarity.Rare) points *= 2;
+        if (spawnPoint == null || processedOrbPrefab == null) return;
 
-        var spawned = new List<Item>();
-        foreach (var drop in itemsToSpawn)
-        {
-            var receipt = NetworkPlayer.ReceiptFor(drop.itemPrefab.GetComponent<Item>());
-            receipt.price = Random.Range(drop.minPrice, drop.maxPrice + 1);
-            Vector2 offset = Random.insideUnitCircle * spawnRadius;
-            var position = spawnPoint.position + new Vector3(offset.x, spawnHeight, offset.y);
-            if (NetworkPlayer.TrySpawnReceipt(drop.itemPrefab, receipt, position, out var item))
-                spawned.Add(item);
-            else
-            {
-                foreach (var created in spawned) created.Despawn();
-                return; // No trophy or reward is consumed when any output fails.
-            }
-        }
+        // Create the collectible before consuming its receipt so a failed spawn cannot eat a corpse.
+        var orb = SkillPointOrb.Spawn(processedOrbPrefab, spawnPoint.position, points,
+            spawnPoint.forward * orbEjectionSpeed);
+        if (orb == null) return;
         if (!player.ServerInventory.Consume(token, out _))
         {
-            foreach (var created in spawned) created.Despawn();
+            orb.Despawn();
             return;
         }
 
-        // 전리품 → 스킬 포인트 (처리한 플레이어에게)
-        int points = ResolveTrophyPoints(requestedCorpseName);
-        // Intact trophies (head-shot kills, graded Rare or better by the server) are worth double.
-        bool intact = trophyRarity >= (int)ItemRarity.Rare;
-        if (intact)
-            points *= 2;
-        if (points > 0)
+        float bloodStartsAt = Time.time + processingBloodDelay;
+        orb.Landed += (position, normal) =>
         {
-            PlayerVitals vitals = FindVitalsForPlayer(info.sender);
-            if (vitals != null)
-                vitals.GrantSkillPoints(points, intact ? requestedCorpseName + " (intact x2)" : requestedCorpseName);
-        }
-
+            if (this != null && isActiveAndEnabled)
+                PlayLandedBloodObserversRpc(position, normal, Mathf.Max(0f, bloodStartsAt - Time.time));
+        };
+        PlayProcessingEffectsObserversRpc();
         ContractGoal? goal = ContractEvents.GoalForTrophy(requestedCorpseName);
         if (goal.HasValue)
             ContractEvents.Report(goal.Value, 1);
         player.CompleteItemUse(token, $"Processed {requestedCorpseName}");
+    }
+
+    [ObserversRpc(runLocally: true)]
+    private void PlayProcessingEffectsObserversRpc()
+    {
+        if (processingAudioSource != null && processingSound != null)
+        {
+            _processingSoundUntil = Time.time + processingSoundDuration;
+            if (_processingSoundRoutine == null)
+                _processingSoundRoutine = StartCoroutine(PlayProcessingSound());
+        }
+
+        if (bloodOutputPoint != null)
+            StartCoroutine(PlayProcessingBlood());
+    }
+
+    private IEnumerator PlayProcessingBlood()
+    {
+        yield return new WaitForSeconds(processingBloodDelay);
+        if (bloodOutputPoint == null) yield break;
+
+        var outputRenderer = GetComponentInChildren<Renderer>();
+        uint renderingLayers = outputRenderer != null ? outputRenderer.renderingLayerMask : 1u;
+        Vector3 outputPosition = bloodOutputPoint.position + bloodOutputPoint.up * 0.35f;
+        for (int i = 0; i < processingBloodBursts; i++)
+        {
+            BloodVfxVisual.Spawn(processingBloodVfxPrefab, outputPosition,
+                bloodOutputPoint.rotation, processingBloodVfxScale, processingBloodVfxLifetime,
+                renderingLayers);
+            if (i + 1 < processingBloodBursts)
+                yield return new WaitForSeconds(processingBloodBurstInterval);
+        }
+    }
+
+    [ObserversRpc(runLocally: true)]
+    private void PlayLandedBloodObserversRpc(Vector3 position, Vector3 normal, float delay)
+    {
+        StartCoroutine(FormPuddleAtOrbLanding(position, normal, delay));
+    }
+
+    private IEnumerator FormPuddleAtOrbLanding(Vector3 position, Vector3 normal, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (spawnPoint == null) yield break;
+        var outputRenderer = GetComponentInChildren<Renderer>();
+        uint renderingLayers = outputRenderer != null ? outputRenderer.renderingLayerMask : 1u;
+        Vector3 source = spawnPoint.position;
+        float flightTime = Mathf.Max(0.25f,
+            Mathf.Sqrt(2f * Mathf.Max(0.1f, source.y - position.y) / Mathf.Max(0.1f, -Physics.gravity.y)));
+        // Use the server's actual contact point, including slopes, even if the orb is collected.
+        StartCoroutine(SpreadProcessingPuddle(position, normal, renderingLayers, flightTime));
+    }
+
+    private IEnumerator SpreadProcessingPuddle(Vector3 position, Vector3 normal,
+        uint renderingLayers, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        var puddle = BloodPoolVisual.SpawnAtGround(position, normal,
+            processingBloodPuddleScale, processingBloodPuddlePrefab, processingBloodPuddleLifetime);
+        if (puddle == null) yield break;
+
+        // Repeated processing refreshes one stain instead of stacking coplanar decals.
+        bool replacingPuddle = _processingPuddle != null;
+        if (replacingPuddle) Destroy(_processingPuddle);
+        _processingPuddle = puddle;
+        var renderers = puddle.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers) renderer.renderingLayerMask = renderingLayers;
+        var properties = new MaterialPropertyBlock();
+        float elapsed = 0f;
+        while (puddle != null && _processingPuddle == puddle && elapsed < 0.8f)
+        {
+            elapsed += Time.deltaTime;
+            properties.SetFloat("_PuddleSize", replacingPuddle ? 1f : Mathf.Lerp(0.15f, 1f, elapsed / 0.8f));
+            foreach (var renderer in renderers) renderer.SetPropertyBlock(properties);
+            yield return null;
+        }
+    }
+
+    private IEnumerator PlayProcessingSound()
+    {
+        processingAudioSource.clip = processingSound;
+        processingAudioSource.loop = true;
+        processingAudioSource.volume = 0f;
+        processingAudioSource.Play();
+        // Rapid successful uses extend one machine voice instead of stacking loud loops.
+        while (Time.time < _processingSoundUntil)
+        {
+            float targetVolume = processingSoundVolume * Mathf.Clamp01((_processingSoundUntil - Time.time) / 0.25f);
+            processingAudioSource.volume = Mathf.MoveTowards(processingAudioSource.volume,
+                targetVolume, processingSoundVolume * Time.deltaTime / 0.08f);
+            yield return null;
+        }
+        processingAudioSource.Stop();
+        processingAudioSource.volume = 0f;
+        _processingSoundRoutine = null;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        _processingSoundRoutine = null;
+        if (processingAudioSource != null) processingAudioSource.Stop();
+        if (_processingPuddle != null) Destroy(_processingPuddle);
     }
 
     [System.Serializable]
@@ -237,21 +334,6 @@ public class CorpseProcessor : AInteractable
         return false;
     }
 
-    private static PlayerVitals FindVitalsForPlayer(PlayerID player)
-    {
-        PlayerVitals[] all = FindObjectsByType<PlayerVitals>(FindObjectsSortMode.None);
-        for (int i = 0; i < all.Length; i++)
-        {
-            PlayerVitals vitals = all[i];
-            if (vitals != null && vitals.isSpawned && vitals.owner.HasValue && vitals.owner.Value == player)
-                return vitals;
-        }
-
-        return null;
-    }
-
-
-
     #endregion
 
     #region Corpse Processing Logic
@@ -263,93 +345,6 @@ public class CorpseProcessor : AInteractable
 
         return IsExtraTrophyName(itemData.itemName);
     }
-
-    private List<DropData> GetDropsForCorpse(string corpseName)
-    {
-        List<DropData> drops = new List<DropData>();
-
-        if (dropTable == null)
-        {
-            Debug.LogError("[CorpseProcessor] Drop table not assigned!");
-            return drops;
-        }
-
-        string lowerName = corpseName.ToLower();
-
-        // 테이블에서 매칭되는 시체 타입 찾기
-        CorpseDropTable.CorpseTypeDrops matchedDrops = null;
-
-        // 순서대로 체크하여 첫 번째 매칭되는 것 사용
-        foreach (var corpseDrops in dropTable.corpseDrops)
-        {
-            if (string.IsNullOrEmpty(corpseDrops.corpseKeyword))
-                continue;
-
-            if (lowerName.Contains(corpseDrops.corpseKeyword.ToLower()))
-            {
-                matchedDrops = corpseDrops;
-                Debug.Log($"[CorpseProcessor] Matched corpse type: {corpseDrops.corpseKeyword}");
-                break;
-            }
-        }
-
-        // 못 찾으면 generic 타입 사용
-        if (matchedDrops == null)
-        {
-            matchedDrops = dropTable.corpseDrops.FirstOrDefault(
-                x => x.corpseKeyword.ToLower() == "generic");
-
-            if (matchedDrops != null)
-            {
-                Debug.Log("[CorpseProcessor] Using generic drop table");
-            }
-        }
-
-        // 드롭 처리
-        if (matchedDrops != null)
-        {
-            foreach (var dropInfo in matchedDrops.possibleDrops)
-            {
-                if (dropInfo.itemPrefab == null)
-                {
-                    Debug.LogWarning("[CorpseProcessor] Drop item prefab is null!");
-                    continue;
-                }
-
-                // 드롭 확률 체크
-                if (Random.Range(0f, 100f) <= dropInfo.dropChance)
-                {
-                    int quantity = Random.Range(dropInfo.minQuantity, dropInfo.maxQuantity + 1);
-
-                    for (int i = 0; i < quantity; i++)
-                    {
-                        drops.Add(new DropData
-                        {
-                            itemPrefab = dropInfo.itemPrefab,
-                            minPrice = dropInfo.minPrice,
-                            maxPrice = dropInfo.maxPrice
-                        });
-                    }
-                }
-            }
-        }
-
-        return drops;
-    }
-
-    // 간단한 데이터 구조
-    private class DropData
-    {
-        public GameObject itemPrefab;
-        public int minPrice;
-        public int maxPrice;
-    }
-
-    #endregion
-
-    #region Price Setting
-
-
 
     #endregion
 

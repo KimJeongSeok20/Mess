@@ -22,6 +22,7 @@ public sealed class OctopusSwarmController : NetworkBehaviour, IMonsterFlowTelem
     [SerializeField] private List<OctopusSwarmMember> members = new();
     [SerializeField] private MonsterDoorTraversalGroup doorTraversalGroup;
     [SerializeField] private OctopusSwarmPresentation presentation;
+    [SerializeField] private SkillPointOrb deathOrbPrefab;
 
     [Header("Swarm Motion")]
     [Tooltip("순찰하거나 추적할 때 보이지 않는 스웜 중심이 움직이는 속도입니다.")]
@@ -424,6 +425,8 @@ public sealed class OctopusSwarmController : NetworkBehaviour, IMonsterFlowTelem
     {
         if (member == null || !HasServerAuthority)
             return;
+
+        SkillPointOrb.Spawn(deathOrbPrefab, member.transform.position + Vector3.up * 0.65f);
 
         PlayMemberPresentationNetworked(
             explosive ? OctopusPresentationEvent.MemberExplosiveDeath : OctopusPresentationEvent.MemberDeath,

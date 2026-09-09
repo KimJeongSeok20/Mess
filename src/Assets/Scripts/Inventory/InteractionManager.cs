@@ -43,7 +43,7 @@ public class InteractionManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameMenuController.IsOpen || SkillWebTerminalInteraction.BlocksGameplayInput)
+        if (GameMenuController.IsOpen || (SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput))
         {
             ClearHover();
             return;
@@ -53,7 +53,7 @@ public class InteractionManager : MonoBehaviour
 
     public void OnGrabItem(InputValue value)  // F키 입력
     {
-        if (!value.isPressed || GameMenuController.IsOpen || SkillWebTerminalInteraction.BlocksGameplayInput) return;
+        if (!value.isPressed || GameMenuController.IsOpen || (SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput)) return;
 
         if (_cam == null)
         {

@@ -10,8 +10,8 @@ using UnityEngine;
 ///   2) 마일스톤: 특정 티어에서 이름 붙은 특성이 열린다 (예: +3 "더블 탭" = 한 번에 2발).
 ///
 /// 강화 규칙:
-///   같은 무기 2개 이상 보유 → 최고 티어 + 1
-///   예: AK +5 + AK(아무 티어) → AK +6
+///   최고 티어 무기 + 같은 종류의 미강화(+0) 무기 1개 → 한 단계 강화 시도
+///   예: AK +5 + AK +0 → AK +6 시도
 /// </summary>
 [CreateAssetMenu(fileName = "UpgradeChain", menuName = "Upgrade/Item Upgrade Recipe")]
 public class ItemUpgradeRecipe : ScriptableObject

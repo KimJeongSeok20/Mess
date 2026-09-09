@@ -63,7 +63,7 @@ public sealed class DungeonRoomPowerPhone : MonoBehaviour
 
     public void HandleToggleInput()
     {
-        if (SkillWebTerminalInteraction.BlocksGameplayInput)
+        if ((SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput))
             return;
 
         if (_controller == null || !_controller.isOwner)

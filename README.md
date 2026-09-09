@@ -9,16 +9,16 @@ Unity 6 · URP · PurrNet 온라인 멀티플레이 · 1인 개발
 
 | | |
 |---|---|
-| **플레이 빌드** | [Alpha 0.21](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.21) |
+| **플레이 빌드** | [Alpha 0.3](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.3) |
 | **플레이 영상** | [MessUp Alpha — 게임 소개 영상 (52초)](https://www.youtube.com/watch?v=4gWtgscMQmA) |
 | **개발 기간** | 2025.08 ~ 진행 중 |
 | **역할** | 기획 · 프로그래밍 · 툴링 전담 (1인) |
 
 ---
 
-## Alpha 0.21
+## Alpha 0.3
 
-Steam 없이 실행하는 로컬 플레이와 저장 이어하기를 추가하고, 캠프 진입과 던전 맵 로딩을 분리했습니다. 여러 던전 맵을 등록해도 선택한 맵만 읽도록 구성했습니다. [변경 내용과 확인 범위](docs/releases/alpha-0.21.md)를 참고해 주세요.
+몬스터 처치와 시체 분쇄 보상을 수집형 orb로 바꾸고, 분쇄기의 배출·혈흔·소리와 Clown 시체 표시를 개선했습니다. 모루 강화 화면과 스타 캐치 등 현재 프로젝트 변경 사항도 반영했습니다. [변경 내용과 확인 범위](docs/releases/alpha-0.3.md)를 참고해 주세요.
 
 ## 게임 소개
 
@@ -59,7 +59,7 @@ Lethal Company 계열의 협동 루팅 게임입니다. 하루는 게임 내 9:0
 
 ```
 src/Assets/
-├── Scripts/            게임 로직 (198)
+├── Scripts/            게임 로직 (200)
 │   ├── Dungeon 1/        던전 생성·조명·전원·NavMesh
 │   ├── Inventory/        인벤토리·아이템·무기
 │   ├── monster/          몬스터 공통·smily·Octopus
@@ -81,6 +81,6 @@ src/Assets/
 
 ## 이 저장소에 대하여
 
-**클론해도 빌드되지 않습니다.** 에셋스토어에서 구매한 모델·사운드·에디터 확장(DunGen, PurrNet, Kinemation 등)이 프로젝트의 큰 부분을 차지하는데 라이선스상 재배포할 수 없어 제외했습니다. 씬·프리팹·머티리얼도 함께 빠졌습니다. 직접 작성한 C# 스크립트 492개만 들어 있습니다.
+**클론해도 빌드되지 않습니다.** 에셋스토어에서 구매한 모델·사운드·에디터 확장(DunGen, PurrNet, Kinemation 등)이 프로젝트의 큰 부분을 차지하는데 라이선스상 재배포할 수 없어 제외했습니다. 씬·프리팹·머티리얼도 함께 빠졌습니다. 직접 작성한 C# 스크립트 494개만 들어 있습니다.
 
-플레이는 [Alpha 0.21](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.21)의 빌드로 해주세요.
+플레이는 [Alpha 0.3](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.3)의 빌드로 해주세요.

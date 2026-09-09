@@ -43,6 +43,7 @@ public class InventoryManager : MonoBehaviour
         return (int)System.Math.Min(total, int.MaxValue);
     }
 
+    public PlayerInput GameplayInput => playerInput;
     public IReadOnlyList<InventorySlot> Slots => slots;
     public int SlotCount => slots.Count;
 
@@ -125,7 +126,7 @@ public class InventoryManager : MonoBehaviour
     {
         bool dropKeyPressed = Keyboard.current != null && Keyboard.current.gKey.isPressed;
         if (dropKeyPressed && !_dropKeyWasPressed && !GameMenuController.IsOpen
-            && !SkillWebTerminalInteraction.BlocksGameplayInput)
+            && !(SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput))
             TryDropActiveItem();
 
         _dropKeyWasPressed = dropKeyPressed;
@@ -160,7 +161,7 @@ public class InventoryManager : MonoBehaviour
 
     public void ToggleInventory(bool toggle)
     {
-        if (toggle && SkillWebTerminalInteraction.BlocksGameplayInput)
+        if (toggle && (SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput))
             return;
 
         if (inventoryCanvasGroup != null && _audioInventoryOpen != toggle)
@@ -1066,6 +1067,14 @@ public class InventoryManager : MonoBehaviour
 
     /// 특정 이름의 아이템 개수 세기 (Phase 6.5)
     /// </summary>
+    public int CountItemsWithTier(string itemName, int tier)
+    {
+        int count = 0;
+        foreach (var data in _inventoryData)
+            if (data.itemName == itemName && data.upgradeTier == tier) count++;
+        return count;
+    }
+
     public int CountItemsByName(string itemName)
     {
         int count = 0;
@@ -1273,7 +1282,7 @@ public class InventoryManager : MonoBehaviour
 
     public bool TryDropActiveItem()
     {
-        if (SkillWebTerminalInteraction.BlocksGameplayInput)
+        if ((SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput))
             return false;
 
         if (_activeActionSlot == null)

@@ -390,6 +390,8 @@ public class TimeManager : NetworkBehaviour
         _seatOccupant.Clear();
         currentDay.value = 1;
         syncedTime.value = DayStartHour;
+        if (dungeonController != null)
+            dungeonController.RestorePowerServer();
 
         if (isSpawned)
             ApplyRunRestartRpc(reason);
@@ -613,6 +615,8 @@ public class TimeManager : NetworkBehaviour
             {
                 syncedTime.value = DayStartHour;
                 currentDay.value = Mathf.Max(1, currentDay.value + 1);
+                if (dungeonController != null)
+                    dungeonController.RestorePowerServer();
             }
 
             Debug.Log($"[TimeManager] Time forward animation completed on {(isServer ? "Server" : "Client")} day={GetCurrentDay()} scaling={GetDailyScalingMultiplier():0.###}");

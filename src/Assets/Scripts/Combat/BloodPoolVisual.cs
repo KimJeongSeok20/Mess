@@ -30,10 +30,17 @@ public sealed class BloodPoolVisual : MonoBehaviour
         if (floorHit.collider == null)
             return null;
 
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, floorHit.normal)
+        return SpawnAtGround(floorHit.point, floorHit.normal, scale, prefab, lifetime);
+    }
+
+    public static GameObject SpawnAtGround(Vector3 position, Vector3 normal,
+        float scale, GameObject prefab, float lifetime)
+    {
+        if (prefab == null) return null;
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal)
             * Quaternion.Euler(0f, Random.Range(0f, 360f), 0f)
             * prefab.transform.rotation;
-        GameObject pool = Instantiate(prefab, floorHit.point + floorHit.normal * 0.012f, rotation);
+        GameObject pool = Instantiate(prefab, position + normal * 0.012f, rotation);
         pool.transform.localScale = prefab.transform.localScale * Mathf.Max(0.1f, scale);
         pool.AddComponent<BloodPoolVisual>();
         Destroy(pool, Mathf.Max(0.1f, lifetime));

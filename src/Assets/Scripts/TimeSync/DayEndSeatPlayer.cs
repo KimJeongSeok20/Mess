@@ -130,7 +130,7 @@ public sealed class DayEndSeatPlayer : NetworkBehaviour
 
     private void Update()
     {
-        if (SkillWebTerminalInteraction.BlocksGameplayInput)
+        if ((SkillWebTerminalInteraction.BlocksGameplayInput || AnvilUI.BlocksGameplayInput))
             return;
 
         if (!isOwner || _state != SeatState.Seated)
