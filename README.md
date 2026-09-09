@@ -10,7 +10,7 @@ Unity 6 · URP · PurrNet 온라인 멀티플레이 · 1인 개발
 | | |
 |---|---|
 | **플레이 빌드** | [Alpha 0.21](https://github.com/KimJeongSeok20/MessUp/releases/tag/alpha-0.21) |
-| **플레이 영상** | <!-- YouTube 링크 --> |
+| **플레이 영상** | [MessUp Alpha — 게임 소개 영상 (52초)](https://www.youtube.com/watch?v=4gWtgscMQmA) |
 | **개발 기간** | 2025.08 ~ 진행 중 |
 | **역할** | 기획 · 프로그래밍 · 툴링 전담 (1인) |
 
